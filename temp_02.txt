@@ -10,20 +10,21 @@ pip3 install virtualenv
 virtualenv --system-site-packages -p python3.7 venv
 source venv3/bin/activate
 
-pip3 install "numpy < 1.17"
-pip3 install adafruit-circuitpython-gps
-pip3 install gps
-pip3 install --upgrade pillow
-pip3 install --upgrade pip setuptools wheel
-pip3 install colour  IPython h5py  tablib crontab clint docopt 
-pip3 install Cython coco pycocotools
-pip3 install tensorflow
-pip3 install keras	
-pip3 install oef
-pip3 install fetchai-ledger-api
-pip3 install base58
-pip3 install shapely --no-dependencies
-pip3 install scikit-image --no-dependencies
-pip3 install imgaug --no-dependencies
-
+pip3 install "numpy < 1.17" --user
+pip3 install adafruit-circuitpython-gps --user
+pip3 install gps --user
+pip3 install --upgrade pillow --user
+pip3 install --upgrade pip setuptools wheel --user
+pip3 install colour  IPython h5py  tablib crontab clint docopt  --user
+pip3 install Cython coco pycocotools --user
+pip3 install tensorflow --user
+pip3 install keras --user	
+pip3 install oef --user
+pip3 install fetchai-ledger-api --user
+pip3 install base58 --user
+pip3 install shapely --no-dependencies --user
+pip3 install scikit-image --no-dependencies --user
+pip3 install imgaug --no-dependencies --user
+pip3 install pywt
+pip3 install imageio --no-dependencies
 
