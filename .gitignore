@@ -88,3 +88,12 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Project specific stuff
+/temp_files
+/car_detection/weights/mask_rcnn_coco.h5
+
+
+# OSX stuff
+.DS_Store
+.AppleDouble
