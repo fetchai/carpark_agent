@@ -10,6 +10,9 @@ cd "$script_full_path"
 source ../venv/bin/activate
 
 # Modify this line with your own command line arguments
-python3 run_carparkagent.py -ps 120 -fn set_friendly_name
+nice python3 run_detection_only.py &
+python3 run_carparkagent.py -ps 120 -fn set_friendly_name -dd
+
+pkill -KILL python3 run_detection_only.py
 
 deactivate

@@ -1,7 +1,7 @@
 # test deployment
 import argparse
 import time
-
+import os
 
 from carpark_agent.detection_database import DetectionDatabase
 from carpark_agent.threaded_car_detection import ThreadedCarDetection
