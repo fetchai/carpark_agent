@@ -3,28 +3,38 @@
 
 sudo apt-get install gcc htop vim mc python3-dev ffmpeg virtualenv libatlas-base-dev libsm6 libxext6 clang libblas3 liblapack3 liblapack-dev libblas-dev cython gfortran build-essential libgdal-dev libopenblas-dev liblapack3 liblapacke liblapacke-dev liblcms2-utils liblcms2-2 libwebpdemux2 python3-scipy python3-numpy python3-matplotlib libjasper-dev libqtgui4 libqt4-test protobuf-compiler python3-opencv gpsd gpsd-clients
 
+
+
+rpi3
+sudo apt-get install python-opencv
+or maybe
+pip3 install opencv-python
+
+
+
 osx
-brew install opencv3 
+brew install opencv3
+
 
 pip3 install virtualenv 
 virtualenv --system-site-packages -p python3.7 venv
 source venv/bin/activate
 
-pip3 install "numpy < 1.17" --user
-pip3 install adafruit-circuitpython-gps --user
-pip3 install gps --user
-pip3 install --upgrade pillow --user
-pip3 install --upgrade pip setuptools wheel --user
-pip3 install colour  IPython h5py  tablib crontab clint docopt  --user
-pip3 install Cython coco pycocotools --user
-pip3 install tensorflow --user
-pip3 install keras --user	
-pip3 install oef --user
-pip3 install fetchai-ledger-api --user
-pip3 install base58 --user
-pip3 install shapely --no-dependencies --user
-pip3 install scikit-image --no-dependencies --user
-pip3 install imgaug --no-dependencies --user
+pip3 install "numpy < 1.17"
+pip3 install adafruit-circuitpython-gps
+pip3 install gps
+pip3 install --upgrade pillow
+pip3 install --upgrade pip setuptools wheel
+pip3 install colour  IPython h5py  tablib crontab clint docopt
+pip3 install Cython coco pycocotools
+pip3 install tensorflow
+pip3 install keras
+pip3 install oef
+pip3 install fetchai-ledger-api
+pip3 install base58
+pip3 install shapely --no-dependencies
+pip3 install scikit-image --no-dependencies
+pip3 install imgaug --no-dependencies
 pip3 install pywt
 pip3 install imageio --no-dependencies
 
