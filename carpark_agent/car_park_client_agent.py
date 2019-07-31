@@ -42,8 +42,10 @@ class CarParkClientAgent(OEFAgent):
         oef_key = self.wallet_2_oef_key(self.entity.public_key_bytes)
         print("Client oef key: " + oef_key)
         print("Address(self.entity): " + str(Address(self.entity)))
-        print("oef_addr: " + oef_addr)
+        print("oef_ip: " + oef_addr)
         print("oef_port: " + str(oef_port))
+        print("ledger_ip: " + ledger_ip)
+        print("ledger_port: " + str(ledger_port))
         super(CarParkClientAgent, self).__init__(oef_key, oef_addr, oef_port)
 
         # configuration
@@ -274,7 +276,10 @@ class CarParkClientAgent(OEFAgent):
 
     def generate_wealth(self, fet):
         self.push_msg("Generate_wealth")
-        self.api.sync(self.api.tokens.wealth(self.entity, fet))
+        try:
+            self.api.sync(self.api.tokens.wealth(self.entity, fet))
+        except Exception as e:
+            self.ledger_status = "Failed: Error on connection"
         self.handle_transaction_clearing()
 
     def can_do_accept_decline(self):
