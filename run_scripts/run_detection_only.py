@@ -4,10 +4,7 @@ import time
 
 
 from carpark_agent.detection_database import DetectionDatabase
-from carpark_agent.tk_gui_app import TkGuiApp
 from carpark_agent.threaded_car_detection import ThreadedCarDetection
-from carpark_agent.threaded_image_capture import ThreadedImageCapture
-from carpark_agent.car_park_agent import CarParkAgent
 
 # parse the command line arguments
 parser = argparse.ArgumentParser(description='Launch the Fetch Car Parking Agent for Raspberry Pi')
@@ -45,7 +42,7 @@ parser.add_argument(
 
 # Get command line arguments and construct database interface
 args = parser.parse_args()
-db = DetectionDatabase()
+db = DetectionDatabase(os.path.dirname(__file__))
 
 if args.reset_database:
     db.reset_database()
@@ -58,7 +55,6 @@ if args.reset_mask:
 car_detection = ThreadedCarDetection(
     db,
     (args.default_latitude, args.default_longitude),
-    args.poll_seconds,
     args.max_file_count)
 
 car_detection.start_processing()

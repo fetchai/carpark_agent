@@ -13,7 +13,6 @@ import numpy as np
 from tkinter import *
 from tkinter import ttk
 from car_detection.circular_list import CircularList
-from .file_paths import FilePaths
 
 
 uistate_live_detect = 0
@@ -898,8 +897,14 @@ class TkGuiApp:
         status_str += "Friendly name: {}\n".format(friendly_name)
         status_str += "Uncleared FET: {}\n".format(uncleared_fet)
         status_str += "Cleared FET: {}\n".format(cleared_fet)
-        status_str += "Ledger status: {}\n".format(self.db.get_system_status("ledger"))
-        status_str += "OEF status: {}\n".format(self.db.get_system_status("oef"))
+        status_str += "Ledger status: {}:{}: {}\n".format(
+            self.db.get_system_status("ledger-ip"),
+            self.db.get_system_status("ledger-port"),
+            self.db.get_system_status("ledger-status"))
+        status_str += "OEF status: {}:{}: {}\n".format(
+            self.db.get_system_status("oef-ip"),
+            self.db.get_system_status("oef-port"),
+            self.db.get_system_status("oef-status"))
         status_str += "GPS source: {}\n".format(self.db.get_system_status("gps_source"))
         status_str += "GPS Location: {}\n".format(self.db.get_lat_lon())
 
@@ -986,23 +991,23 @@ class TkGuiApp:
     def save_masks(self):
         red, green, blue = cv2.split(self.ui_coloured_mask)
         mask_image = cv2.cvtColor(blue, cv2.COLOR_GRAY2RGB)
-        skimage.io.imsave(FilePaths.mask_image_path, mask_image)
-        skimage.io.imsave(FilePaths.mask_ref_image_path, self.mask_ref_image)
+        skimage.io.imsave(self.db.mask_image_path, mask_image)
+        skimage.io.imsave(self.db.mask_ref_image_path, self.mask_ref_image)
 
 
     def load_masks(self):
-        if os.path.isfile(FilePaths.mask_image_path):
-            mask_bw = skimage.io.imread(FilePaths.mask_image_path)
+        if os.path.isfile(self.db.mask_image_path):
+            mask_bw = skimage.io.imread(self.db.mask_image_path)
         else:
             mask_bw = np.full(
                 (self.image_source.cam_height, self.image_source.cam_width, 3),
                 (255, 255, 255),
                 np.uint8)
 
-        if os.path.isfile(FilePaths.mask_ref_image_path):
-            self.mask_ref_image = skimage.io.imread(FilePaths.mask_ref_image_path)
+        if os.path.isfile(self.db.mask_ref_image_path):
+            self.mask_ref_image = skimage.io.imread(self.db.mask_ref_image_path)
         else:
-            self.mask_ref_image = skimage.io.imread(FilePaths.default_mask_ref_path)
+            self.mask_ref_image = skimage.io.imread(self.db.default_mask_ref_path)
             self.mask_ref_image = cv2.cvtColor(self.mask_ref_image, cv2.COLOR_RGBA2RGB)
 
         inverted_image = cv2.bitwise_not(mask_bw)

@@ -46,7 +46,7 @@ args = parser.parse_args()
 print("Starting Fetch Car Parking Client Agent...")
 
 client_agent = CarParkClientAgent(
-    oef_addr="k-1-delta.fetch-ai.com",
+    oef_ip="k-1-delta.fetch-ai.com",
     oef_port=50001,
 
     reset_wallet=args.reset_wallet,

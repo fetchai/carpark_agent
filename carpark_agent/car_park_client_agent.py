@@ -27,7 +27,7 @@ class CarParkClientAgent(OEFAgent):
 
     def __init__(
             self,
-            oef_addr,
+            oef_ip,
             oef_port,
             reset_wallet,
             max_price_fet,
@@ -42,11 +42,11 @@ class CarParkClientAgent(OEFAgent):
         oef_key = self.wallet_2_oef_key(self.entity.public_key_bytes)
         print("Client oef key: " + oef_key)
         print("Address(self.entity): " + str(Address(self.entity)))
-        print("oef_ip: " + oef_addr)
+        print("oef_ip: " + oef_ip)
         print("oef_port: " + str(oef_port))
         print("ledger_ip: " + ledger_ip)
         print("ledger_port: " + str(ledger_port))
-        super(CarParkClientAgent, self).__init__(oef_key, oef_addr, oef_port)
+        super(CarParkClientAgent, self).__init__(oef_key, oef_ip, oef_port)
 
         # configuration
         self.cost = 0
@@ -54,6 +54,9 @@ class CarParkClientAgent(OEFAgent):
         self.max_detection_age_seconds = max_detection_age_seconds
         self.ledger_ip = ledger_ip
         self.ledger_port = ledger_port
+        self.oef_ip = oef_ip
+        self.oef_port = oef_port
+
         if friendly_name != "":
             self.friendly_name = friendly_name
         else:

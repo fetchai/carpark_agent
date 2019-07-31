@@ -36,7 +36,7 @@ class CarParkAgent(OEFAgent):
 
     def __init__(
             self,
-            oef_addr,
+            oef_ip,
             oef_port,
             database,
             reset_wallet,
@@ -51,11 +51,13 @@ class CarParkAgent(OEFAgent):
         print("Agent wallet key: " + str(self.entity.public_key_bytes))
         oef_key = self.wallet_2_oef_key(self.entity.public_key_bytes)
         print("Agent oef key: " + oef_key)
-        print("oef_addr: " + oef_addr)
+        print("oef_ip: " + oef_ip)
         print("oef_port: " + str(oef_port))
-        self.oef_addr = oef_addr
+        print("ledger_ip: " + ledger_ip)
+        print("ledger_port: " + str(ledger_port))
+        self.oef_ip = oef_ip
         self.oef_port = oef_port
-        super(CarParkAgent, self).__init__(oef_key, oef_addr, oef_port)
+        super(CarParkAgent, self).__init__(oef_key, oef_ip, oef_port)
 
         # Configuration
         self.data_price_fet = data_price_fet
@@ -81,8 +83,12 @@ class CarParkAgent(OEFAgent):
         # self.service_test_idle_duration = 10
 
         # Set up system status
-        self.db.set_system_status("ledger", "OK")
-        self.db.set_system_status("oef", "OK")
+        self.db.set_system_status("ledger-status", "OK")
+        self.db.set_system_status("ledger-ip", self.ledger_ip)
+        self.db.set_system_status("ledger-port", self.ledger_port)
+        self.db.set_system_status("oef-status", "OK")
+        self.db.set_system_status("oef-ip", self.oef_ip)
+        self.db.set_system_status("oef-port", self.oef_port )
 
         # Ledger stuff
         self.api = LedgerApi(ledger_ip, ledger_port)
@@ -104,11 +110,11 @@ class CarParkAgent(OEFAgent):
     def read_balance(self):
         try:
             balance = self.api.tokens.balance(self.entity)
-            self.db.set_system_status("ledger", "OK")
+            self.db.set_system_status("ledger-status", "OK")
             return balance
         except Exception as e:
             print("Failed to read balance from ledger: {}".format(e.args))
-            self.db.set_system_status("ledger", "Error: Failed to connect")
+            self.db.set_system_status("ledger-status", "Error: Failed to connect")
             return -1
 
     def stop_agent(self):
@@ -117,10 +123,10 @@ class CarParkAgent(OEFAgent):
         # Need to do this to shut down the event loop (this will be fixed in OEF SDK at some point)
         if self._task is not None:
             self._loop.call_soon_threadsafe(self._task.cancel)
+        if self._task is not None:
             self.stop()
         self.agent_thread.join(120)
         self.balance_thread.join(120)
-        # self.service_poller_thread.join(120)
 
         try:
             self.unregister_service(0, self.car_park_service_description)
@@ -162,7 +168,7 @@ class CarParkAgent(OEFAgent):
                         self.db.set_transaction_complete(tx_hash)
             except Exception as e:
                 print("Error querying status of transaction: {}".format(e))
-                self.db.set_system_status("ledger", "Error: Failed to connect")
+                self.db.set_system_status("ledger-status", "Error: Failed to connect")
 
             time.sleep(1)
 
@@ -196,21 +202,22 @@ class CarParkAgent(OEFAgent):
                 # Sometimes connection is not fully up before going to next line
                 time.sleep(1)
                 self.register_service(0, self.car_park_service_description)
-                self.db.set_system_status("oef", "OK")
+                self.db.set_system_status("oef-status", "OK")
 
             except Exception as e:
                 print("Failed to connect to OEF: {}".format(e))
-                self.db.set_system_status("oef", "Error: Failed to connect")
+                self.db.set_system_status("oef-status", "Error: Failed to connect")
 
             try:
                 self.run()
                 # need to do this in case we exited due to an exception
                 if self._task is not None:
                     self._loop.call_soon_threadsafe(self._task.cancel)
+                if self._task is not None:
                     self.stop()
                 print("Runfunction exited")
             except Exception as e:
-                self.db.set_system_status("oef", "Error: Failed to connect")
+                self.db.set_system_status("oef-status", "Error: Failed to connect")
                 print("Runfunction exited with exception")
 
             time.sleep(1)
@@ -255,7 +262,7 @@ class CarParkAgent(OEFAgent):
     #                     self.service_test_state = service_test_state_searching
     #                 except Exception as e:
     #                     print("Failed to search oef: {}".format(e))
-    #                     self.db.set_system_status("oef", "Error: Failed to contact OEF")
+    #                     self.db.set_system_status("oef-status", "Error: Failed to contact OEF")
     #                     self.service_test_state = service_test_state_disconnected
     #         elif self.service_test_state == service_test_state_searching:
     #             if on_enter:
@@ -263,7 +270,7 @@ class CarParkAgent(OEFAgent):
     #
     #             # if we dont get a response:
     #             if time.time() - service_test_start_time > self.service_test_idle_duration:
-    #                 self.db.set_system_status("oef", "Error: Failed to contact OEF")
+    #                 self.db.set_system_status("oef-status", "Error: Failed to contact OEF")
     #                 self.service_test_state = service_test_state_disconnected
     #
     #         elif self.service_test_state == service_test_state_test_cfp:
@@ -386,7 +393,7 @@ class CarParkAgent(OEFAgent):
     #     return base58.b58decode(oef_public_key.encode("utf-8"))[:-12]
 
     def create_or_load_wallet(self, reset_wallet, filename):
-        private_key_dir = self.db.get_temp_dir()
+        private_key_dir = self.db.temp_dir
 
         file_path = private_key_dir + "/" + filename
         if not reset_wallet and os.path.isfile(file_path):

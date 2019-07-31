@@ -7,7 +7,7 @@ cd "$script_full_path"
 
 
 # Activate the evirtual environment
-source venv/bin/activate
+source ../venv/bin/activate
 
 # Modify this line with your own command line arguments
 python3 run_carparkagent.py -ps 120 -fn set_friendly_name

@@ -1,6 +1,7 @@
 # test deployment
 import argparse
 import time
+import os
 
 
 from carpark_agent.detection_database import DetectionDatabase
@@ -21,9 +22,9 @@ parser.add_argument(
 parser.add_argument(
     '-li',
     '--ledger_ip',
-    help='IP or name of ledger node to connect to. use 127.0.0.1 for local (default dev.fetch-ai.com)',
+    help='IP or name of ledger node to connect to. use 127.0.0.1 for local (default delta.fetch-ai.com)',
     type=str,
-    default='dev.fetch-ai.com')
+    default='delta.fetch-ai.com')
 parser.add_argument(
     '-lp',
     '--ledger_port',
@@ -37,6 +38,12 @@ parser.add_argument(
     type=str,
     default='50001')
 parser.add_argument(
+    '-oi',
+    '--oef_ip',
+    help='IP or name of oef node to connect to. use 127.0.0.1 for local (default k-1-delta.fetch-ai.com)',
+    type=str,
+    default='k-1-delta.fetch-ai.com')
+parser.add_argument(
     '-fn',
     '--friendly_name',
     help='A human readable name we can refer to our agent by',
@@ -47,11 +54,11 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Get command line arguments and construct database interface
-db = DetectionDatabase()
+db = DetectionDatabase(os.path.dirname(__file__))
 
 # Create the OEF Agent
 agent = CarParkAgent(
-    oef_addr=args.oef_ip,
+    oef_ip=args.oef_ip,
     oef_port=args.oef_port,
     database=db,
     reset_wallet=args.reset_wallet,

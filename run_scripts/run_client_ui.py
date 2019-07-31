@@ -27,9 +27,9 @@ parser.add_argument(
 parser.add_argument(
     '-li',
     '--ledger_ip',
-    help='IP or name of ledger node to connect to. use 127.0.0.1 for local (default dev.fetch-ai.com)',
+    help='IP or name of ledger node to connect to. use 127.0.0.1 for local (default delta.fetch-ai.com)',
     type=str,
-    default='dev.fetch-ai.com')
+    default='delta.fetch-ai.com')
 parser.add_argument(
     '-lp',
     '--ledger_port',
@@ -59,7 +59,7 @@ args = parser.parse_args()
 
 
 client_agent = CarParkClientAgent(
-    oef_addr=args.oef_ip,
+    oef_ip=args.oef_ip,
     oef_port=args.oef_port,
     reset_wallet=args.reset_wallet,
     max_price_fet=args.max_price_fet,

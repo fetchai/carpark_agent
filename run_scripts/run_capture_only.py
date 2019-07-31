@@ -19,6 +19,7 @@ parser.add_argument(
 # Get command line arguments and construct database interface
 args = parser.parse_args()
 
+db = DetectionDatabase(os.path.dirname(__file__))
 
 # Create the thread capturing images from the camera
 image_capture = ThreadedImageCapture()
@@ -27,7 +28,8 @@ image_capture.start_capture()
 # Create the thread to perform the vehicle detection image processing
 image_recorder = ThreadedImageRecorder(
     image_capture,
-    args.poll_seconds)
+    args.poll_seconds,
+    db)
 
 image_recorder.start_processing()
 

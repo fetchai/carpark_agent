@@ -4,12 +4,24 @@ import os
 import shutil
 import skimage
 import time
-from .file_paths import FilePaths
 
 
 class DetectionDatabase:
-    def __init__(self, database_name="images.db"):
-        self.database_path = FilePaths.temp_dir + "/" + database_name
+    def __init__(self, run_dir):
+        self.this_dir =os.path.dirname(__file__)
+        self.run_dir = run_dir
+        self.temp_dir = str(os.path.join(self.run_dir, '..', "temp_files"))
+
+        self.mask_image_path = self.temp_dir + "/mask.tiff"
+        self.mask_ref_image_path =self. temp_dir + "/mask_ref.tiff"
+        self.raw_image_dir = self.temp_dir + "/db_raw_images/"
+        self.processed_image_dir = self.temp_dir + "/db_processed_images/"
+        # Note that this path should be under source control
+        self.default_mask_ref_path = self.this_dir + "/default_mask_ref.png"
+        self.num_digits_time = 12  # need to match this up with the generate functions below
+        self.image_file_ext = ".png"
+
+        self.database_path = self.temp_dir + "/" + "detection_results.db"
         self.initialise_backend()
 
     def reset_database(self):
@@ -21,27 +33,26 @@ class DetectionDatabase:
             os.remove(self.database_path)
 
         # Clear stored images
-        shutil.rmtree(FilePaths.raw_image_dir)
-        shutil.rmtree(FilePaths.processed_image_dir)
+        shutil.rmtree(self.raw_image_dir)
+        shutil.rmtree(self.processed_image_dir)
 
         # Recreate them
         self.initialise_backend()
 
-    def get_temp_dir(self):
-        return FilePaths.temp_dir
 
     def reset_mask(self):
         # If we need to reset the database, then remove the table and any stored images
         print("Database being reset")
 
         # Remove the actual database file
-        if os.path.isfile(FilePaths.mask_image_path):
-            os.remove(FilePaths.mask_image_path)
-        if os.path.isfile(FilePaths.mask_ref_image_path):
-            os.remove(FilePaths.mask_ref_image_path)
+        if os.path.isfile(self.mask_image_path):
+            os.remove(self.mask_image_path)
+        if os.path.isfile(self.mask_ref_image_path):
+            os.remove(self.mask_ref_image_path)
+        self.ensure_dirs_exist()
 
     def initialise_backend(self):
-        FilePaths.ensure_dirs_exist()
+        self.ensure_dirs_exist()
         self.execute_single_sql(
             "CREATE TABLE IF NOT EXISTS images (epoch INTEGER, raw_image_path TEXT, "
             "processed_image_path TEXT, total_count INTEGER, "
@@ -224,15 +235,15 @@ class DetectionDatabase:
 
     def add_entry_no_save(self, raw_path, processed_path, total_count, moving_count, free_spaces, lat, lon):
         # need to extract the time!
-        t = FilePaths.extract_time_from_raw_path(raw_path)
+        t = self.extract_time_from_raw_path(raw_path)
         self.execute_single_sql("INSERT INTO images VALUES ({}, '{}', '{}', {}, {}, {}, '{}', '{}')".format(
             t, raw_path, processed_path, total_count, moving_count, free_spaces, lat, lon))
 
 
     def add_entry(self, raw_image, processed_image, total_count, moving_count, free_spaces, lat, lon):
         t = int(time.time())
-        raw_path = FilePaths.generate_raw_image_path(t)
-        processed_path = FilePaths.generate_processed_path(t)
+        raw_path = self.generate_raw_image_path(t)
+        processed_path = self.generate_processed_path(t)
 
         skimage.io.imsave(raw_path, raw_image)
         skimage.io.imsave(processed_path, processed_image)
@@ -293,3 +304,24 @@ class DetectionDatabase:
             last_epoch = results[0][0]
             self.execute_single_sql("DELETE FROM {}} WHERE epoch<{}".format(table_name, last_epoch))
 
+    def ensure_dirs_exist(self):
+        if not os.path.isdir(self.temp_dir):
+            os.mkdir(self.temp_dir)
+        if not os.path.isdir(self.raw_image_dir):
+            os.mkdir(self.raw_image_dir)
+        if not os.path.isdir(self.processed_image_dir):
+            os.mkdir(self.processed_image_dir)
+
+    def generate_raw_image_path(self, t):
+        return self.raw_image_dir + "{0:012d}".format(t) + "_raw_image" + self.image_file_ext
+
+    def generate_processed_path(self, t):
+        return self.processed_image_dir + "{0:012d}".format(t)+ "_processed_image" + self.image_file_ext
+
+    def generate_processed_from_raw_path(self, raw_name):
+        return raw_name.replace("_raw_image.", "_processed_image.").replace(self.raw_image_dir, self.processed_image_dir)
+
+    def extract_time_from_raw_path(self, raw_name):
+        start_index = len(self.raw_image_dir)
+        extracted_num = raw_name[start_index:start_index + self.num_digits_time]
+        return int(extracted_num)

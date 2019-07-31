@@ -4,15 +4,15 @@ import skimage
 import glob
 import os
 
-from .file_paths import FilePaths
 
 class ThreadedImageRecorder:
-    def __init__(self, image_source, poll_seconds, max_file_count):
+    def __init__(self, image_source, poll_seconds, max_file_count, database):
         # Configuration
         self.image_source = image_source
         self.poll_seconds = poll_seconds
         self.loop_count = 0
         self.max_file_count = max_file_count
+        self.db = database
 
         # Thread control
         self.kill_event = threading.Event()
@@ -30,7 +30,7 @@ class ThreadedImageRecorder:
         self.processing_thread.join(120)
 
     def prune_image_files(self):
-        search_text = FilePaths.raw_image_dir + "*" + FilePaths.image_file_ext
+        search_text = self.db.raw_image_dir + "*" + self.db.image_file_ext
         files = glob.glob(search_text)
         files.sort()
         num_files_to_remove = max(0, len(files) - self.max_file_count)
@@ -49,7 +49,7 @@ class ThreadedImageRecorder:
 
             if image is not None:
                 t = int(time.time())
-                skimage.io.imsave(FilePaths.generate_raw_image_path(t), image)
+                skimage.io.imsave(self.db.generate_raw_image_path(t), image)
                 print("Saving image: " + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(int(time.time()))))
                 self.prune_image_files()
 

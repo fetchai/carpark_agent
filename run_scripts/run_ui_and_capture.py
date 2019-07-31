@@ -1,6 +1,6 @@
 # test deployment
 import argparse
-
+import os
 
 from carpark_agent.detection_database import DetectionDatabase
 from carpark_agent.tk_gui_app import TkGuiApp
@@ -33,7 +33,7 @@ args = parser.parse_args()
 
 
 # Get command line arguments and construct database interface
-db = DetectionDatabase()
+db = DetectionDatabase(os.path.dirname(__file__))
 
 # Create the thread capturing images from the camera and make them available in a threadsafe way
 image_capture = ThreadedImageCapture()
@@ -44,7 +44,8 @@ image_capture.start_capture()
 image_recorder = ThreadedImageRecorder(
     image_capture,
     args.poll_seconds,
-    args.max_file_count)
+    args.max_file_count,
+    db)
 
 image_recorder.start_processing()
 

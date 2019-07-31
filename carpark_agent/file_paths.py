@@ -1,20 +1,21 @@
 import os
 
 class FilePaths:
-    this_dir = str(os.path.dirname(__file__))
-    temp_dir = str(os.path.join(this_dir, '..', "temp_files"))
 
-    mask_image_path = temp_dir + "/mask.tiff"
-    mask_ref_image_path = temp_dir + "/mask_ref.tiff"
-    raw_image_dir = temp_dir + "/db_raw_images/"
-    processed_image_dir = temp_dir + "/db_processed_images/"
-    # Note that this path should be under source control
-    default_mask_ref_path = this_dir + "/default_mask_ref.png"
-    num_digits_time = 12  # need to match this up with the generate functions below
-    image_file_ext = ".png"
 
-    def __init__(self):
-        pass
+    def __init__(self, root_dir):
+        self.this_dir = str(os.path.dirname(__file__))
+        self.run_dir = root_dir
+        self.temp_dir = str(os.path.join(self.run_dir, '..', "temp_files"))
+
+        self.mask_image_path = self.temp_dir + "/mask.tiff"
+        self.mask_ref_image_path =self. temp_dir + "/mask_ref.tiff"
+        self.raw_image_dir = self.temp_dir + "/db_raw_images/"
+        self.processed_image_dir = self.temp_dir + "/db_processed_images/"
+        # Note that this path should be under source control
+        self.default_mask_ref_path = self.this_dir + "/default_mask_ref.png"
+        self.num_digits_time = 12  # need to match this up with the generate functions below
+        self.image_file_ext = ".png"
 
     @classmethod
     def ensure_dirs_exist(cls):
@@ -42,19 +43,3 @@ class FilePaths:
         start_index = len(cls.raw_image_dir)
         extracted_num = raw_name[start_index:start_index + cls.num_digits_time]
         return int(extracted_num)
-
-
-    # @classmethod
-    # def set_this_dir(cls, new_dir):
-    #     this_dir = new_dir
-    #     cls.mask_image_path = this_dir + "/mask.tiff"
-    #     cls.mask_ref_image_path = this_dir + "/mask_ref.tiff"
-    #     cls.database_path = this_dir + "/images.db"
-    #     cls.raw_image_dir = this_dir + "/db_raw_images/"
-    #     cls.processed_image_dir = this_dir + "/db_processed_images/"
-    #     # Note that this path should be under source control
-    #     cls.default_mask_ref_path = this_dir + "/default_mask_ref.png"
-    #     cls.num_digits_time = 12  # need to match this up with the generate functions below
-    #     cls.image_file_ext = ".png"
-    #
-

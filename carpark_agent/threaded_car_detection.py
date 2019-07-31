@@ -6,18 +6,16 @@ import threading
 import skimage
 import numpy as np
 from car_detection.helpers import ParkedCarDetector
-from .file_paths import FilePaths
 from .gps import GPS
 
 # If there is no maximum capacity stored we set it to this
 default_max_cap = 8
 
 class ThreadedCarDetection:
-    def __init__(self, database, default_lat_lon, poll_seconds, max_file_count):
+    def __init__(self, database, default_lat_lon, max_file_count):
         # Configuration
         self.db = database
         self.default_lat_lon = default_lat_lon
-        self.poll_seconds = poll_seconds
         self.max_file_count = max_file_count
 
         # Detection mask and temporary images
@@ -36,16 +34,16 @@ class ThreadedCarDetection:
         self.processing_thread = None
 
     def load_mask_image(self, image_shape):
-        if os.path.isfile(FilePaths.mask_image_path):
-            self.mask_image = skimage.io.imread(FilePaths.mask_image_path)
+        if os.path.isfile(self.db.mask_image_path):
+            self.mask_image = skimage.io.imread(self.db.mask_image_path)
         else:
             self.mask_image = np.full(
                 image_shape,
                 (255, 255, 255),
                 np.uint8)
 
-        if os.path.isfile(FilePaths.mask_ref_image_path):
-            self.mask_ref_image = skimage.io.imread(FilePaths.mask_ref_image_path)
+        if os.path.isfile(self.db.mask_ref_image_path):
+            self.mask_ref_image = skimage.io.imread(self.db.mask_ref_image_path)
         else:
             self.mask_ref_image = np.full(
                 image_shape,
@@ -62,7 +60,7 @@ class ThreadedCarDetection:
         self.processing_thread.join(120)
 
     def get_new_image(self):
-        search_text = FilePaths.raw_image_dir + "*" + FilePaths.image_file_ext
+        search_text = self.db.raw_image_dir + "*" + self.db.image_file_ext
         files = glob.glob(search_text)
         files.sort(reverse=True)
         index = 0
@@ -81,7 +79,7 @@ class ThreadedCarDetection:
 
     def prune_files_and_db(self):
         # prune the processed image files
-        search_text = FilePaths.processed_image_dir + "*" + FilePaths.image_file_ext
+        search_text = self.db.processed_image_dir + "*" + self.db.image_file_ext
         files = glob.glob(search_text)
         files.sort()
         num_files_to_remove = max(0, len(files) - self.max_file_count)
@@ -176,7 +174,7 @@ class ThreadedCarDetection:
                 out_image = self.detector.image_visualise(bwImage, results)
 
                 print("Visualisation complete")
-                processed_filename = FilePaths.generate_processed_from_raw_path(self.prev_recent_filename)
+                processed_filename = self.db.generate_processed_from_raw_path(self.prev_recent_filename)
                 skimage.io.imsave(processed_filename, out_image)
 
                 # Add images and data to database
@@ -197,7 +195,7 @@ class ThreadedCarDetection:
                 self.on_calc_finished.set()
                 last_time = time.time()
 
-            time.sleep(self.poll_seconds)
+            time.sleep(1)
 
 
 

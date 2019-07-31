@@ -1,7 +1,7 @@
 # test deployment
 import argparse
 import time
-
+import os
 
 from carpark_agent.detection_database import DetectionDatabase
 from carpark_agent.tk_gui_app import TkGuiApp
@@ -91,7 +91,8 @@ parser.add_argument(
 
 # Get command line arguments and construct database interface
 args = parser.parse_args()
-db = DetectionDatabase()
+db = DetectionDatabase(os.path.dirname(__file__))
+
 if args.reset_database:
     db.reset_database()
 
@@ -101,12 +102,8 @@ if args.reset_mask:
 if not args.disable_agent:
     # Create the OEF Agent
     agent = CarParkAgent(
-        oef_addr=args.oef_ip,
+        oef_ip=args.oef_ip,
         oef_port=args.oef_port,
-        # oef_addr="127.0.0.1",
-        # oef_port=10000,
-        # oef_addr="oef.economicagents.com",
-        #oef_port=3333,
         database=db,
         reset_wallet=args.reset_wallet,
         data_price_fet=args.data_price_fet,
@@ -124,7 +121,8 @@ image_capture.start_capture()
 image_recorder = ThreadedImageRecorder(
     image_capture,
     args.poll_seconds,
-    args.max_file_count)
+    args.max_file_count,
+    db)
 
 image_recorder.start_processing()
 
@@ -134,7 +132,6 @@ if not args.disable_detection:
     car_detection = ThreadedCarDetection(
         db,
         (args.default_latitude, args.default_longitude),
-        args.poll_seconds,
         args.max_file_count)
 
     car_detection.start_processing()
