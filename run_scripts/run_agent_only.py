@@ -31,6 +31,12 @@ parser.add_argument(
     type=str,
     default='80')
 parser.add_argument(
+    '-op',
+    '--oef_port',
+    help='Port of oef node to connect to. use 10000 for local (default 50001)',
+    type=str,
+    default='50001')
+parser.add_argument(
     '-fn',
     '--friendly_name',
     help='A human readable name we can refer to our agent by',
@@ -45,9 +51,8 @@ db = DetectionDatabase()
 
 # Create the OEF Agent
 agent = CarParkAgent(
-    # oef_addr="oef.economicagents.com",
-    oef_addr="k-1-delta.fetch-ai.com",
-    oef_port=50001,
+    oef_addr=args.oef_ip,
+    oef_port=args.oef_port,
     database=db,
     reset_wallet=args.reset_wallet,
     data_price_fet=args.data_price_fet,

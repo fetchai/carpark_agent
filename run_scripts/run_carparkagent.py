@@ -63,6 +63,18 @@ parser.add_argument(
     help='Port of ledger node to connect to. use 8000 for local (default 80)',
     type=str,
     default='80')
+parser.add_argument(
+    '-oi',
+    '--oef_ip',
+    help='IP or name of oef node to connect to. use 127.0.0.1 for local (default k-1-delta.fetch-ai.com)',
+    type=str,
+    default='k-1-delta.fetch-ai.com')
+parser.add_argument(
+    '-op',
+    '--oef_port',
+    help='Port of oef node to connect to. use 10000 for local (default 50001)',
+    type=str,
+    default='50001')
 
 parser.add_argument(
     '-mf',
@@ -89,8 +101,8 @@ if args.reset_mask:
 if not args.disable_agent:
     # Create the OEF Agent
     agent = CarParkAgent(
-        oef_addr="k-1-delta.fetch-ai.com",
-        oef_port=50001,
+        oef_addr=args.oef_ip,
+        oef_port=args.oef_port,
         # oef_addr="127.0.0.1",
         # oef_port=10000,
         # oef_addr="oef.economicagents.com",
