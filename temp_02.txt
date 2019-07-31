@@ -8,7 +8,7 @@ brew install opencv3
 
 pip3 install virtualenv 
 virtualenv --system-site-packages -p python3.7 venv
-source venv3/bin/activate
+source venv/bin/activate
 
 pip3 install "numpy < 1.17" --user
 pip3 install adafruit-circuitpython-gps --user
