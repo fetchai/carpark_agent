@@ -21,7 +21,7 @@ print("platform: " + platform)
 
 # If raspberry Pi, 3 or 4
 if platform == "linux-armv7l":
-    subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_rpi.txt'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_rpi4.txt'])
 # If raspberry mac
 elif platform.startswith("macosx"):
     subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_osx.txt'])
