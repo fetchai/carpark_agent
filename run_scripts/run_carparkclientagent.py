@@ -48,10 +48,9 @@ print("Starting Fetch Car Parking Client Agent...")
 client_agent = CarParkClientAgent(
     oef_ip="k-1-delta.fetch-ai.com",
     oef_port=50001,
-
     reset_wallet=args.reset_wallet,
-    max_price_fet=args.max_price_fet,
-    max_detection_age_seconds=args.max_detection_age_seconds,
+    max_price_fet=int(args.max_price_fet),
+    max_detection_age_seconds=float(args.max_detection_age_seconds),
     ledger_ip=args.ledger_ip,
     ledger_port=args.ledger_port,
     friendly_name=args.friendly_name)

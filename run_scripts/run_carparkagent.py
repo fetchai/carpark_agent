@@ -105,7 +105,7 @@ if not args.disable_agent:
         oef_port=args.oef_port,
         database=db,
         reset_wallet=args.reset_wallet,
-        data_price_fet=args.data_price_fet,
+        data_price_fet=int(args.data_price_fet),
         ledger_ip=args.ledger_ip,
         ledger_port=args.ledger_port,
         friendly_name=args.friendly_name)
