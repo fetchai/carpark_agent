@@ -22,6 +22,7 @@ subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'setuptool
 subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'wheel'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'numpy < 1.17'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'adafruit-circuitpython-gps == 3.3.0'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'adafruit-blinka == 2.2.0'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'gps == 3.19'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'colour'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'IPython'])

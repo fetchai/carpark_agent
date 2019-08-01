@@ -10,7 +10,10 @@ sudo apt-get install python-opencv
 or maybe
 pip3 install opencv-python
 
+sudo systemctl stop gpsd.socket
+sudo systemctl disable gpsd.socket
 
+sudo nano /etc/dphys-swapfile
 
 osx
 brew install opencv3
@@ -22,6 +25,7 @@ source venv/bin/activate
 
 pip3 install numpy < 1.17
 pip3 install adafruit-circuitpython-gps
+pip3 install adafruit-blinka
 pip3 install gps
 pip3 install --upgrade pillow
 pip3 install --upgrade pip setuptools wheel
@@ -38,3 +42,4 @@ pip3 install imgaug --no-dependencies
 pip3 install pywt
 pip3 install imageio --no-dependencies
 
+@reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
