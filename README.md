@@ -170,11 +170,16 @@ Now that the car park agent is running, we will set up a client agent on your Ma
 These instructions have only been done for  Mac so far.
 
 
-If you do not have Homebrew already installed, open a terminal paste in the following lines:
+If you do not have Homebrew already installed, open a terminal:
 
     xcode-select --install
+    
+Go through the various dialog boxes agreeing to everything and wait till all the X-code tools install. Now go back to the terminal:
+
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     
+Yu need to press ENTER to confirm and will be prompted to give your password.
+
 Now we need to install some software to support the agent. Paste these lines into a Terminal window:
     
     brew install wget python3 opencv3
@@ -193,7 +198,6 @@ Open a Terminal
     
 If you want to try running that actual carpark agent on a mac, you can do this. You will need to get the object detection datafile:
     
-    ./car_detection/
     ./car_detection/weights/download_weights.sh
     
 Create and activate the virtual environment and install the python packages
@@ -203,17 +207,24 @@ Create and activate the virtual environment and install the python packages
     python3 setup.py develop
         
 ### Running the client
-Configure the client agent. Open the file ./run_scripts/run_client_agent.sh in a text editor. Fine this line:
+Configure the client agent. Open the file run_scripts/run_client_agent.sh in a text editor. You can do this using a terminal by typing
+
+    nano run_scripts/run_client_agent.sh
+    
+then find the line that says:
 
     python3 run_client_ui.py -fn set_friendly_name -ma 3600 -mf 4000
 
-Change the set_friendly_name to something personal. E.g. I would called it dc_client_agent. SO my line would look like:
+Change the set_friendly_name to something personal. E.g. I would called it dc_client_agent. So my line would look like:
 
     python3 run_client_ui.py -fn dc_client_agent -ma 3600 -mf 4000
 
-The other options shown here are:
+
+The other options on this command line are:
 -ma: The maximum age of any detection data we consider worth having. Default is 3600 seconds (1 hour) 
 -mf: The naximum price this client would be prepared to pay for car parking data. This is specified in nano-fet. I.e. 0.0000000001 FET. SO, default is 0.0000004 FET 
+
+Save the file and exit the editor.
 
 Now you can run the agent
     
