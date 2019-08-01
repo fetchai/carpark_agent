@@ -37,14 +37,13 @@ parser.add_argument(
     '--default_latitude',
     help='default default_latitude to use if GPS is not available or has never been read',
     type=str,
-    default='52.235027')
-
+    default='20.079735')
 parser.add_argument(
     '-lon',
     '--default_longitude',
     type=str,
     help='default longitude to use if GPS is not available or has never been read',
-    default='0.153508')
+    default='-157.422098')
 parser.add_argument(
     '-ps',
     '--poll_seconds',

@@ -111,13 +111,13 @@ class ThreadedCarDetection:
 
             # Retrieve latest value fom database
             lat, lon = self.db.get_lat_lon()
-            if lat is None and lon is None:
+            if (lat is None and lon is None) or self.db.get_system_status("gps_source") == "Command line":
                 lat, lon = self.default_lat_lon
                 self.db.save_lat_lon(lat, lon)
                 self.db.set_system_status("gps_source", "Command line")
 
             this_time = time.time()
-            print("waiting for new image to be available: " + time.strftime('%Mm %Ss', time.gmtime(this_time- last_time)))
+            print("waiting for new image to be available: " + time.strftime('%Mm %Ss', time.gmtime(this_time - last_time)))
             image = self.get_new_image()
 
             # save this one out immediately in case it causes a cash we will have a record of it

@@ -16,10 +16,10 @@ You will need - I've added links to the things I bought:
 * Raspberry Pi 4 [link](https://thepihut.com/products/raspberry-pi-4-model-b?gclid=EAIaIQobChMImcuwvcfh4wIVirHtCh3szg2EEAAYASAAEgJQ_fD_BwE)
 * Case to put Raspbery Pi and Camera in [link](https://uk.rs-online.com/web/p/products/1270210/?grossPrice=Y&cm_mmc=UK-PLA-DS3A-_-google-_-CSS_UK_EN_CatchAll-_-Catch+All-_-PRODUCT_GROUP&matchtype=&pla-381930223918&gclsrc=aw.ds&&gclid=EAIaIQobChMIqoC2hsjh4wIVxbHtCh0w5whsEAQYASABEgKsJfD_BwE)
 * Clamp and Arm [link](https://www.amazon.co.uk/dp/B011769YUM/ref=pe_3187911_189395841_TE_dp_1)
+* (optional) Adafruit GPS unit [link] (https://www.amazon.co.uk/dp/B01H1R8BK0?ref_=pe_3187911_264767211_E_301_dt_1)
 
-
+The GPS unit is optional 
     
-
 ## Download weights
 
     cd resources/weights/

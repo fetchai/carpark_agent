@@ -6,7 +6,6 @@ import time
 import os
 import base58
 import random
-from typing import List
 from datetime import datetime
 
 # oef stuff
@@ -14,7 +13,6 @@ from datetime import datetime
 from oef.agents import OEFAgent
 from oef.schema import Description
 from oef.messages import CFP_TYPES
-from oef.query import Query, Constraint, Eq
 from carpark_agent.car_detect_dataModel import CarParkDataModel
 
 # Ledger stuff
@@ -22,15 +20,6 @@ from fetchai.ledger.api import LedgerApi
 from fetchai.ledger.crypto import Entity
 from fetchai.ledger.api import TransactionApi
 
-
-# State machine for testing own service connetion and registration
-# service_test_state_starting_up = "starting_up"
-# service_test_state_disconnected = "disconnected"
-# service_test_state_idle = "idle"
-# service_test_state_searching = "searching"
-# service_test_state_test_cfp = "test_cfp"
-# service_test_state_waiting_for_cfp = "waiting_for_cfp"
-# service_test_state_try_restart_agent = "try_restart_agent"
 
 class CarParkAgent(OEFAgent):
 
@@ -75,12 +64,6 @@ class CarParkAgent(OEFAgent):
         self.last_detection_time= 0
         self.car_park_service_description = None
         self.test_dlg_id = 0
-        # self.service_test_state = service_test_state_starting_up
-        # self.last_service_test_state = service_test_state_starting_up
-        # self.wait_for_cfp_time = 0
-        # self.service_test_cfp_timeout = 60
-        # self.db.set_system_status("service_connection_test", self.service_test_state)
-        # self.service_test_idle_duration = 10
 
         # Set up system status
         self.db.set_system_status("ledger-status", "OK")
@@ -134,20 +117,6 @@ class CarParkAgent(OEFAgent):
             pass
         except Exception as e:
             print("having some problems closing connection")
-
-    # def restart_agent(self):
-    #     try:
-    #         self.unregister_service(0, self.car_park_service_description)
-    #         self.disconnect()
-    #     except Exception as e:
-    #         print("Had a problem disconnecting the agent")
-    #     if self._task is not None:
-    #         self._loop.call_soon_threadsafe(self._task.cancel)
-    #         self.stop()
-    #
-    #     self.agent_thread.join(120)
-    #     self.agent_thread = threading.Thread(target=self.run_function)
-    #     self.agent_thread.start()
 
     def balance_poll_function(self):
         while not self.kill_event.wait(0):
@@ -222,79 +191,6 @@ class CarParkAgent(OEFAgent):
 
             time.sleep(1)
 
-
-
-    # regularly search for ourselves to ensure our service is still connected otherwise we
-    # may sit there waiting for agents to find us and connect, not get any, and not realise
-    # it is because we are no longer descoverable
-    # def service_poller_function(self):
-    #     service_test_start_time = time.time()
-    #     while not self.kill_event.wait(0):
-    #         on_enter = self.service_test_state != self.last_service_test_state
-    #         self.last_service_test_state = self.service_test_state
-    #
-    #         #print("{}: self.service_test_state = {}".format(time.time(), self.service_test_state))
-    #         if self.service_test_state == service_test_state_disconnected:
-    #             try:
-    #                 self.unregister_service(0, self.car_park_service_description)
-    #                 self.disconnect()
-    #             except Exception as e:
-    #                 print("Had problems attempting to connect to oef")
-    #
-    #             try:
-    #                 self.attempt_connection()
-    #             except Exception as e:
-    #                 print("Had problems attempting to connect to oef")
-    #
-    #         # Test if we can search for ourselves
-    #         elif self.service_test_state == service_test_state_idle:
-    #             if on_enter:
-    #                 service_test_start_time = time.time()
-    #
-    #             if time.time() - service_test_start_time > self.service_test_idle_duration:
-    #                 try:
-    #                     self.agents_data = {}
-    #                     query = Query(
-    #                         [Constraint("unique_id", Eq(self.public_key))],
-    #                         CarParkDataModel())
-    #                     search_id = random.randint(1, 1000000)
-    #                     self.search_services(search_id, query)
-    #                     self.service_test_state = service_test_state_searching
-    #                 except Exception as e:
-    #                     print("Failed to search oef: {}".format(e))
-    #                     self.db.set_system_status("oef-status", "Error: Failed to contact OEF")
-    #                     self.service_test_state = service_test_state_disconnected
-    #         elif self.service_test_state == service_test_state_searching:
-    #             if on_enter:
-    #                 service_test_start_time = time.time()
-    #
-    #             # if we dont get a response:
-    #             if time.time() - service_test_start_time > self.service_test_idle_duration:
-    #                 self.db.set_system_status("oef-status", "Error: Failed to contact OEF")
-    #                 self.service_test_state = service_test_state_disconnected
-    #
-    #         elif self.service_test_state == service_test_state_test_cfp:
-    #             self.test_dlg_id = random.randint(1, 1000000)
-    #             self.send_cfp(0, self.test_dlg_id, self.public_key, 0, None)
-    #             self.service_test_state = service_test_state_waiting_for_cfp
-    #             self.wait_for_cfp_time = time.time()
-    #
-    #         elif self.service_test_state == service_test_state_waiting_for_cfp:
-    #             if time.time() - self.wait_for_cfp_time > self.service_test_cfp_timeout:
-    #                 self.service_test_state = service_test_state_disconnected
-    #
-    #         elif self.service_test_state == service_test_state_try_restart_agent:
-    #             self.restart_agent()
-    #
-    #         self.db.set_system_status("service_connection_test", self.service_test_state)
-    #         time.sleep(0.1)
-
-    # # in answer to the service polling
-    # def on_search_result(self, search_id: int, agents: List[str]):
-    #     if len(agents) == 0:
-    #         self.service_test_state = service_test_state_disconnected
-    #     else:
-    #         self.service_test_state = service_test_state_test_cfp
 
 
     def on_message(self, msg_id: int, dialogue_id: int, origin: str, content: bytes):
@@ -383,14 +279,6 @@ class CarParkAgent(OEFAgent):
     def oef_2_wallet_key(self, oef_public_key: str):
         return base58.b58decode(oef_public_key.encode("utf-8"))
 
-    #
-    # def wallet_2_oef_key(self, wallet_public_key: str):
-    #     time12 = format(int(time.time()), '012d')
-    #     time12_as_bytes = str.encode(time12)    # this is still 12 bytes in length
-    #     return base58.b58encode(wallet_public_key + time12_as_bytes).decode("utf-8")
-    #
-    # def oef_2_wallet_key(self, oef_public_key: str):
-    #     return base58.b58decode(oef_public_key.encode("utf-8"))[:-12]
 
     def create_or_load_wallet(self, reset_wallet, filename):
         private_key_dir = self.db.temp_dir
