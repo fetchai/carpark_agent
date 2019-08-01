@@ -13,6 +13,6 @@ source ../venv/bin/activate
 nice python3 run_detection_only.py &
 python3 run_carparkagent.py -ps 120 -fn set_friendly_name -dd
 
-pkill -KILL 'python3 run_detection_only.py'
+pkill -KILL 'python3'
 
 deactivate
