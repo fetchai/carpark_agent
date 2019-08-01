@@ -1,15 +1,21 @@
-# Car detection
+# Fetch Car Park Agent
+This is a project to get a Fetch.AI agent running on a Rasperry Pi which utilises the camera to report on free parking spaces. This data is made available on the Fetch network and can be purchased by other agents. 
 
-## Preparation (Ubuntu; tested on a Google Cloud VM)
+This project primarily targets the Raspbery Pi 4. It can be made to run on the Raspberry Pi 3, but it striggles a little. I include instructions for both versions.
 
-    sudo apt-get update`
-    sudo apt-get install htop vim mc python3-dev ffmpeg virtualenv libatlas-base-dev libsm6 libxext6 libjasper-dev libqtgui4 libqt4-test
-    sudo apt-get install cython
-    virtualenv -p python3.6 env
-    source env/bin/activate
-    pip install numpy tensorflow colour scikit-image keras IPython h5py Cython tablib crontab clint docopt
-    pip install coco
-    pip install pycocotools imgaug
+This document will take you through:
+1. Physically building the Camera/Raspberry PI module
+2. Preparing the Raspberry Pi so we do not need a monitor/keybaord etc. attached
+3. Installing the Fetch carpark_agent software on the Rasperry Pi
+4. Using the software to report on car parking spaces
+5. Installing the client software on a desktop machine (mac only at the moment)
+
+
+## Physically building the Camera/Raspberry PI module
+You will need - I've added links to the things I bought:
+Raspberry Pi 4 [link](https://thepihut.com/products/raspberry-pi-4-model-b?gclid=EAIaIQobChMImcuwvcfh4wIVirHtCh3szg2EEAAYASAAEgJQ_fD_BwE)
+Case to put Raspbery Pi and Camera in [link](ttps://uk.rs-online.com/web/p/products/1270210/?grossPrice=Y&cm_mmc=UK-PLA-DS3A-_-google-_-CSS_UK_EN_CatchAll-_-Catch+All-_-PRODUCT_GROUP&matchtype=&pla-381930223918&gclsrc=aw.ds&&gclid=EAIaIQobChMIqoC2hsjh4wIVxbHtCh0w5whsEAQYASABEgKsJfD_BwE)
+Clamp and Arm [link](https://www.amazon.co.uk/dp/B011769YUM/ref=pe_3187911_189395841_TE_dp_1)
     
 
 ## Download weights
