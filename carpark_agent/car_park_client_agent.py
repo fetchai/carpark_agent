@@ -213,7 +213,7 @@ class CarParkClientAgent(OEFAgent):
         # Send a CFP to all agents in the list
         for agent in self.agents_data:
             print("[{0}]: Sending to agent {1}".format(self.public_key, agent))
-            self.push_msg("Sending cfp to : " + self.public_key[:8] + "....")
+            self.push_msg("Sending cfp to : " + agent[:8] + "....")
 
             # we send a 'None' query, meaning "give me all the resources you can propose."
             self.send_cfp(1, random.randint(1, 1000000), agent, 0, None)

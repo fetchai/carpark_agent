@@ -232,7 +232,7 @@ Now you can run the agent
     
 You are presented with a screen with a number of buttons. 
 * Press Search. This will look for agents on the Fetch.AI network which can supply car parking information. Their public keys will be listed here.
-* Press Send CFP. This sends a "Call for Proposal" to all the gents listed. They will send back a friendly name that you can identify them with, the age of thier last detection, how many spaces they can report about and the total FET they charge. The UI will display whether their data fits your acceptance criteria (new enough and cheap enough)
+* Press CFP. This sends a "Call for Proposal" to all the gents listed. They will send back a friendly name that you can identify them with, the age of thier last detection, how many spaces they can report about and the total FET they charge. The UI will display whether their data fits your acceptance criteria (new enough and cheap enough)
 * When you first start this, you will not be able to requiest any data because you do not have any FET to spend. Press Generate FET to create some (this will freeze the UI for about 30 seconds while it does this)
 * Press Request data. All of the agents that satisfy the acceptance criteria will be asked to send their data. The final column of the table will be filled in showing how many car parking spaces that agent is aware of.  In return this client agent will send the appropriate amount of FET to the car park agent
 
@@ -240,3 +240,7 @@ You are presented with a screen with a number of buttons.
 Both the client and carpark agent UI show the current FET levels of each of the agent at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
 
 Something else to watch out for in this status panel is any errors shown on the Ledger or OEF. If there is an error, the agent may need restarting, or it could be a problem at the server side.
+
+## Known issues
+### Searchable but non CFP-able agents
+Sometimes the car park agents get in a state where they are still serchable for, but do not receive any notificaiton when CFP is sent. This is an issue at the Fetch end of things and the only solution for agent developers at present is to restart their agents which this happens.
