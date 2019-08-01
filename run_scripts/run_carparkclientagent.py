@@ -11,7 +11,7 @@ parser.add_argument(
     '-mf',
     '--max_price_fet',
     default=4000,
-    help='maximum price we would be prepared to pay for data in Fetch Tokens (default: 20)'
+    help='maximum price we would be prepared to pay for data in Fetch Tokens (default: 4000)'
 )
 parser.add_argument(
     '-ma',
