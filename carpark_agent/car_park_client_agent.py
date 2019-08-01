@@ -410,6 +410,10 @@ class CarParkClientAgent(OEFAgent):
 
         private_key_dir = str(os.path.join(self.run_dir, '..', "temp_files"))
 
+        # ensure the directory exists
+        if not os.path.isdir(private_key_dir):
+            os.mkdir(private_key_dir)
+
         file_path = private_key_dir + "/" + filename
         if not reset_wallet and os.path.isfile(file_path):
             with open(file_path, 'r') as private_key_file:
