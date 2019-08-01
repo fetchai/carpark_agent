@@ -35,8 +35,9 @@ class CarParkClientAgent(OEFAgent):
             ledger_ip,
             ledger_port,
             friendly_name,
-            enable_auto_search=True):
+            run_dir):
         # surely I should be called super first?!?
+        self.run_dir = run_dir
         self.entity = self.create_or_load_wallet(reset_wallet,  "car_park_client_agent_private.key")
         print("Client wallet key: " + str(self.entity.public_key_bytes))
         oef_key = self.wallet_2_oef_key(self.entity.public_key_bytes)
@@ -61,7 +62,6 @@ class CarParkClientAgent(OEFAgent):
             self.friendly_name = friendly_name
         else:
             self.friendly_name = "car_park_agent_client_{}".format(random.randint(1, 1000000))
-        self.enable_auto_mode = enable_auto_search
 
         # Market data
         self.agents_data = {}
@@ -195,8 +195,6 @@ class CarParkClientAgent(OEFAgent):
         for agent in agents:
             self.agents_data[agent] = {'public_key': agent}
 
-        if self.enable_auto_mode:
-            self.do_cfp_to_all()
 
     def can_do_cfp(self):
         return len(self.agents_data) > 0
@@ -257,25 +255,6 @@ class CarParkClientAgent(OEFAgent):
 
         self.push_msg("Proposal returned from : " + proposal.values['friendly_name'])
 
-        if self.enable_auto_mode:
-            print('check that we have enough funds')
-            try:
-                current_fet = self.api.tokens.balance(self.entity)
-            except Exception as e:
-                self.ledger_status = "Failed: Error on connection"
-                return
-
-            print("current_fet = " + str(current_fet))
-            if current_fet - self.max_price_fet - self.transfer_fee <= 0:
-                print("Have run out of fet - generating more")
-                self.generate_wealth(50000)
-
-            if self.is_acceptable_proposal(proposal.values['price'], proposal.values["last_detection_time"]):
-                print("Accept transaction")
-                self.send_accept(msg_id+1, dialogue_id, origin, msg_id)
-            else:
-                print("Declining proposal as price was too high or data was too old")
-                self.send_decline(msg_id+1, dialogue_id, origin, msg_id)
 
     def generate_wealth(self, fet):
         self.push_msg("Generate_wealth")
@@ -429,8 +408,7 @@ class CarParkClientAgent(OEFAgent):
 
     def create_or_load_wallet(self, reset_wallet, filename):
 
-        this_dir = str(os.path.dirname(os.path.realpath(__file__)))
-        private_key_dir = str(os.path.join(this_dir, '..', "temp_files"))
+        private_key_dir = str(os.path.join(self.run_dir, '..', "temp_files"))
 
         file_path = private_key_dir + "/" + filename
         if not reset_wallet and os.path.isfile(file_path):

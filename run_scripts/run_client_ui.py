@@ -1,5 +1,5 @@
 import argparse
-
+import os
 from carpark_agent.tk_client_gui_app import TkClientGuiApp
 from carpark_agent.car_park_client_agent import CarParkClientAgent
 
@@ -67,7 +67,7 @@ client_agent = CarParkClientAgent(
     ledger_ip=args.ledger_ip,
     ledger_port=args.ledger_port,
     friendly_name=args.friendly_name,
-    enable_auto_search=False)
+    run_dir=os.path.dirname(__file__))
 
 client_agent.start_agent()
 

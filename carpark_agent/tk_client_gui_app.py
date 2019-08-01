@@ -449,13 +449,13 @@ class TkClientGuiApp:
         status_str += "Uncleared FET: {}\n".format(self.carparkclientagent.calc_uncleared_fet())
         status_str += "Cleared FET: {}\n".format(self.carparkclientagent.cleared_fet)
         status_str += "Ledger status: {}:{}: {}\n".format(
-            self.carparkclientagent.ledger_status,
             self.carparkclientagent.ledger_ip,
-            self.carparkclientagent.ledger_port)
+            self.carparkclientagent.ledger_port,
+            self.carparkclientagent.ledger_status)
         status_str += "OEF status: {}:{}: {}\n".format(
-            self.carparkclientagent.oef_status,
             self.carparkclientagent.oef_ip,
-            self.carparkclientagent.oef_port)
+            self.carparkclientagent.oef_port,
+            self.carparkclientagent.oef_status)
         self.status_text["text"] = status_str
         self.setup_ui_state()
         self.tk_root.after(self.history_update_wait_ms, self.update_history)
