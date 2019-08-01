@@ -14,7 +14,16 @@ with open('README.md') as f:
 with open('LICENSE') as f:
     license = f.read()
 
+platform = distutils.util.get_platform()
+print("platform: " + platform)
 
+if platform.startswith("macosx"):
+    subprocess.call([sys.executable, '-m', 'pip', 'install', 'scipy'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', 'scikit-image'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', 'scikit-learn'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', 'ipython'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', 'pandas'])
+    subprocess.call([sys.executable, '-m', 'pip', 'install', 'opencv-python'])
 
 subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pillow'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
@@ -45,11 +54,8 @@ subprocess.call([sys.executable, '-m', 'pip', 'install', 'scikit-image == 0.15.0
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'imgaug == 0.2.9', '--no-dependencies'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'imageio == 2.5.0', '--no-dependencies'])
 
-
 #
 #
-# platform = distutils.util.get_platform()
-# print("platform: " + platform)
 #
 # # If raspberry Pi, 3 or 4
 # if platform == "linux-armv7l":

@@ -16,6 +16,12 @@ sudo systemctl disable gpsd.socket
 sudo nano /etc/dphys-swapfile
 
 osx
+Download and install homebrew
+brew install wget
+brew install python3
+
+
+
 brew install opencv3
 
 

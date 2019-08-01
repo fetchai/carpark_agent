@@ -2,11 +2,11 @@
 try:
     import board
     import adafruit_gps
-    import serial
+    import serials
 
     has_gps = True
-except ImportError:
-    print("Failed to load Raspberry Pi gps module")
+except Exception as e:
+    print("Failed to load Raspberry Pi gps module: {}".format(e))
     has_gps = False
 
 if has_gps:
