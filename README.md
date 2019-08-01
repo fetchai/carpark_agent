@@ -1,7 +1,7 @@
 # Fetch Car Park Agent
 This is a project to get a Fetch.AI agent running on a Rasperry Pi which utilises the camera to report on free parking spaces. This data is made available on the Fetch network and can be purchased by other agents. 
 
-This project primarily targets the Raspbery Pi 4. It can be made to run on the Raspberry Pi 3, but it striggles a little. I include instructions for both versions.
+This project primarily targets the Raspberry Pi 4. It can be made to run on the Raspberry Pi 3, but it struggles a little. Currently there are only instructions for the Raspberry Pi 4, but I will add instructions for the 3 later.
 
 This document will take you through:
 1. Physically building the Camera/Raspberry PI module
@@ -22,37 +22,48 @@ Things you will need - I've added links to the specific things I bought:
 * A PC or Mac 
 * A network which the PC/Mac and Raspberry pi can connect to
 
-I use a wireless network as once your Raspberry Pi is set up, you want as few wires going to it as possible 
+I use a wireless network because, once your Raspberry Pi is set up, you want as few wires going to it as possible 
 The GPS unit is optional and initially these instructions will focus on building the agent without the GPS Unit. I may do an additional set of instructions on how to update it to use a GPS unit.
 As mentioned in the introduction, this will also work on a Raspberry Pi 3 (4) - however, some additional sets are needed to make this work, so I'll put some notes about this at the end.
 
 ### Building 
-The case I got has excellent instructions on how to put it together and mount the Raspberry PI and Camera inside it. However, this case is desgined for the Raspberry Pi 3 rather than 4 and so the side with the holes for the HDMI output will not fit on when the board is inside. I just left this side off, but you could probably just enlarge the holes.
+The case I got has excellent instructions on how to put it together and mount the Raspberry PI and Camera inside it. However, this case is desgined for the Raspberry Pi 3 rather than 4 and so the side with the holes for the HDMI output will not fit on when the board is inside. I just left this side off, but you could probably enlarge the holes with a file.
 https://thepihut.com/blogs/raspberry-pi-tutorials/nwazet-pi-zero-camera-box-assembly-instructions
 
-I then removed the metal plate from the camera-case wall-mount and attached it to the clamp + arm and then reassembled it all.
+I will attach the clamp and arm to the box until later, 
 
 Plug in the monitor, keyboard and mouse.
 
 ## 2. Preparing the Raspberry Pi
-If you have got a brand-new Raspberry Pi, then you will need to first install the Raspbian operating system. If you do not have a new Rasperry pi, I recommend updating your operating system to the latest version.
+If you have got a brand-new Raspberry Pi, you can simply insert the SD card, connect the power and boot up. 
 
-With your new Raspberry Pi, you should have received an SD card with NOOBS installed on it. If you do not have an SD card like this, then you can turn an existing SD card into one, using the NOOBS instructions below:
+If you do not have a new Rasperry Pi SD card, you will need to make one. To do this follow the NOOBS insructions below. 
 
-###NOOBS
+### NOOBS
 NOOBS is a way to get an SD card like it was when you got your Raspberry Pi new from the shop - I used the "Offline and network install" option and am using version 3.2.0:
 Go to here and follow the instructions: https://www.raspberrypi.org/downloads/noobs/
 
-###Installing and updating Raspbian
-Once you have set up your SD card, plug it into your Raspberry Pi, connect the power and watch it boot up. When prompted select the Raspbian operating system and click on Install. You may be prompted to enter a password for the Raspberry PI and your wifi password so the Raspberry Pi has access to the internet. When it has finished you will be prompted to restart.
+Once you have set up your SD card, plug it into your Raspberry Pi, connect the power and watch it boot up. When prompted select the Raspbian operating system and click on Install. 
 
-It is wise to ensure your operating system is completely up to date. Open a Terminal window and type:
 
-    sudo apt update  -y
+### Booting up and updating the OS
+When you first boot your Raspberry Pi, you will be prompted to enter a password for the Raspberry PI and your wifi password so the Raspberry Pi has access to the internet. When it has finished you will be prompted to restart.
+
+You will need to have your OS completely up to date to avoid problens with these instructions. Open a Terminal window and type:
+
+    sudo apt update -y
     sudo apt-get update
     sudo apt-get dist-upgrade
 
 ### Configuring the Raspberry Pi
+Click on the Raspberry symbol in the top left of the screen. Select Preferences -> Raspberry Pi Configuration.
+Select the Interfaces tab.
+Enable the following:
+* Camera
+* SSH
+* VNC
+
+VNC lets us control the Raspberry Pi's desktop even when the monitor, keyboard and mouse have been disconnected. 
 
 Find out the ip address of your raspberry pi. Open a Terminal and type:
 
@@ -67,66 +78,117 @@ There should be a some lines saying something like:
 
 The numbers after inet is my Raspberry Pi's ip address. In this case 192.168.11.9 Write these down.
 
-
-Click on the Raspberry symbol in the top left of the screen. Select Preferences -> Raspberry Pi Configuration.
-Select the Interfaces tab.
-Enable the following:
-* Camera
-* SSH
-* VNC
-
-VNC lets us control the Raspberry Pi's desktop even when the monitor, keyboard and mouse have been disconnected. 
-
 Let's test that VNC is working by going to our Mac or PC and downloading and installing VNC viewer:
 https://www.realvnc.com/en/connect/download/viewer/
 
 When you run it, you there should be a bar at the top where you can type in an IP address. Type in the IP address of your Raspberry Pi. You will be prompted for your Raspberry Pi password. You should then see your Raspberry Pi's desktop in a window on your Mac or PC.
 
-Now we should test it without the monitor plugged in:
-Unplug your monitor
-Using your VNC viewing, restart your Raspberry pi by going to the Raspberry icon on the rop left of the screen.
-You will lose your connecting with the Raspberry pi while it reboots, but when it has rebooted, you should see the desktop again on your Mac or Pc.
+Now we need to test it without the monitor plugged in:
+* Shut down your Raspberry Pi using the Raspberry icon at the top left of the screen
+* Unplug your monitor
+* Unplug the power from the mains, leave it for 10 seconds then plug it back in
+* On your Mac or PC, Use your VNC Viewer to view the desktop of the Raspberry Pi
 
-The reason for testing that this works is that while I never had any problems doign this on the Raspberry Pi 3, the Raspberry Pi 4 had an issue where the screen solution would revert to a very low resolutoin 4:3 aspect ratio when using VNC after rebooting without the mintor plugged in. If this happens to you, you will need to do the following:
+The reason for testing that this works is that while I never had any problems doing this on the Raspberry Pi 3, the Raspberry Pi 4 had an issue where the screen solution would revert to a very low resolutoin 4:3 aspect ratio when using VNC after rebooting without the mintor plugged in. The car park agent is very difficult to use if this happens, and so I recommend fixingthis issue.
 
 ### Fixing the low screen-resolution issue on Raspberry Pi 4
-[To do]
+Open a terminal and type:
+
+    sudo nano /boot/config.txt
+ 
+ Use the Nano editor to scroll down until you see the following lines:
+ 
+    [pi4]
+    # Enable DRM VC4 V3D driver on top of the dispmanx display stack
+    dtoverlay=vc4-fkms-v3d
+    max_framebuffers=2
+ 
+ Comment out the latter two lines so it now says:
+ 
+    [pi4]
+    # Enable DRM VC4 V3D driver on top of the dispmanx display stack
+    # dtoverlay=vc4-fkms-v3d
+    # max_framebuffers=2
+ 
+Save this file and exit the editor. Now reboot you can do this by typing into the terminal:
+ 
+    reboot
+    
+As you reboot, your VNC Viewer on your Mac or PC will no longer be able to see your screen. However it will come back to life once your Raspberry Pi has booted up.
+You may find that once you have rebooted, your screen resolution is still small (perhaps even smaller than it was). This is expected. so fix this problem. Open a terminal and type:
+ 
+    sudo raspi-config
+    
+Use the up/down arrow keys, select Advanced options and press Enter
+Go down the Resolution and press Enter
+Go all the way to the bottom to the 1920X1080 option and press Enter
+Confirm the change
+Use the right arrow to select <Finish>, press Enter
+You will be prompted to restart
+
+Now when the Pi restarts, the VNC Viewer should show a nice large resolution. Is this is what happens, you can shut it down, reconnect your monitor and restart it 
 
 ## 3. Installing the Fetch.AI carpark_agent software on the Rasperry Pi
+I would now work directly on the Raspbery Pi as the VNC connection can be quite laggy sometimes.
 
-I would reconnect the monitor and continue working directly on the Raspbery Pi if possible as the VNC connection can be quite laggy sometimes.
+We will be getting the code from github.com. At the moment, the code is  in a private repository, so you will need a Fetch github account to get access to it. WHen the code is public, you will not need to log into github to get the code, but it is still useful to log in and have the page open in a browser on the Raspberry Pi so you can copy and past text into the terminal fromn these instructions.
 
-We will be getting the code from github.com
 
-### 
-Since the repository is not public, you will need a github account in order to donload the code. You will also need to generate 
-In order to install the software you will need a github account. If you odn't have one you will need to create one when you first go to github
+### Adding a key to your git hub account
+While the code is in a private repository, you will not be able to get the code without creating a public/private key pair on the Raspberry Pi and adding it to your github account. Only Fetch employees will be able to do this. 
 
-Since the repository is not
+The first step is to make a public/private key pair. On your Raspberry PI, open a terminal and type (replacing the last bit with your own email address):
+
+    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+    
+When you are presented with options just press Enter to accept the defaults until you are informed a key has been generated.
+
+Now we need to get the public key into the clipboard
 
     sudo apt-get install xclip
-Then type:
-
-    cd ~/.ssh  
+    cd ~/.ssh
     cat id_rsa.pub | xclip -i
     
-You then need to paste this into your github settings
+Open up a browser and type this into the address bar (don't copy and past this in as you will lose the key stored in your clipboard):
+ 
+    www.github.com
+    
+You will be asked to sign in - since you are en employee, you should have an account associated with Fetch.AI already. To add the newprivate key, do the following:
+* In the top right corner, click on the icon representing you. 
+* Select settings
+* On the left hand side select SSH and GPG keys
+* in the top right press, new SSH key
+* In the title, write something like "Raspberry Pi"
+* Right click in the Key text box and select Paste - you should see a long string of numbers and letters pasted in finishing with your email address 
+* Click Add SSH Key
+    
+Now you will be able to download the code from github as if it were a public repository
+
+
 
 ### Getting the code
-Open a terminal
+In your browser on your Raspberry Pi, type this into the address bar:
+
+    https://github.com/fetchai/carpark_agent
+
+This takes you to the webpage with these instructions. Having it available on the Raspberry Pi is useful for copying and pasting text into the terminal
+ 
+Open a terminal and type:
 
     cd ~/Desktop
     git clone git@github.com:fetchai/carpark_agent.git
     cd carpark_agent
     
-Now we need to download the ..:
+In order to run the machine learning algorithms we need to download a large datafile. 
 
     ./car_detection/weights/download_weights.sh
     
-Now install various things
-Past these lines into the terminal
+There are a number of things that need to be installed on the Raspberry Pi before we get install the agent code itself. Paste this line into the terminal (careful its a long one, so make sure you select it all before doing copy/paste)
 
     sudo apt-get install gcc htop vim mc python3-dev ffmpeg virtualenv libatlas-base-dev libsm6 libxext6 clang libblas3 liblapack3 liblapack-dev libblas-dev cython gfortran build-essential libgdal-dev libopenblas-dev liblapack3 liblapacke liblapacke-dev liblcms2-utils liblcms2-2 libwebpdemux2 python3-scipy python3-numpy python3-matplotlib libjasper-dev libqtgui4 libqt4-test protobuf-compiler python3-opencv gpsd gpsd-clients
+
+Now type this:
+
     pip3 install virtualenv     
 
 Create the virtual environment and activate it
@@ -138,6 +200,8 @@ Install the software in develop mode
     
     python3 setup.py develop
     
+When install python software you can either pass `install` or `develop` into the setup.py script.  "install" copies all the code into the python environment so it can be run - this means that there are then two copies of the code and if you change one of the python files, it will not necessarily have any effect unless you reinstall it. This can be quite confusing if you are intending to muck around with the code. Therefore, I recommend that you use "develop" as this will create a link to the code and so any changes you make will take immediate effect when you run the code.  
+
 ### Ensure it runs correctly
 Try running it
     
@@ -145,7 +209,7 @@ Try running it
     
 You should now see the agent running.
 
-If you go back to your Mac or PC and go to the git hub repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will cpature in email and perform vehicle detection on the image. It should detect the cars in your picture.
+If you go back to your Mac or PC and go to the git hub repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image. It should detect the cars in your picture (you might have to wait a few minutes to know that it has worked)
 
 If this all seems to work, power down your Raspberry pi, disconnect the power, keyboard, mouse and keyboard.
 
@@ -155,19 +219,59 @@ Attach the Clamp and Arm and set the camera up pointing to your parking spaces, 
 ### Configuring the agent
 Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi. The agent should be running. You can now move your camera around so it is looking at the area you are interested in.
 
-Select an area of interest. 
+There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
+* Press Edit Detection Area button
+* Press Capture Ref Image button - this will capture in image from the camera and it should be tinted blue - indicating that it will detect everywhere
+* Press the red Fill All button - This will turn it all red - showing it will now detect nowhere
+* Press Draw detectable button and then draw an outline around the area you are interested in Ensure you make a compleely closed shape
+* Press the blue Flood Fill button and then click inside the shape you have drawn. This should fill it blue
 
-Set  Max capacity.
+Note that this UI can be a bit laggy when running over VNC and while detections are going on, so just do it slowly and be patient.
 
-Close it down.
+Count the number of parking spaces in the area of interest you marked out. If it is hard to see, press Live Detect to see things more clearly. When you have counted them press Edit Detection area again to go into edit mode.
+Use the arrows either side of "Max Capacity" to set the correct number of parking spaces that the agent can report on.
 
-Open thr script file - give it a friendly name. set the lat and lon.
+When you are done press the Live Detect button. 
+
+Close down the agent by pressing the Quit button. If you watch the terminal window that you launch it from, you may find that it takes a while to full y shut down - this is because if it is in the middle of a detection it needs to finish what it is doing before quitting. This can take a minute or so.  
+
+We now need to edit the script file which launches the agent. In the terminal window make sure your current directory is ~/Desktop/carpark_agent and type:
+
+    nano run_scripts/run_carpark_agent.sh
+
+Look for the line that says
+
+    python3 run_carparkagent.py -ps 120 -fn set_friendly_name -fet 2000 -lat 40.780343 -lon -73.967491
     
+Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
+
+You also need to set the latitude and longitude of your locations. An easy way to do this is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. Paste these values into the script command line - be careful not to leave any commas in.
+ 
+My new line would read
+
+    python3 run_carparkagent.py -ps 120 -fn diarmid_carpark_agent -fet 2000 -lat 52.235063 -lon 0.154021
+
+The -fet argument is how much nano fet we wish to charge other agents for information about parking. Note that a nano fet is 0.0000000001 FET, so the default value here is 0.0000002 FET.
+
+Save the edited file and close the editor.
+
+The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. In a terminal type:
+    
+    crontab -e
+    
+You may be asked to specify which editor you wish to use.
+
+This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
+
+    @reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
+  
+Save the file exit the editor. Reboot your Raspberry Pi. The car pakr agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the numberof vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
+
 ## 4. Installing the client software on a Mac
 ### Setting up the Mac
 Now that the car park agent is running, we will set up a client agent on your Mac or PC. This will query the Fetch.AI network for parking space data.
  
-These instructions have only been done for  Mac so far.
+These instructions have only been done for Mac so far.
 
 
 If you do not have Homebrew already installed, open a terminal:
@@ -233,8 +337,10 @@ Now you can run the agent
 You are presented with a screen with a number of buttons. 
 * Press Search. This will look for agents on the Fetch.AI network which can supply car parking information. Their public keys will be listed here.
 * Press CFP. This sends a "Call for Proposal" to all the gents listed. They will send back a friendly name that you can identify them with, the age of thier last detection, how many spaces they can report about and the total FET they charge. The UI will display whether their data fits your acceptance criteria (new enough and cheap enough)
-* When you first start this, you will not be able to requiest any data because you do not have any FET to spend. Press Generate FET to create some (this will freeze the UI for about 30 seconds while it does this)
+* When you first start this, you will not be able to request any data because you do not have any FET to spend. Press Generate FET to create some (this will freeze the UI for about 30 seconds while it does this)
 * Press Request data. All of the agents that satisfy the acceptance criteria will be asked to send their data. The final column of the table will be filled in showing how many car parking spaces that agent is aware of.  In return this client agent will send the appropriate amount of FET to the car park agent
+
+Note there is a transaction fee of 1 nano-fet when you send FET from one agent to another. So the client agent's FET will go down by a bit more than the cost of the data on its own.
 
 ### Cleared and uncleared FET
 Both the client and carpark agent UI show the current FET levels of each of the agent at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
@@ -244,3 +350,7 @@ Something else to watch out for in this status panel is any errors shown on the 
 ## Known issues
 ### Searchable but non CFP-able agents
 Sometimes the car park agents get in a state where they are still serchable for, but do not receive any notificaiton when CFP is sent. This is an issue at the Fetch end of things and the only solution for agent developers at present is to restart their agents which this happens.
+### To dos:
+* Do instructions for Raspberry Pi Version 3
+* Do instructions for running the windows client agent
+* Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
