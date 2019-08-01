@@ -1,4 +1,4 @@
-# Fetch Car Park Agent
+# Fetch.AI Car Park Agent
 This is a project to get a Fetch.AI agent running on a Rasperry Pi which utilises the camera to report on free parking spaces. This data is made available on the Fetch network and can be purchased by other agents. 
 
 This project primarily targets the Raspberry Pi 4. It can be made to run on the Raspberry Pi 3, but it struggles a little. Currently there are only instructions for the Raspberry Pi 4, but I will add instructions for the 3 later.
