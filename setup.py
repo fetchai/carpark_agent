@@ -16,18 +16,48 @@ with open('LICENSE') as f:
 
 
 
-platform = distutils.util.get_platform()
-print("platform: " + platform)
 
-# If raspberry Pi, 3 or 4
-if platform == "linux-armv7l":
-    subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_rpi.txt', '--no-dependencies'])
-# If  mac
-elif platform.startswith("macosx"):
-    subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_osx.txt', '--no-dependencies'])
-else:
-    print("Error unsupported platform")
-    exit()
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'numpy < 1.17'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'adafruit-circuitpython-gps'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'gps'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade pillow'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade pip setuptools wheel'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'colour'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'IPython'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'h5py'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'tablib'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'crontab'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'clint'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'docopt'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'Cython'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'coco'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'pycocotools'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'tensorflow'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'keras'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'oef'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'fetchai-ledger-api'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'base58'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'pywt'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'shapely', '--no-dependencies'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'scikit-image', '--no-dependencies'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'imgaug', '--no-dependencies'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'imageio', '--no-dependencies'])
+
+
+#
+#
+# platform = distutils.util.get_platform()
+# print("platform: " + platform)
+#
+# # If raspberry Pi, 3 or 4
+# if platform == "linux-armv7l":
+#     subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_rpi.txt', '--no-dependencies'])
+# # If  mac
+# elif platform.startswith("macosx"):
+#     subprocess.call([sys.executable, '-m', 'pip', 'install', '-r', 'requirements_osx.txt', '--no-dependencies'])
+# else:
+#     print("Error unsupported platform")
+#     exit()
 
 setup(
     name='carpark_agent',
