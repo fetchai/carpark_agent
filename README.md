@@ -363,6 +363,7 @@ Something else to watch out for in this status panel is any errors shown on the 
 ### Searchable but non CFP-able agents
 Sometimes the car park agents get in a state where they are still searchable for, but do not receive any notification when CFP is sent. This is an issue at the Fetch.AI end of things and we are working a solution. The only work-around for agent developers at present is to restart their agents when this happens.
 ### To dos:
+* Add illustrative screenshots to these instructions
 * Do instructions for Raspberry Pi Version 3
 * Do instructions for running the windows client agent
 * Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
