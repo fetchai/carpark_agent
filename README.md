@@ -367,3 +367,6 @@ Sometimes the car park agents get in a state where they are still searchable for
 * Do instructions for Raspberry Pi Version 3
 * Do instructions for running the windows client agent
 * Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
+
+## Installing under Windows
+https://pysource.com/2019/03/15/how-to-install-python-3-and-opencv-4-on-windows/
