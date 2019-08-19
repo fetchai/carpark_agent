@@ -33,4 +33,7 @@ shapely==1.6.4.post2
 fixes:
 python -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.12.0-py3-none-any.whl
 
+install redistributables
+https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads
+
 https://www.tensorflow.org/install/source_windows
