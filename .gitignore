@@ -92,7 +92,7 @@ ENV/
 # Project specific stuff
 /temp_files
 /car_detection/weights/mask_rcnn_coco.h5
-
+/_win
 
 # OSX stuff
 .DS_Store

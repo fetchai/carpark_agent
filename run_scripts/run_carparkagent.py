@@ -124,6 +124,7 @@ image_recorder = ThreadedImageRecorder(
     db)
 
 image_recorder.start_processing()
+print("Recorder started")
 
 # Create the thread to perform the vehicle detection image processing
 if not args.disable_detection:
@@ -137,6 +138,9 @@ if not args.disable_detection:
 else:
     car_detection = None
 
+print("Detection started")
+
+print("About to start gui")
 # (optionally) create a GUI application (or just a loop which waits to be cancelled)
 if not args.run_headless:
     TkGuiApp("Fetch.AI car-park agent", image_capture, db, args.screen_width_fraction)
