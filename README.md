@@ -6,8 +6,8 @@ This project primarily targets the Raspberry Pi 4. It can be made to run on the 
 This document will take you through:
 1. Physically building the Camera/Raspberry PI module
 2. Preparing the Raspberry Pi 
-3. Installing the Fetch.AI carpark_agent software on the Rasperry Pi
-4. Installing the client software on a Mac (windows will be done later)
+3. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
+4. Installing the client software (a. Mac, b. Windows)
 
 
 ## 1. Physically building the car park agent
@@ -135,7 +135,7 @@ I would now work directly on the Raspbery Pi as the VNC connection can be quite 
 
 We will be getting the code from github.com. At the moment, the code is  in a private repository, so you will need a Fetch github account to get access to it. When the code is public, you will not need to log into github to get the code, but it is still useful to log in and have the page open in a browser on the Raspberry Pi so you can copy and past text into the terminal fromn these instructions.
 
-### Adding a key to your git hub account
+### Adding a key to your github account
 While the code is in a private repository, you will not be able to get the code without creating a public/private key pair on the Raspberry Pi and adding it to your github account. Only Fetch employees will be able to do this. 
 
 The first step is to make a public/private key pair. On your Raspberry PI, open a terminal and type (replacing the last bit with your own email address):
@@ -212,7 +212,7 @@ Try running it
     
 You should now see the agent running.
 
-If you go back to your Mac or PC and go to the git hub repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture (you might have to wait a few minutes to know that it has worked)
+If you go back to your Mac or PC and go to the github repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture (you might have to wait a few minutes to know that it has worked)
 
 If this all seems to work, power down your Raspberry pi, disconnect the power, keyboard, mouse and keyboard.
 
@@ -315,7 +315,7 @@ When the system has restarted, try running it. Open up a terminal and type:
     
 You should now see the agent running.  
 
-If you go back to your Mac or PC and go to the git hub repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture. Note that it may take several minutes to start up and then will only capture in image and attempt to detect cars about once every 5 minutes - so you might want to go and make a cup of tea while you wait.
+If you go back to your Mac or PC and go to the github repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture. Note that it may take several minutes to start up and then will only capture in image and attempt to detect cars about once every 5 minutes - so you might want to go and make a cup of tea while you wait.
 
 If this all seems to work, power down your Raspberry pi, disconnect the power, keyboard, mouse and keyboard.
 
@@ -421,7 +421,7 @@ Now we need to install some software to support the agent. Paste these lines int
     pip3 install virtualenv
      
 ### Getting and installing the code
-Since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your git hub account".
+Since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your github account".
  
 This should now let you get the code from github as if it were a public repository
   
@@ -483,7 +483,7 @@ To configure and run the agent on the mac, simply follow the instructions for th
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
 
 ### Git hub
-You will need to clone the repository from git hub as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this steps starts with the words "After entering the above command..."'  
+You will need to clone the repository from github as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this steps starts with the words "After entering the above command..."'  
 https://www.computerhope.com/issues/ch001927.htm
 
 You can now used Git-Bash to execute any of the Linux style bash scripts. 
@@ -539,7 +539,7 @@ Locate the file called "opencv_python-4.1.1-cp37-cp37m-win32.whl" and download i
 ### Getting the car-park agent code
 Using the Git-Bash terminal you can now get the code from git-hub.  
 
-As before, since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your git hub account".
+As before, since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your github account".
  
 This should now let you get the code from github as if it were a public repository
   
