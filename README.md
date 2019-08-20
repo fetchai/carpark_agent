@@ -201,7 +201,7 @@ Create the virtual environment and activate it
     
 Install the software in develop mode
     
-    python3 setup.py develop
+    python setup.py develop
     
 When install python software you can either pass `install` or `develop` into the setup.py script.  "install" copies all the code into the python environment so it can be run - this means that there are then two copies of the code and if you change one of the python files, it will not necessarily have any effect unless you reinstall it. This can be quite confusing if you are intending to muck around with the code. Therefore, I recommend that you use "develop" as this will create a link to the code and so any changes you make will take immediate effect when you run the code.  
 
@@ -219,7 +219,7 @@ If this all seems to work, power down your Raspberry pi, disconnect the power, k
 Attach the Clamp and Arm and set the camera up pointing to your parking spaces, reconnect the power and let it boot up.
 
 
-### Configuring the agent
+### Configuring the car-park agent
 Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi. 
 
 The agent will not be running. So, open a terminal and type:
@@ -251,7 +251,7 @@ We now need to edit the script file which launches the agent. In the terminal wi
 
 Look for the line that says
 
-    python3 run_carparkagent.py -ps 120 -fn set_friendly_name -fet 2000 -lat 40.780343 -lon -73.967491
+    python run_carparkagent.py -ps 120 -fn set_friendly_name -fet 2000 -lat 40.780343 -lon -73.967491
     
 Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
 
@@ -259,11 +259,13 @@ You also need to set the latitude and longitude of your locations. An easy way t
  
 My new line would read
 
-    python3 run_carparkagent.py -ps 120 -fn diarmid_carpark_agent -fet 2000 -lat 52.235063 -lon 0.154021
+    python run_carparkagent.py -ps 120 -fn diarmid_carpark_agent -fet 2000 -lat 52.235063 -lon 0.154021
 
 The -fet argument is how much nano-FET we wish to charge other agents for information about parking. Note that a nano-FET is 0.0000000001 FET, so the default value here is 0.0000002 FET.
 
 Save the edited file and close the editor.
+
+### Make the agent start on boot up
 
 The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. In a terminal type:
     
@@ -320,7 +322,7 @@ Create and activate the virtual environment and install the python packages
     
     ./run_scripts/create_venv.sh
     source venv/bin/activate
-    python3 setup.py develop
+    python setup.py develop
         
 ### Running the client
 Configure the client agent. Open the file run_scripts/run_client_agent.sh in a text editor. You can do this using a terminal by typing
@@ -329,16 +331,16 @@ Configure the client agent. Open the file run_scripts/run_client_agent.sh in a t
     
 then find the line that says:
 
-    python3 run_client_ui.py -fn set_friendly_name -ma 3600 -mf 4000
+    python run_client_ui.py -fn set_friendly_name -ma 3600 -mf 4000
 
 Change the set_friendly_name to something personal. E.g. I would called it dc_client_agent. So my line would look like:
 
-    python3 run_client_ui.py -fn dc_client_agent -ma 3600 -mf 4000
+    python run_client_ui.py -fn dc_client_agent -ma 3600 -mf 4000
 
 
 The other options on this command line are:
 * -ma: The maximum age of any detection data we consider worth having. Default is 3600 seconds (1 hour) 
-* -mf: The naximum price this client would be prepared to pay for car parking data. This is specified in nano-FET. I.e. 0.0000000001 FET. SO, default is 0.0000004 FET 
+* -mf: The maximum price this client would be prepared to pay for car parking data. This is specified in nano-FET. I.e. 0.0000000001 FET. SO, default is 0.0000004 FET 
 
 Save the file and exit the editor.
 
@@ -354,6 +356,92 @@ You are presented with a screen with a number of buttons.
 
 Note there is a transaction fee of 1 nano-FET when you send FET from one agent to another. So the client agent's FET will go down by a bit more than the cost of the data on its own.
 
+### Running the car-park agent on a Mac
+Since you have all the code installed on the Mac, you can also run the car-park agent itself. It will use the Mac's built in camera and so will most likely be looking at you rather than at a car-parking space. However, I have found that the Mac is a much easier environment to develop the code in before then transferring it to the Raspberry Pi. If you hold up a photo of a car-park you can test that the detection algorithms are working correctly.
+
+To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
+
+
+## Installing under Windows
+The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
+
+### Git hub
+You will need to clone the repository from git hub as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this steps starts with the words "After entering the above command..."'  
+https://www.computerhope.com/issues/ch001927.htm
+
+You can now used Git-Bash to execute any of the Linux style bash scripts. 
+
+### Installing Python and Open CV
+Download and run this installer:
+https://www.python.org/ftp/python/3.7.4/python-3.7.4.exe
+On the first page of the installation program there is check box "Add Python 3.7 to PATH" tick this. 
+
+Open Git-Bash and type:
+
+    $ python --version
+    
+This should print something like:
+    
+    Python 3.7.3
+    
+However, if it shows an earlier version e.g.:
+    
+    Python 2.7.15
+
+Then if means you still have Python 2 in your system PATH and it needs to be removed. To do this on Windows 10:
+*   Go to the search bar in the bottom left of the screen and type Environment
+*   Click on "Edit the System Environment Variables" option
+*   Click on the "Environment variables..." button
+*   In the bottom section entitled "System Variables" double click on the Path entry
+*   Find the entry with the location of the earlier version of Python e.g. "C:\Python27" select it and press the delete button
+*   There may be more than one such entry delete all of them (though keep any which refer to Python37 as this is the new one we just installed)
+*   When finished click OK
+
+You will need to close down Git-Bash and restart it.
+
+Now you can open Git-Bash and type:
+
+    $ python --version
+
+Check that is displays the correct version.
+
+Now install virtualenv. Type:
+    
+    pip install virtualenv
+
+To install OpenCV, Go to this website:
+[https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv)
+
+pip install "c:\Users\dishm\Downloads\opencv_python-4.1.1-cp37-cp37m-win32.whl"
+
+    
+### Getting the car-park agent code
+Using the Git-Bash terminal you can now get the code from git-hub.  
+
+As before, since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your git hub account".
+ 
+This should now let you get the code from github as if it were a public repository
+  
+In the Git-Bash terminal type:
+
+    cd ~/Desktop
+    git clone git@github.com:fetchai/carpark_agent.git
+    cd carpark_agent
+    
+ Create and activate the virtual environment and install the python packages (not that the script name to create the virutal envrionment is a bespoke windows version)
+    
+    ./run_scripts/create_venv_win.sh
+    source venv/bin/activate
+    python setup.py develop
+
+
+Use gitapp
+./car_detection/weights/download_weights_win.sh
+
+./run_scripts/create_venv.sh
+source venv/bin/activate
+python setup.py develop
+
 ### Cleared and uncleared FET
 Both the client and carpark agent UI show the current FET levels at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
 
@@ -368,5 +456,10 @@ Sometimes the car park agents get in a state where they are still searchable for
 * Do instructions for running the windows client agent
 * Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
 
-## Installing under Windows
+
+
+
+
+
+
 https://pysource.com/2019/03/15/how-to-install-python-3-and-opencv-4-on-windows/

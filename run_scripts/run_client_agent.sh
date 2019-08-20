@@ -10,6 +10,6 @@ cd "$script_full_path"
 source ../venv/bin/activate
 
 # Modify this line with your own command line arguments
-python run_client_ui.py -fn win_dc -ma 3600 -mf 4000
+python run_client_ui.py -fn set_friendly_name -ma 3600 -mf 4000
 
 deactivate

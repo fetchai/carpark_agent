@@ -151,7 +151,7 @@ class TkClientGuiApp:
 
         self.generate_fet_button = ttk.Button(
             self.ui_frame,
-            text="Generate 0.01 FET",
+            text="Generate 0.0001 FET",
             style='C.TButton',
             command=self.do_generate_fet)
         self.generate_fet_button.grid(row=0, column=button_pos)
