@@ -130,7 +130,7 @@ Use the up/down arrow keys, select Advanced options and press Enter
 
 Now when the Pi restarts, the VNC Viewer should show a nice large resolution. If this is what happens, you can shut it down, reconnect your monitor and restart it 
 
-## 3. Installing the Fetch.AI carpark_agent software on the Rasperry Pi
+## 3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi Version 4
 I would now work directly on the Raspbery Pi as the VNC connection can be quite laggy sometimes.
 
 We will be getting the code from github.com. At the moment, the code is  in a private repository, so you will need a Fetch github account to get access to it. When the code is public, you will not need to log into github to get the code, but it is still useful to log in and have the page open in a browser on the Raspberry Pi so you can copy and past text into the terminal fromn these instructions.
@@ -205,7 +205,7 @@ Install the software in develop mode
     
 When install python software you can either pass `install` or `develop` into the setup.py script.  "install" copies all the code into the python environment so it can be run - this means that there are then two copies of the code and if you change one of the python files, it will not necessarily have any effect unless you reinstall it. This can be quite confusing if you are intending to muck around with the code. Therefore, I recommend that you use "develop" as this will create a link to the code and so any changes you make will take immediate effect when you run the code.  
 
-### Ensure it runs correctly
+### Ensure it runs correctly (RPi4 only)
 Try running it
     
     ./run_scripts/run_carpark_agent.sh
@@ -219,7 +219,7 @@ If this all seems to work, power down your Raspberry pi, disconnect the power, k
 Attach the Clamp and Arm and set the camera up pointing to your parking spaces, reconnect the power and let it boot up.
 
 
-### Configuring the car-park agent
+### Configuring the car-park agent (RPi4 only)
 Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi. 
 
 The agent will not be running. So, open a terminal and type:
@@ -265,7 +265,7 @@ The -fet argument is how much nano-FET we wish to charge other agents for inform
 
 Save the edited file and close the editor.
 
-### Make the agent start on boot up
+### Make the agent start on boot up (RPi4 only)
 
 The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. In a terminal type:
     
@@ -276,6 +276,123 @@ You may be asked to specify which editor you wish to use.
 This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
 
     @reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
+  
+Save the file exit the editor. Reboot your Raspberry Pi.
+
+The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
+
+## 3b.Creating the car-park agent on a Raspberry Pi Version 3
+In this section I'll describe how to get the car-park agent running on a Raspberry Pi version 3. Version 3 is very similar to 4 in the way it works but it can only have a maximum of 1GB of RAM (as opposed to Version 4 whihc can have 4 GB of RAM). 1GB is not enough to run the car detection algorithms and so the way we get around this is to allocate a large "swap file" for the Raspberry Pi OS. This is an area of the SD car allocated to the OS which it can treat just like RAM. The SD card is many times slower than NAtive RAM and as a result the algorthm runs MUCH slower on the Version 3 and than on the 4 (taking roughly 5 minutes per detection run). The other issue is that sometimes the scripts simply run out of usable memory and crash. I haven't been ale to completely understand why, but I think it relates to the available address space and memory fragmentation. Anyway, the fix for this is to not run the car-park agent all in one process. Instead I split into two proccess:
+*  Process 1 runs the GUI, the camera, the image capture and the Fetch.AI agent selling the data
+*  Process 2 runs the car detection algorithm only
+
+However, to make this easier, I've simply made a different script called "run_carpark_agent_split.sh" which launches both of these processes.
+ 
+To build the car-park agent on a Raspberry Pi version 3 (instead of version 4), follow all the steps described above for version 4 but stop just after the section entitled "Getting the code" and before "Ensure it runs correctly (RPi4 only)". 
+
+Now follow these instructions instead:
+
+### Create a larger SWAP file
+In the terminal, type:
+
+    sudo nano /etc/dphys-swapfile
+    
+Scroll down to the line that says:
+    
+    CONF_SWAPSIZE=100
+    
+Change it to:
+
+    CONF_SWAPSIZE=2048
+  
+Save the file and exit nano. Reboot the Raspberry Pi.
+
+### Ensure it runs correctly (RPi3 only)
+When the system has restarted, try running it. Open up a terminal and type:
+
+    cd Desktop/carpark_agent
+    ./run_scripts/run_carpark_agent_split.sh
+    
+You should now see the agent running.  
+
+If you go back to your Mac or PC and go to the git hub repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture. Note that it may take several minutes to start up and then will only capture in image and attempt to detect cars about once every 5 minutes - so you might want to go and make a cup of tea while you wait.
+
+If this all seems to work, power down your Raspberry pi, disconnect the power, keyboard, mouse and keyboard.
+
+Attach the Clamp and Arm and set the camera up pointing to your parking spaces, reconnect the power and let it boot up.
+
+### Configuring the car-park agent (RPi3 only)
+Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi. 
+
+The agent will not be running. So, open a terminal and type:
+
+    cd Desktop/carpark_agent
+    ./run_scripts/run_carpark_agent_split.sh
+
+When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in. Also try moving you mouse around the screen - is it responsive enough to use?
+
+### If GUI is too unresponsive to use the GUI (RPi3 only)
+Note that this UI can be a very unresponsive when running over VNC, especially on a Raspberry Pi Version 3 while detections are going on, so just do it slowly and be patient. Do the following:
+Quit the agent (press Quit - if it is in the middle of a detection, you may have to wait a while for it to fully shut down).
+
+Open up the script file called "run_carpark_agent_split.sh" and find the following line:
+
+    nice python run_detection_only.py &
+
+Comment it out so it looks like this:
+
+    # nice python run_detection_only.py &
+
+Now if you re-run the script the application should be much more responsive (but it won't be doing any car detection). When you have set up your areas, of interest, quit the application and make sure you un-comment the line in the run_carpark_agent_split.sh script before trying to run it properly.
+  
+
+### Configuring the car-park agent (RPi3 only) continued... 
+There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
+* Press Edit Detection Area button
+* Press Capture Ref Image button - this will capture in image from the camera and it should be tinted blue - indicating that it will detect everywhere
+* Press the red Fill All button - This will turn it all red - showing it will now detect nowhere
+* Press Draw detectable button and then draw an outline around the area you are interested in. Ensure you make a completely closed shape
+* Press the blue Flood Fill button and then click inside the shape you have drawn. This should fill it blue
+
+Count the number of parking spaces in the area of interest you marked out. If it is hard to see, press Live Detect to see things more clearly. When you have counted them press Edit Detection area again to go into edit mode.
+Use the arrows either side of "Max Capacity" to set the correct number of parking spaces that the agent can report on.
+
+When you are done press the Live Detect button. 
+
+Close down the agent by pressing the Quit button. If you watch the terminal window that you launched it from, you may find that it takes a while to fully shut down - this is because if it is in the middle of a detection it needs to finish what it is doing before quitting. This can take a minute or so.
+
+
+We now need to edit the script file which launches the agent. In the terminal window make sure your current directory is ~/Desktop/carpark_agent and type:
+
+    nano run_scripts/run_carpark_agent_split.sh
+
+Look for the line that says
+
+    python run_carparkagent.py -ps 300 -fn set_friendly_name -dd -fet 2000 -lat 40.780343 -lon -73.967491
+    
+Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
+
+You also need to set the latitude and longitude of your locations. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. Paste these values into the script command line - be careful not to leave any commas in.
+ 
+My new line would read
+
+    python run_carparkagent.py -ps 300 -fn diarmid_carpark_agent -dd -fet 2000 -lat 52.235063 -lon 0.15402
+
+The -fet argument is how much nano-FET we wish to charge other agents for information about parking. Note that a nano-FET is 0.0000000001 FET, so the default value here is 0.0000002 FET.
+
+Save the edited file and close the editor.
+
+### Make the agent start on boot up (RPi3 only)
+
+The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. In a terminal type:
+    
+    crontab -e
+    
+You may be asked to specify which editor you wish to use.
+
+This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
+
+    @reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent_split.sh
   
 Save the file exit the editor. Reboot your Raspberry Pi.
 
@@ -324,7 +441,7 @@ Create and activate the virtual environment and install the python packages
     source venv/bin/activate
     python setup.py develop
         
-### Running the client
+### Configuring and running the client
 Configure the client agent. Open the file run_scripts/run_client_agent.sh in a text editor. You can do this using a terminal by typing
 
     nano run_scripts/run_client_agent.sh
@@ -373,10 +490,12 @@ You can now used Git-Bash to execute any of the Linux style bash scripts.
 
 ### Installing Python and Open CV
 Download and run this installer:
+
 https://www.python.org/ftp/python/3.7.4/python-3.7.4.exe
+
 On the first page of the installation program there is check box "Add Python 3.7 to PATH" tick this. 
 
-Open Git-Bash and type:
+When installation is finishedm you will have a program call Git-Bash installed on your machine. Open it and you will be presented with a Linux style terminal window. Type:
 
     $ python --version
     
@@ -412,7 +531,9 @@ Now install virtualenv. Type:
 To install OpenCV, Go to this website:
 https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
 
-pip install "c:\Users\dishm\Downloads\opencv_python-4.1.1-cp37-cp37m-win32.whl"
+Locate the file called "opencv_python-4.1.1-cp37-cp37m-win32.whl" and download it. Find where it has been downloaded to and install it. This was what I typed - though you will need to replace the path with where your browser downloaded the file.
+
+    pip install "c:\Users\dishm\Downloads\opencv_python-4.1.1-cp37-cp37m-win32.whl"
 
     
 ### Getting the car-park agent code
@@ -428,22 +549,16 @@ In the Git-Bash terminal type:
     git clone git@github.com:fetchai/carpark_agent.git
     cd carpark_agent
     
- Create and activate the virtual environment and install the python packages (not that the script name to create the virutal envrionment is a bespoke windows version)
+Create and activate the virtual environment and install the python packages (note that the script name to create the virtual environment is a bespoke windows version)
     
     ./run_scripts/create_venv_win.sh
     source venv/bin/activate
     python setup.py develop
 
-
-Use gitapp
-./car_detection/weights/download_weights_win.sh
-
-./run_scripts/create_venv.sh
-source venv/bin/activate
-python setup.py develop
+You can now run the client agent by following the same instructions as for the Mac above entitled "Configuring and running the client".
 
 ### Cleared and uncleared FET
-Both the client and carpark agent UI show the current FET levels at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
+Both the client and car-park agent UI show the current FET levels at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
 
 Something else to watch out for in this status panel is any errors shown on the Ledger or OEF. If there is an error, the agent may need restarting, or it could be a problem at the server side.
 
@@ -452,8 +567,8 @@ Something else to watch out for in this status panel is any errors shown on the 
 Sometimes the car park agents get in a state where they are still searchable for, but do not receive any notification when CFP is sent. This is an issue at the Fetch.AI end of things and we are working a solution. The only work-around for agent developers at present is to restart their agents when this happens.
 ### To dos:
 * Add illustrative screenshots to these instructions
-* Do instructions for Raspberry Pi Version 3
-* Do instructions for running the windows client agent
+* Running headless version
+* Code architectute
 * Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
 
 
