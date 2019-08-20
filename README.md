@@ -281,7 +281,7 @@ Save the file exit the editor. Reboot your Raspberry Pi.
 
 The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
 
-## 4. Installing the client software on a Mac
+## 4a. Installing the client software on a Mac
 ### Setting up the Mac
 Now that the car park agent is running, we will set up a client agent on your Mac or PC. This will query the Fetch.AI network for parking space data.
  
@@ -362,7 +362,7 @@ Since you have all the code installed on the Mac, you can also run the car-park 
 To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
 
 
-## Installing under Windows
+## 4b. Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
 
 ### Git hub
@@ -410,7 +410,7 @@ Now install virtualenv. Type:
     pip install virtualenv
 
 To install OpenCV, Go to this website:
-[https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv)
+https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
 
 pip install "c:\Users\dishm\Downloads\opencv_python-4.1.1-cp37-cp37m-win32.whl"
 
