@@ -5,8 +5,8 @@ This project primarily targets the Raspberry Pi 4. It can be made to run on the 
 
 This document will take you through:
 
-* 1 . [Physically building the Camera/Raspberry PI module](#1.-physically-building-the-car-park-agent)
-* 2 . Preparing the Raspberry Pi 
+* 1 . [Physically building the Camera/Raspberry PI module](#1-physically-building-the-car-park-agent)
+* 2 . [Preparing the Raspberry Pi](#2-preparing-the-raspberry-pi) 
 * 3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
 * 4a. Installing the client software (a. Mac, b. Windows)
 
@@ -18,7 +18,7 @@ The results will look like this:
 
 
 
-## 1. Physically building the car park agent
+## 1 Physically building the car park agent
 ### Prerequisits
 Things you will need - I've added links to the specific things I bought:
 * Raspberry Pi 4 [link](https://thepihut.com/products/raspberry-pi-4-model-b?gclid=EAIaIQobChMImcuwvcfh4wIVirHtCh3szg2EEAAYASAAEgJQ_fD_BwE)
@@ -38,7 +38,7 @@ I will attach the clamp and arm to the box later,
 
 Plug in the monitor, keyboard and mouse.
 
-## 2. Preparing the Raspberry Pi
+## 2 Preparing the Raspberry Pi
 If you have got a brand-new Raspberry Pi, you can simply insert the SD card, connect the power and boot up. 
 
 If you do not have a new Rasperry Pi SD card, you will need to make one. To do this follow the NOOBS insructions below. 
@@ -144,7 +144,7 @@ Use the up/down arrow keys, select Advanced options and press Enter
 
 Now when the Pi restarts, the VNC Viewer should show a nice large resolution. If this is what happens, you can shut it down, reconnect your monitor and restart it 
 
-## 3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi Version 4
+## 3a Installing the Fetch.AI carpark_agent software on the Rasperry Pi Version 4
 I would now work directly on the Raspbery Pi as the VNC connection can be quite laggy sometimes.
 
 We will be getting the code from github.com. At the moment, the code is  in a private repository, so you will need a Fetch github account to get access to it. When the code is public, you will not need to log into github to get the code, but it is still useful to log in and have the page open in a browser on the Raspberry Pi so you can copy and past text into the terminal fromn these instructions.
@@ -299,7 +299,7 @@ Save the file exit the editor. Reboot your Raspberry Pi.
 
 The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
 
-## 3b.Creating the car-park agent on a Raspberry Pi Version 3
+## 3b Creating the car-park agent on a Raspberry Pi Version 3
 In this section I'll describe how to get the car-park agent running on a Raspberry Pi version 3. Version 3 is very similar to 4 in the way it works but it can only have a maximum of 1GB of RAM (as opposed to Version 4 whihc can have 4 GB of RAM). 1GB is not enough to run the car detection algorithms and so the way we get around this is to allocate a large "swap file" for the Raspberry Pi OS. This is an area of the SD car allocated to the OS which it can treat just like RAM. The SD card is many times slower than NAtive RAM and as a result the algorthm runs MUCH slower on the Version 3 and than on the 4 (taking roughly 5 minutes per detection run). The other issue is that sometimes the scripts simply run out of usable memory and crash. I haven't been ale to completely understand why, but I think it relates to the available address space and memory fragmentation. Anyway, the fix for this is to not run the car-park agent all in one process. Instead I split into two proccess:
 *  Process 1 runs the GUI, the camera, the image capture and the Fetch.AI agent selling the data
 *  Process 2 runs the car detection algorithm only
@@ -416,7 +416,7 @@ Save the file exit the editor. Reboot your Raspberry Pi.
 
 The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
 
-## 4a. Installing the client software on a Mac
+## 4a Installing the client software on a Mac
 ### Setting up the Mac
 Now that the car park agent is running, we will set up a client agent on your Mac. This will query the Fetch.AI network for parking space data.
  
@@ -500,7 +500,7 @@ Since you have all the code installed on the Mac, you can also run the car-park 
 To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
 
 
-## 4b. Installing the client software on Windows
+## 4b Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
 
 ### Access Github
