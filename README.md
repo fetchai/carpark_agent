@@ -8,13 +8,13 @@ This document will take you through:
 * 1 . [Physically building the Camera/Raspberry PI module](#1-physically-building-the-car-park-agent)
 * 2 . [Preparing the Raspberry Pi](#2-preparing-the-raspberry-pi) 
 * 3a. [Installing the carpark_agent on Rasperry Pi Version 4](#3a-installing-the-carpark_agent-on-rasperry-pi-version-4) (alternativley [3b Version 3 instructions](#3b-installing-the-carpark_agent-on-rasperry-pi-version-3))
-* 4a. [Installing the client software on a Mac](#4a-installing-the-client-software-on-a-mac) (alternativley [4b Windows instructions](#4b-installing-the-client-software-on-windows))
+* 4a. [Installing the client software on a Mac](#4a-installing-the-client-software-on-a-mac) (alternativley [4b Windows instructions](#4b-installing-the client-software-on-windows))
 
 The results will look like this:
 
 | Hardware  | Car Park Agent GUI  | Client Agent GUI  |
 | ------------- |:-------------:|:-----:|
-|  <img src="resources/readme_images/device_small.jpg" height="100">       |  <img src="resources/readme_images/pi_live.jpg" height="100"> | <img src="resources/readme_images/client_04.jpg" height="100"> |
+|  <img src="resources/readme_images/device_small.jpg" height="120">       |  <img src="resources/readme_images/pi_live.jpg" height="120"> | <img src="resources/readme_images/client_04.jpg" height="120"> |
 
 
 
@@ -500,7 +500,7 @@ Since you have all the code installed on the Mac, you can also run the car-park 
 To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
 
 
-## 4b Installing the client software on Windows
+## 4b. Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
 
 ### Access Github
