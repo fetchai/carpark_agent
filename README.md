@@ -592,8 +592,8 @@ This is an explanation of the code architecture in a blog post I wrote - you can
 Something that isn't mentioned there is that a number of files are created in your car park agent directory when you run any of the appications. This includes all your images you've captured, the keys for your wallets etc. If you want to reset your agent simple remove this folder. It is a sub-directory of the carpark_agent directory called "temp_files"  
 
 ## Trouble shooting
-### Car detection not reliable
-We use an off-the-shelf car detection algorithm which is not trailed specifically on car parks. As with all computer vision it will not be 100% reliable however often detection rates can be made much better by choosing a more suitable vantage point for your camera.
+### Car detection not accurately detecting
+We use an off-the-shelf car detection algorithm which is not trained specifically on car-parks. As with all computer vision it will not be 100% reliable however often detection rates can be made much better by choosing a more suitable vantage point for your camera.
 
 ## Known issues
 ### Searchable but non CFP-able agents
