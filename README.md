@@ -13,7 +13,7 @@ The results will look like this:
 
 | Hardware  | Car Park Agent GUI  | Client Agent GUI  |
 | ------------- |:-------------:|:-----:|
-|  <img src="resources/readme_images/device.jpg" height="100">       |  <img src="resources/readme_images/pi_live.jpg" height="100"> | <img src="resources/readme_images/client_04.jpg" height="100"> |
+|  <img src="resources/readme_images/device_small.jpg" height="100">       |  <img src="resources/readme_images/pi_live.jpg" height="100"> | <img src="resources/readme_images/client_04.jpg" height="100"> |
 
 
 
