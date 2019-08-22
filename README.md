@@ -10,6 +10,7 @@ This document will take you through:
 4. Installing the client software (a. Mac, b. Windows)
 
 The results will look like this:
+
 | Hardware   | Car Park Agent GUI   | Client Agent GUI |
 | ------------- |:-------------:| -----:|
 | col 3 is      | right-aligned | $1600 |
