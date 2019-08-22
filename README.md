@@ -13,7 +13,7 @@ The results will look like this:
 
 | Hardware   | Car Park Agent GUI   | Client Agent GUI |
 | ------------- |:-------------:| -----:|
-| <img src="resources/readme_images/device.jpg">    | <img src="resources/readme_images/pi_live.jpg"> | client_04.jpg |
+| <img src="resources/readme_images/device.jpg">    | <img src="resources/readme_images/pi_live.jpg"> | <img src="resources/readme_images/client_04.jpg">  |
 
 
 ## 1. Physically building the car park agent
