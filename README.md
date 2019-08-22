@@ -11,15 +11,10 @@ This document will take you through:
 
 The results will look like this:
 
-| Tables        | Are           | Cool  |
+| Hardware  | Car Park Agent GUI  | Client Agent GUI  |
 | ------------- |:-------------:| -----:|
 |  <img src="resources/readme_images/device.jpg" height="100">       |  <img src="resources/readme_images/pi_live.jpg" height="100"> | <img src="resources/readme_images/client_04.jpg" height="100"> |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
 
-| Hardware | Car Park Agent GUI | Client Agent GUI |
-| ------------- |:-------------:|: -----:|
-| <img src="resources/readme_images/device.jpg" height="100">    | <img src="resources/readme_images/pi_live.jpg" height="100"> | <img src="resources/readme_images/client_04.jpg" height="100">  |
 
 
 ## 1. Physically building the car park agent
