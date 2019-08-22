@@ -57,6 +57,11 @@ You will need to have your OS completely up to date to avoid problens with these
     sudo apt update -y
     sudo apt-get update
     sudo apt-get dist-upgrade
+    
+once everything is installed you need to reboot. You can do this from the terminal
+
+    sudo reboot
+
 
 ### Configuring the Raspberry Pi
 Click on the Raspberry symbol in the top left of the screen. Select Preferences -> Raspberry Pi Configuration.
@@ -65,6 +70,9 @@ Enable the following:
 * Camera
 * SSH
 * VNC
+
+<img src="resources/readme_images/config_dlg.png" height="200"> 
+
 
 Close the window.
 
