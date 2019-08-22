@@ -8,7 +8,7 @@ This document will take you through:
 * 1 . [Physically building the Camera/Raspberry PI module](#1-physically-building-the-car-park-agent)
 * 2 . [Preparing the Raspberry Pi](#2-preparing-the-raspberry-pi) 
 * 3a. [Installing the Fetch.AI carpark_agent software on the Rasperry Pi Version 4](#3a-installing-the-fetchai-carpark_agent-software-on-the-rasperry-pi-version-4) (see [3b](#3b-installing-the-fetchai-carpark_agent-software-on-the-rasperry-pi-version-3) for Version 3 instructions)
-* 4a. [Installing the client software on a Mac](#4a-installing-the-client-software-on-a-mac) (see [4b](#4a-installing-the-client-software-on-windows] for Windows instructions))
+* 4a. [Installing the client software on a Mac](#4a-installing-the-client-software-on-a-mac) (see [4b](#4a-installing-the-client-software-on-windows) for Windows instructions)
 
 The results will look like this:
 
