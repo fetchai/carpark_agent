@@ -66,6 +66,9 @@ once everything is installed you need to reboot. You can do this from the termin
 ### Configuring the Raspberry Pi
 Click on the Raspberry symbol in the top left of the screen. Select Preferences -> Raspberry Pi Configuration.
 Select the Interfaces tab.
+
+<img src="resources/readme_images/config_nav.png" height="200"> 
+
 Enable the following:
 * Camera
 * SSH
