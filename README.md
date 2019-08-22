@@ -247,12 +247,11 @@ When it starts up and you see the output from the camera, you can move your came
 
 There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
 * Press Edit Detection Area button
-<img src="resources/readme_images/pi_roi.jpg" height="100"> 
-
 * Press Capture Ref Image button - this will capture in image from the camera and it should be tinted blue - indicating that it will detect everywhere
 * Press the red Fill All button - This will turn it all red - showing it will now detect nowhere
 * Press Draw detectable button and then draw an outline around the area you are interested in. Ensure you make a completely closed shape
 * Press the blue Flood Fill button and then click inside the shape you have drawn. This should fill it blue
+<img src="resources/readme_images/pi_roi.jpg" height="100"> 
 
 Note that this UI can be a bit laggy when running over VNC and while detections are going on, so just do it slowly and be patient.
 
