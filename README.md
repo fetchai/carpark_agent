@@ -65,11 +65,10 @@ once everything is installed you need to reboot. You can do this from the termin
 
 ### Configuring the Raspberry Pi
 Click on the Raspberry symbol in the top left of the screen. Select Preferences -> Raspberry Pi Configuration.
-Select the Interfaces tab.
 
 <img src="resources/readme_images/config_nav.png" height="200"> 
 
-Enable the following:
+Select the Interfaces tab. Enable the following:
 * Camera
 * SSH
 * VNC
@@ -128,7 +127,7 @@ Open a terminal and type:
  
 Save this file and exit the editor. Now reboot. You can do this by typing into the terminal:
  
-    reboot
+    sudo reboot
     
 As you reboot, your VNC Viewer on your Mac or PC will no longer be able to see your screen. However it will come back to life once your Raspberry Pi has booted up.
 You may find that once you have rebooted, your screen resolution is still small (perhaps even smaller than it was). This is expected. so fix this problem. Open a terminal and type:
@@ -243,8 +242,12 @@ The agent will not be running. So, open a terminal and type:
 
 When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in.
 
+<img src="resources/readme_images/pi_live.jpg" height="100"> 
+
 There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
 * Press Edit Detection Area button
+<img src="resources/readme_images/pi_roi.jpg" height="100"> 
+
 * Press Capture Ref Image button - this will capture in image from the camera and it should be tinted blue - indicating that it will detect everywhere
 * Press the red Fill All button - This will turn it all red - showing it will now detect nowhere
 * Press Draw detectable button and then draw an outline around the area you are interested in. Ensure you make a completely closed shape
@@ -476,11 +479,17 @@ Now you can run the agent
     
     ./run_scripts/run_client_agent.sh
     
+    
+<img src="resources/readme_images/client_01_small.jpg" height="200"> 
+    
+    
 You are presented with a screen with a number of buttons. 
 * Press Search. This will look for agents on the Fetch.AI network which can supply car parking information. Their public keys will be listed here.
 * Press CFP. This sends a "Call for Proposal" to all the gents listed. They will send back a friendly name that you can identify them with, the age of thier last detection, how many spaces they can report about and the total FET they charge. The UI will display whether their data fits your acceptance criteria (new enough and cheap enough)
 * When you first start this, you will not be able to request any data because you do not have any FET to spend. Press Generate FET to create some (this will freeze the UI for about 30 seconds while it does this)
 * Press Request data. All of the agents that satisfy the acceptance criteria will be asked to send their data. The final column of the table will be filled in showing how many car parking spaces that agent is aware of.  In return this client agent will send the appropriate amount of FET to the car park agent
+
+<img src="resources/readme_images/client_04_small.jpg" height="200">
 
 Note there is a transaction fee of 1 nano-FET when you send FET from one agent to another. So the client agent's FET will go down by a bit more than the cost of the data on its own.
 
@@ -576,6 +585,11 @@ Both the client and car-park agent UI show the current FET levels at the top lef
 
 Something else to watch out for in this status panel is any errors shown on the Ledger or OEF. If there is an error, the agent may need restarting, or it could be a problem at the server side.
 
+### Code Architecture
+This is an explanation of the code architecture in a blog post I wrote - you can find it here [LINK NEEDED.DC]
+
+Something that isn't mentioned there is that a number of files are created in your car park agent directory when you run any of the appications. This includes all your images you've captured, the keys for your wallets etc. If you want to reset your agent simple remove this folder. It is a sub-directory of the carpark_agent directory called "temp_files"  
+
 ## Trouble shooting
 ### Car detection not reliable
 We use an off-the-shelf car detection algorithm which is not trailed specifically on car parks. As with all computer vision it will not be 100% reliable however often detection rates can be made much better by choosing a more suitable vantage point for your camera.
@@ -584,17 +598,4 @@ We use an off-the-shelf car detection algorithm which is not trailed specificall
 ### Searchable but non CFP-able agents
 Sometimes the car park agents get in a state where they are still searchable for, but do not receive any notification when CFP is sent. This is an issue at the Fetch.AI end of things and we are working a solution. The only work-around for agent developers at present is to restart their agents when this happens.
 
-### To dos:
-* Add illustrative screenshots to these instructions
-* Running headless version
-* Code architecture
-* Temp files
-* Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
-* Area for improvement (computer vision / trust of agents)
 
-
-
-
-
-
-https://pysource.com/2019/03/15/how-to-install-python-3-and-opencv-4-on-windows/
