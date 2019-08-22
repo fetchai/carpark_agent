@@ -152,7 +152,10 @@ else:
 # Shut down
 print("killing threads...")
 image_recorder.stop_processing()
-image_capture.stop_capture()
+
+if image_capture is not None:
+    image_capture.stop_capture()
+
 if not args.disable_agent:
     agent.stop_agent()
 

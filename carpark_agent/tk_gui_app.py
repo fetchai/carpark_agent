@@ -53,15 +53,28 @@ class TkGuiApp:
         self.tk_root.title(window_title)
 
 
+            # We scale the app to an appropriate size on screen such that it is 75% of the screen width
+        if image_source is not None:
+            image_width = int(image_source.cam_width)
+            image_height = int(image_source.cam_height)
+        else:
+            image_width = 1920
+            image_height = 1080
+
         # temporary images
         self.ui_coloured_mask = None
         self.mask_ref_image = None
         self.load_masks()
-        self.adjusted_image = np.zeros((self.image_source.cam_height, self.image_source.cam_width, 3), np.uint8)
-        self.show_main_image = np.zeros((self.image_source.cam_height, self.image_source.cam_width, 3), np.uint8)
+        if self.image_source is not None:
+            self.adjusted_image = np.zeros((image_height, image_width, 3), np.uint8)
+            self.show_main_image = np.zeros((image_height, image_width, 3), np.uint8)
+        else:
+            self.adjusted_image = None
+            self.show_main_image = None
 
-        # We scale the app to an appropriate size on screen such that it is 75% of the screen width
-        unscaled_live_feed_width = image_source.cam_width
+
+
+        unscaled_live_feed_width = image_width
         unscaled_small_image_width = unscaled_live_feed_width / self.num_history
         unscaled_border_width = 4
         num_little_fames_on_row = 3     # so we know how many borders we have to consider
@@ -75,8 +88,7 @@ class TkGuiApp:
         self.scaled_total_width = unscaled_total_width * self.scale_factor
 
         # calculate sizes of frames we will need
-        image_width = int(image_source.cam_width)
-        image_height = int(image_source.cam_height)
+
         self.main_canvas_width = int(image_width * self.scale_factor)
         self.main_canvas_height = int(image_height * self.scale_factor)
         self.small_width = int(self.main_canvas_width / self.num_history)
@@ -803,6 +815,9 @@ class TkGuiApp:
         #print("{}: Update_live_feed".format(self.frame_count))
         #self.frame_count += 1
 
+        if self.image_source is None:
+            return
+
         if self.uistate == uistate_edit_detection_area:
             self.handle_mask_edit()
 
@@ -1011,8 +1026,9 @@ class TkGuiApp:
             self.mask_ref_image = cv2.cvtColor(self.mask_ref_image, cv2.COLOR_RGBA2RGB)
 
         inverted_image = cv2.bitwise_not(mask_bw)
-        red_image = np.full((self.image_source.cam_height, self.image_source.cam_width, 3), (1, 0, 0), np.uint8)
-        blue_image = np.full((self.image_source.cam_height, self.image_source.cam_width, 3), (0, 0, 1), np.uint8)
+        im_height, im_width, im_ch = self.mask_ref_image.shape
+        red_image = np.full((im_height, im_width, 3), (1, 0, 0), np.uint8)
+        blue_image = np.full((im_height, im_width, 3), (0, 0, 1), np.uint8)
         cv2.multiply(mask_bw, blue_image,  blue_image)
         cv2.multiply(inverted_image, red_image, red_image)
         save_this = False

@@ -41,6 +41,9 @@ class ThreadedImageRecorder:
     def processing_function(self):
 
         print("Starting: Image recorder thread")
+        if self.image_source is None:
+            return
+
         self.image_source.get_capture_image()
         time.sleep(20)
         while not self.kill_event.wait(0):

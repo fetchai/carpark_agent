@@ -1,7 +1,7 @@
 # Fetch.AI Car Park Agent
 This is a project to get a Fetch.AI agent running on a Rasperry Pi which utilises the camera to report on free parking spaces. This data is made available on the Fetch network and can be purchased by other agents. 
 
-This project primarily targets the Raspberry Pi 4. It can be made to run on the Raspberry Pi 3, but it struggles a little. Currently there are only instructions for the Raspberry Pi 4, but I will add instructions for the 3 later.
+This project primarily targets the Raspberry Pi 4. It can be made to run on the Raspberry Pi 3, but it struggles a little.
 
 This document will take you through:
 1. Physically building the Camera/Raspberry PI module
@@ -17,18 +17,14 @@ Things you will need - I've added links to the specific things I bought:
 * Raspberry PI Camera [link](https://thepihut.com/products/raspberry-pi-camera-module?variant=758603005)
 * Case to put Raspbery Pi and Camera in [link](https://uk.rs-online.com/web/p/products/1270210/?grossPrice=Y&cm_mmc=UK-PLA-DS3A-_-google-_-CSS_UK_EN_CatchAll-_-Catch+All-_-PRODUCT_GROUP&matchtype=&pla-381930223918&gclsrc=aw.ds&&gclid=EAIaIQobChMIqoC2hsjh4wIVxbHtCh0w5whsEAQYASABEgKsJfD_BwE)
 * Clamp and Arm [link](https://www.amazon.co.uk/dp/B011769YUM/ref=pe_3187911_189395841_TE_dp_1)
-* (optional) Adafruit GPS unit [link](https://www.amazon.co.uk/dp/B01H1R8BK0?ref_=pe_3187911_264767211_E_301_dt_1)
 * An HDMI monitor and USB moue and keyboard to plug into your Raspberry Pi
 * A PC or Mac 
 * A network which the PC/Mac and Raspberry pi can connect to
 
-I use a wireless network because, once your Raspberry Pi is set up, you want as few wires going to it as possible 
-The GPS unit is optional and initially these instructions will focus on building the agent without the GPS Unit. I may do an additional set of instructions on how to update it to use a GPS unit.
-As mentioned in the introduction, this will also work on a Raspberry Pi 3 - however, some additional steps are needed to make this work, so I'll put some notes about this at the end.
+I use a wireless network because, once your Raspberry Pi is set up, you want as few wires going to it as possible .
 
-### Building 
-The case I got has excellent instructions on how to put it together and mount the Raspberry PI and Camera inside it. However, this case is desgined for the Raspberry Pi 3 rather than 4 and so the side with the holes for the HDMI output will not fit on when the board is inside. I just left this side off, but you could probably enlarge the holes with a file.
-https://thepihut.com/blogs/raspberry-pi-tutorials/nwazet-pi-zero-camera-box-assembly-instructions
+The Raspberry Pi case I got has excellent instructions on how to put it together and mount the Raspberry PI and Camera inside it. However, this case is desgined for the Raspberry Pi 3 rather than 4 and so the side with the holes for the HDMI output will not fit on when the board is inside. I just left this side off, but you could probably enlarge the holes with a file.
+https://docs-emea.rs-online.com/webdocs/166a/0900766b8166a59a.pdf
 
 I will attach the clamp and arm to the box later, 
 
@@ -400,11 +396,8 @@ The carpark agent should now start up after it has booted. Wait for a detection 
 
 ## 4a. Installing the client software on a Mac
 ### Setting up the Mac
-Now that the car park agent is running, we will set up a client agent on your Mac or PC. This will query the Fetch.AI network for parking space data.
+Now that the car park agent is running, we will set up a client agent on your Mac. This will query the Fetch.AI network for parking space data.
  
-These instructions have only been done for Mac so far.
-
-
 If you do not have Homebrew already installed, open a terminal:
 
     xcode-select --install
@@ -482,7 +475,7 @@ To configure and run the agent on the mac, simply follow the instructions for th
 ## 4b. Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
 
-### Git hub
+### Access Github
 You will need to clone the repository from github as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this steps starts with the words "After entering the above command..."'  
 https://www.computerhope.com/issues/ch001927.htm
 
@@ -557,20 +550,29 @@ Create and activate the virtual environment and install the python packages (not
 
 You can now run the client agent by following the same instructions as for the Mac above entitled "Configuring and running the client".
 
+Now follow the instructions in the section called "Configuring and running the client", above in the instructions for getting this running on a Mac.  
+
+
 ### Cleared and uncleared FET
 Both the client and car-park agent UI show the current FET levels at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
 
 Something else to watch out for in this status panel is any errors shown on the Ledger or OEF. If there is an error, the agent may need restarting, or it could be a problem at the server side.
 
+## Trouble shooting
+### Car detection not reliable
+We use an off-the-shelf car detection algorithm which is not trailed specifically on car parks. As with all computer vision it will not be 100% reliable however often detection rates can be made much better by choosing a more suitable vantage point for your camera.
+
 ## Known issues
 ### Searchable but non CFP-able agents
 Sometimes the car park agents get in a state where they are still searchable for, but do not receive any notification when CFP is sent. This is an issue at the Fetch.AI end of things and we are working a solution. The only work-around for agent developers at present is to restart their agents when this happens.
+
 ### To dos:
 * Add illustrative screenshots to these instructions
 * Running headless version
-* Code architectute
+* Code architecture
+* Temp files
 * Do instructions for using the GPS module (instead of entering GPS coordinates manually) 
-
+* Area for improvement (computer vision / trust of agents)
 
 
 
