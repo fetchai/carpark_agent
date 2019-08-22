@@ -4,7 +4,7 @@ This is a project to get a Fetch.AI agent running on a Rasperry Pi which utilise
 This project primarily targets the Raspberry Pi 4. It can be made to run on the Raspberry Pi 3, but it struggles a little.
 
 This document will take you through:
-1 . [Physically building the Camera/Raspberry PI module](#1. Physically building the car park agent)
+1 . [Physically building the Camera/Raspberry PI module](1. Physically building the car park agent)
 2 . Preparing the Raspberry Pi 
 3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
 4a. Installing the client software (a. Mac, b. Windows)
