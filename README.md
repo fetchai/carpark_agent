@@ -9,7 +9,12 @@ This document will take you through:
 3. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
 4. Installing the client software (a. Mac, b. Windows)
 
+The results will look like this:
+| Hardware   | Car Park Agent GUI   | Client Agent GUI |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
 
+<img src="resources/readme_images/device.jpg">
 ## 1. Physically building the car park agent
 ### Prerequisits
 Things you will need - I've added links to the specific things I bought:
