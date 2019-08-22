@@ -5,10 +5,10 @@ This project primarily targets the Raspberry Pi 4. It can be made to run on the 
 
 This document will take you through:
 
-1 . Physically building the Camera/Raspberry PI module
-2 . Preparing the Raspberry Pi 
-3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
-4a. Installing the client software (a. Mac, b. Windows)
+* 1 . [Physically building the Camera/Raspberry PI module](# 1. Physically building the car park agent)
+* 2 . Preparing the Raspberry Pi 
+* 3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
+* 4a. Installing the client software (a. Mac, b. Windows)
 
 The results will look like this:
 
