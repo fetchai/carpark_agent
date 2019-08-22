@@ -5,8 +5,8 @@ This project primarily targets the Raspberry Pi 4. It can be made to run on the 
 
 This document will take you through:
 
-* 1 . [Physically building the Camera/Raspberry PI module](#1-physically-building-the-car-park-agent)
-* 2 . [Preparing the Raspberry Pi](#2-preparing-the-raspberry-pi) 
+* 1 . [Physically building the Camera/Raspberry PI module](#1.-physically-building-the-car-park-agent)
+* 2 . [Preparing the Raspberry Pi](#2.-preparing-the-raspberry-pi) 
 * 3a. Installing the Fetch.AI carpark_agent software on the Rasperry Pi (a. Version 4, b. Version 3)
 * 4a. Installing the client software (a. Mac, b. Windows)
 
@@ -18,7 +18,7 @@ The results will look like this:
 
 
 
-## 1 Physically building the car park agent
+## 1. Physically building the car park agent
 ### Prerequisits
 Things you will need - I've added links to the specific things I bought:
 * Raspberry Pi 4 [link](https://thepihut.com/products/raspberry-pi-4-model-b?gclid=EAIaIQobChMImcuwvcfh4wIVirHtCh3szg2EEAAYASAAEgJQ_fD_BwE)
@@ -38,7 +38,7 @@ I will attach the clamp and arm to the box later,
 
 Plug in the monitor, keyboard and mouse.
 
-## 2 Preparing the Raspberry Pi
+## 2. Preparing the Raspberry Pi
 If you have got a brand-new Raspberry Pi, you can simply insert the SD card, connect the power and boot up. 
 
 If you do not have a new Rasperry Pi SD card, you will need to make one. To do this follow the NOOBS insructions below. 
