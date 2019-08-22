@@ -13,9 +13,9 @@ The results will look like this:
 
 | Hardware   | Car Park Agent GUI   | Client Agent GUI |
 | ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
+| <img src="resources/readme_images/device.jpg">    | right-aligned | $1600 |
 
-<img src="resources/readme_images/device.jpg">
+
 ## 1. Physically building the car park agent
 ### Prerequisits
 Things you will need - I've added links to the specific things I bought:
