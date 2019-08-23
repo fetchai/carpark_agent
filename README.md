@@ -515,7 +515,7 @@ https://www.python.org/ftp/python/3.7.4/python-3.7.4.exe
 
 On the first page of the installation program there is check box "Add Python 3.7 to PATH" tick this. 
 
-When installation is finishedm you will have a program call Git-Bash installed on your machine. Open it and you will be presented with a Linux style terminal window. Type:
+When installation is finished, you will have a program call Git-Bash installed on your machine. Open it and you will be presented with a Linux style terminal window. Type:
 
     $ python --version
     
