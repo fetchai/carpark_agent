@@ -14,7 +14,7 @@ The results will look like this:
 
 | Hardware  | Car Park Agent GUI  | Client Agent GUI  |
 | ------------- |:-------------:|:-----:|
-|  <img src="resources/readme_images/device_small.jpg" height="120">       |  <img src="resources/readme_images/pi_live.jpg" height="120"> | <img src="resources/readme_images/client_04.jpg" height="120"> |
+|  <img src="resources/readme_images/device_small.jpg" height="150">       |  <img src="resources/readme_images/pi_live.jpg" height="150"> | <img src="resources/readme_images/client_04.jpg" height="150"> |
 
 
 
@@ -59,7 +59,7 @@ You will need to have your OS completely up to date to avoid problens with these
     sudo apt-get update
     sudo apt-get dist-upgrade
     
-once everything is installed you need to reboot. You can do this from the terminal
+once everything is installed you need to reboot. You can do this from the terminal.
 
     sudo reboot
 
@@ -243,7 +243,7 @@ The agent will not be running. So, open a terminal and type:
 
 When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in.
 
-<img src="resources/readme_images/pi_live.jpg" height="100"> 
+<img src="resources/readme_images/pi_live.jpg" height="200"> 
 
 There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
 * Press Edit Detection Area button
@@ -251,7 +251,7 @@ There are likely to be cars in many parts of your image and by default your agen
 * Press the red Fill All button - This will turn it all red - showing it will now detect nowhere
 * Press Draw detectable button and then draw an outline around the area you are interested in. Ensure you make a completely closed shape
 * Press the blue Flood Fill button and then click inside the shape you have drawn. This should fill it blue
-<img src="resources/readme_images/pi_roi.jpg" height="100"> 
+<img src="resources/readme_images/pi_roi.jpg" height="200"> 
 
 Note that this UI can be a bit laggy when running over VNC and while detections are going on, so just do it slowly and be patient.
 
