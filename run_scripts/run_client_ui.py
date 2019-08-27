@@ -29,7 +29,7 @@ parser.add_argument(
     '--ledger_ip',
     help='IP or name of ledger node to connect to. use 127.0.0.1 for local (default delta.fetch-ai.com)',
     type=str,
-    default='delta.fetch-ai.com')
+    default='alpha.fetch-ai.com')
 parser.add_argument(
     '-lp',
     '--ledger_port',
@@ -41,7 +41,7 @@ parser.add_argument(
     '--oef_ip',
     help='IP or name of oef node to connect to. use 127.0.0.1 for local (default k-1-delta.fetch-ai.com)',
     type=str,
-    default='k-1-delta.fetch-ai.com')
+    default='k-1-alpha.fetch-ai.com')
 parser.add_argument(
     '-op',
     '--oef_port',
