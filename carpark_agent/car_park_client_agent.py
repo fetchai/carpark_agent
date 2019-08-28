@@ -15,6 +15,7 @@ from datetime import datetime
 from oef.query import Query, Constraint, Range, NotEq
 from oef.messages import PROPOSE_TYPES
 from oef.agents import OEFAgent
+from oef.core import AsyncioCore
 from carpark_agent.car_detect_dataModel import CarParkDataModel
 
 # Ledger
@@ -22,6 +23,8 @@ from fetchai.ledger.api import LedgerApi
 from fetchai.ledger.api import TransactionApi
 from fetchai.ledger.crypto import Entity, Address, Identity
 
+def logger(*args):
+    print(">>", *args)
 
 class CarParkClientAgent(OEFAgent):
 
@@ -47,7 +50,9 @@ class CarParkClientAgent(OEFAgent):
         print("oef_port: " + str(oef_port))
         print("ledger_ip: " + ledger_ip)
         print("ledger_port: " + str(ledger_port))
-        super(CarParkClientAgent, self).__init__(oef_key, oef_ip, oef_port)
+        self.core = AsyncioCore(logger=logger)
+        self.core.run_threaded()
+        super(CarParkClientAgent, self).__init__(public_key=oef_key, oef_addr=oef_ip, oef_port=oef_port, core=self.core)
 
         # configuration
         self.cost = 0
@@ -71,7 +76,7 @@ class CarParkClientAgent(OEFAgent):
         self.api = LedgerApi(ledger_ip, ledger_port)
         self.tx = TransactionApi(ledger_ip, ledger_port)
         self.transfer_fee = 1
-        self.oef_status = "OK"
+        self.oef_status = "Trying to connect..."
         self.ledger_status = "OK"
         self.cleared_fet = 0
         try:
@@ -83,7 +88,6 @@ class CarParkClientAgent(OEFAgent):
         self.transaction_lock = threading.Lock()
 
         # Thread control
-        self.agent_run_thread = None
         self.agent_tx_clearing_thread = None
         self.kill_event = threading.Event()
 
@@ -91,63 +95,34 @@ class CarParkClientAgent(OEFAgent):
         self.msg_log = []
 
     def start_agent(self):
-        self.agent_run_thread = threading.Thread(target=self.run_function)
-        self.agent_run_thread.start()
+        self.connect()
 
         self.agent_tx_clearing_thread = threading.Thread(target=self.transaction_clearing_function)
         self.agent_tx_clearing_thread.start()
 
     def stop_agent(self):
+
+        self.disconnect()
+        self.core.stop()
+
         self.kill_event.set()
-
-        # Need to do this to shut down the event loop (this will be fixed in OEF SDK at some point)
-        if self._task is not None:
-            self._loop.call_soon_threadsafe(self._task.cancel)
-            self.stop()
-
-        self.agent_run_thread.join(10)
         self.agent_tx_clearing_thread.join(10)
-        try:
-            self.disconnect()
-        except Exception as e:
-            print("Had a problem disconnecting")
+
+    def on_connect_success(self, url=None):
+        self.oef_status = "OK"
+
+    def on_connect_failed(self, url=None, ex=None):
+        self.oef_status = "Error: on_connect_failed"
+
+    def on_connection_terminated(self, url=None):
+        self.oef_status = "Error: on_connection_terminated"
+
+
 
     def transaction_clearing_function(self):
         while not self.kill_event.wait(0):
             self.handle_transaction_clearing()
             time.sleep(2)
-
-    def run_function(self):
-        while not self.kill_event.wait(0):
-            # do this in case we have a connection still internally from a previous time through this loop
-            try:
-                self.disconnect()
-                pass
-            except Exception as e:
-                print("having some problems closing connection")
-
-            try:
-                self.connect()
-                # Sometimes connection is not fully up before going to next line
-                time.sleep(1)
-                self.oef_status = "OK"
-
-            except Exception as e:
-                print("Failed to connect to OEF: {}".format(e))
-                self.oef_status = "Error: Connecting to OEF"
-
-            try:
-                self.run()
-                # need to do this in case we exited due to an exception
-                if self._task is not None:
-                    self._loop.call_soon_threadsafe(self._task.cancel)
-                    self.stop()
-                print("Runfunction exited")
-            except Exception as e:
-                self.oef_status = "Error: Connecting to OEF"
-                print("Failed to connect to OEF: {}".format(e))
-
-            time.sleep(1)
 
 
     def push_msg(self, text):
@@ -201,7 +176,7 @@ class CarParkClientAgent(OEFAgent):
 
 
     def do_cfp_to_all(self):
-        # Clear the agent data appart from the public keys
+        # Clear the agent data apart from the public keys
         new_data = {}
 
         for data in self.agents_data.values():
@@ -216,7 +191,7 @@ class CarParkClientAgent(OEFAgent):
             self.push_msg("Sending cfp to : " + agent[:8] + "....")
 
             # we send a 'None' query, meaning "give me all the resources you can propose."
-            self.send_cfp(1, random.randint(1, 1000000), agent, 0, None)
+            self.send_cfp(1, random.randint(1, 1000000), agent, 0, b'')
 
             # Send them our friendly name too so they can display it
             data = {}

@@ -9,8 +9,15 @@ import random
 from datetime import datetime
 
 # oef stuff
-
 from oef.agents import OEFAgent
+from oef.core import AsyncioCore
+#
+# from typing import List
+# from oef.agents import PROPOSE_TYPES
+# from oef.query import Eq, Constraint
+# from oef.query import Query
+
+
 from oef.schema import Description
 from oef.messages import CFP_TYPES
 from carpark_agent.car_detect_dataModel import CarParkDataModel
@@ -20,6 +27,8 @@ from fetchai.ledger.api import LedgerApi
 from fetchai.ledger.crypto import Entity
 from fetchai.ledger.api import TransactionApi
 
+def logger(*args):
+    print(">>", *args)
 
 class CarParkAgent(OEFAgent):
 
@@ -33,7 +42,8 @@ class CarParkAgent(OEFAgent):
             ledger_ip,
             ledger_port,
             friendly_name):
-        # surely I should be called super first?!?
+
+        # We need to call super - but don't do it yet!
         self.db = database
 
         self.entity = self.create_or_load_wallet(reset_wallet,  "car_park_agent_private.key")
@@ -46,7 +56,9 @@ class CarParkAgent(OEFAgent):
         print("ledger_port: " + str(ledger_port))
         self.oef_ip = oef_ip
         self.oef_port = oef_port
-        super(CarParkAgent, self).__init__(oef_key, oef_ip, oef_port)
+        self.core = AsyncioCore(logger=logger)
+        self.core.run_threaded()
+        super(CarParkAgent, self).__init__(public_key=oef_key, oef_addr=oef_ip, oef_port=oef_port, core=self.core)
 
         # Configuration
         self.data_price_fet = data_price_fet
@@ -61,7 +73,7 @@ class CarParkAgent(OEFAgent):
         # Set up data model object
         self.lat = ""
         self.lon = ""
-        self.last_detection_time= 0
+        self.last_detection_time = 0
         self.car_park_service_description = None
         self.test_dlg_id = 0
 
@@ -80,15 +92,15 @@ class CarParkAgent(OEFAgent):
         self.uncleared_fet = self.read_balance()
 
         # Thread control
-        self.agent_thread = threading.Thread(target=self.run_function)
         self.balance_thread = threading.Thread(target=self.balance_poll_function)
-        # self.service_poller_thread = threading.Thread(target=self.service_poller_function)
+
         self.kill_event = threading.Event()
 
     def start_agent(self):
-        self.agent_thread.start()
+        self.db.set_system_status("oef-status", "Trying to connect...")
+
+        self.connect()
         self.balance_thread.start()
-       # self.service_poller_thread.start()
 
     def read_balance(self):
         try:
@@ -101,25 +113,43 @@ class CarParkAgent(OEFAgent):
             return -1
 
     def stop_agent(self):
-        self.kill_event.set()
+        self.disconnect()
+        self.core.stop()
 
-        # Need to do this to shut down the event loop (this will be fixed in OEF SDK at some point)
-        if self._task is not None:
-            self._loop.call_soon_threadsafe(self._task.cancel)
-        if self._task is not None:
-            self.stop()
-        self.agent_thread.join(120)
+        self.kill_event.set()
         self.balance_thread.join(120)
 
-        try:
-            self.unregister_service(0, self.car_park_service_description)
-            self.disconnect()
-            pass
-        except Exception as e:
-            print("having some problems closing connection")
+    def on_connect_success(self, url=None):
+        self.db.set_system_status("oef-status", "OK")
+
+    def on_connect_failed(self, url=None, ex=None):
+        self.db.set_system_status("oef-status", "Error: on_connect_failed")
+
+    def on_connection_terminated(self, url=None):
+        self.db.set_system_status("oef-status", "Error: on_connection_terminated")
+
 
     def balance_poll_function(self):
+
         while not self.kill_event.wait(0):
+            # Check if we have data before registering our service with the oef
+            if self.lat == "" or self.lon == "":
+                data = self.db.get_latest_detection_data(1)
+                if data is not None and len(data) != 0:
+                    self.lat = data[0]["lat"]
+                    self.lon = data[0]["lon"]
+                    self.car_park_service_description = Description(
+                        {
+                            "latitude": float(self.lat),
+                            "longitude": float(self.lon),
+                            "unique_id": str(self.public_key)
+                        }, CarParkDataModel()
+                    )
+                    self.register_service(0, self.car_park_service_description)
+
+                else:
+                    print("Waiting for some data before registering OEF agent")
+
             # poll for balance
             new_fet = self.read_balance()
             if new_fet != self.cleared_fet:
@@ -138,56 +168,6 @@ class CarParkAgent(OEFAgent):
             except Exception as e:
                 print("Error querying status of transaction: {}".format(e))
                 self.db.set_system_status("ledger-status", "Error: Failed to connect")
-
-            time.sleep(1)
-
-    def run_function(self):
-        # Need to have some data in the database before we can register our service
-        while (self.lat == "" or self.lon == "") and not self.kill_event.wait(0):
-            data = self.db.get_latest_detection_data(1)
-            if data is not None and len(data) != 0:
-                self.lat = data[0]["lat"]
-                self.lon = data[0]["lon"]
-                self.car_park_service_description = Description(
-                    {
-                        "latitude": float(self.lat),
-                        "longitude": float(self.lon),
-                        "unique_id": str(self.public_key)
-                    }, CarParkDataModel()
-                )
-            print("Waiting for some data before registering OEF agent")
-            time.sleep(5)
-
-        while not self.kill_event.wait(0):
-            try:
-                self.unregister_service(0, self.car_park_service_description)
-                self.disconnect()
-                pass
-            except Exception as e:
-                print("having some problems closing connection")
-
-            try:
-                self.connect()
-                # Sometimes connection is not fully up before going to next line
-                time.sleep(1)
-                self.register_service(0, self.car_park_service_description)
-                self.db.set_system_status("oef-status", "OK")
-
-            except Exception as e:
-                print("Failed to connect to OEF: {}".format(e))
-                self.db.set_system_status("oef-status", "Error: Failed to connect")
-
-            try:
-                self.run()
-                # need to do this in case we exited due to an exception
-                if self._task is not None:
-                    self._loop.call_soon_threadsafe(self._task.cancel)
-                if self._task is not None:
-                    self.stop()
-                print("Runfunction exited")
-            except Exception as e:
-                self.db.set_system_status("oef-status", "Error: Failed to connect")
-                print("Runfunction exited with exception")
 
             time.sleep(1)
 

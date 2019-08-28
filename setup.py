@@ -47,6 +47,10 @@ subprocess.call([sys.executable, '-m', 'pip', 'install', 'clint'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'docopt'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'Cython'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'coco == 0.4.0'])
+# Remove this when done
+# subprocess.call([sys.executable, '-m', 'pip', 'install', 'protobuf'])
+# subprocess.call([sys.executable, '-m', 'pip', 'install', 'graphviz'])
+# subprocess.call([sys.executable, '-m', 'pip', 'install', 'colorlog'])
 if platform.startswith("win32"):
     pass
     #subprocess.call(['rm', '-rf', './_win/'])
