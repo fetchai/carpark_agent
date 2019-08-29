@@ -218,17 +218,17 @@ class CarParkClientAgent(OEFAgent):
 
         # Add additional data we now know about the proposal
         proposal = proposals[0]
-        self.agents_data[origin]['lat'] = proposal.values['lat']
-        self.agents_data[origin]['lon'] = proposal.values['lon']
-        self.agents_data[origin]['price'] = proposal.values['price']
-        self.agents_data[origin]['friendly_name'] = proposal.values['friendly_name']
-        self.agents_data[origin]['last_detection_time'] = proposal.values['last_detection_time']
-        self.agents_data[origin]['max_spaces'] = proposal.values['max_spaces']
+        self.agents_data[origin]['lat'] = proposal['lat']
+        self.agents_data[origin]['lon'] = proposal['lon']
+        self.agents_data[origin]['price'] = proposal['price']
+        self.agents_data[origin]['friendly_name'] = proposal['friendly_name']
+        self.agents_data[origin]['last_detection_time'] = proposal['last_detection_time']
+        self.agents_data[origin]['max_spaces'] = proposal['max_spaces']
         self.agents_data[origin]['proposal_dialogue_id'] = dialogue_id
         self.agents_data[origin]['proposal_msg_id'] = msg_id
 
 
-        self.push_msg("Proposal returned from : " + proposal.values['friendly_name'])
+        self.push_msg("Proposal returned from : " + proposal['friendly_name'])
 
 
     def generate_wealth(self, fet):
