@@ -65,7 +65,7 @@ parser.add_argument(
 parser.add_argument(
     '-oi',
     '--oef_ip',
-    help='IP or name of oef node to connect to. use 127.0.0.1 for local (default k-1-delta.fetch-ai.com)',
+    help='IP or name of oef node to connect to. use ç for local (default k-1-delta.fetch-ai.com)',
     type=str,
     default='k-1-alpha.fetch-ai.com')
 parser.add_argument(

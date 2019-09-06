@@ -17,6 +17,8 @@ from oef.core import AsyncioCore
 # from oef.query import Eq, Constraint
 # from oef.query import Query
 
+#from oef.query import Query, Constraint, NotEq
+
 
 from oef.schema import Description
 from oef.messages import CFP_TYPES
@@ -83,7 +85,8 @@ class CarParkAgent(OEFAgent):
         self.db.set_system_status("ledger-port", self.ledger_port)
         self.db.set_system_status("oef-status", "OK")
         self.db.set_system_status("oef-ip", self.oef_ip)
-        self.db.set_system_status("oef-port", self.oef_port )
+        self.db.set_system_status("oef-port", self.oef_port)
+        self.is_service_registered = False
 
         # Ledger stuff
         self.api = LedgerApi(ledger_ip, ledger_port)
@@ -92,15 +95,15 @@ class CarParkAgent(OEFAgent):
         self.uncleared_fet = self.read_balance()
 
         # Thread control
-        self.balance_thread = threading.Thread(target=self.balance_poll_function)
+        self.polling_thread = threading.Thread(target=self.poll_function)
 
         self.kill_event = threading.Event()
 
     def start_agent(self):
         self.db.set_system_status("oef-status", "Trying to connect...")
 
-        self.connect()
-        self.balance_thread.start()
+        # Let the polling loop handle connections
+        self.polling_thread.start()
 
     def read_balance(self):
         try:
@@ -113,27 +116,20 @@ class CarParkAgent(OEFAgent):
             return -1
 
     def stop_agent(self):
-        self.disconnect()
+        if self.get_state() == "connected":
+            self.disconnect()
+
         self.core.stop()
 
         self.kill_event.set()
-        self.balance_thread.join(120)
-
-    def on_connect_success(self, url=None):
-        self.db.set_system_status("oef-status", "OK")
-
-    def on_connect_failed(self, url=None, ex=None):
-        self.db.set_system_status("oef-status", "Error: on_connect_failed")
-
-    def on_connection_terminated(self, url=None):
-        self.db.set_system_status("oef-status", "Error: on_connection_terminated")
+        self.polling_thread.join(120)
 
 
-    def balance_poll_function(self):
+    def poll_function(self):
 
         while not self.kill_event.wait(0):
             # Check if we have data before registering our service with the oef
-            if self.lat == "" or self.lon == "":
+            if self.get_state() == "connected" and (self.lat == "" or self.lon == "" or not self.is_service_registered):
                 data = self.db.get_latest_detection_data(1)
                 if data is not None and len(data) != 0:
                     self.lat = data[0]["lat"]
@@ -146,6 +142,7 @@ class CarParkAgent(OEFAgent):
                         }, CarParkDataModel()
                     )
                     self.register_service(0, self.car_park_service_description)
+                    self.is_service_registered = True
 
                 else:
                     print("Waiting for some data before registering OEF agent")
@@ -169,8 +166,18 @@ class CarParkAgent(OEFAgent):
                 print("Error querying status of transaction: {}".format(e))
                 self.db.set_system_status("ledger-status", "Error: Failed to connect")
 
-            time.sleep(1)
+            # If we got disconnected from the OEF, then reconnect
+            if self.get_state() != "connected":
+                self.db.set_system_status("oef-status", "Trying to connect...")
+                self.connect()
+                self.is_service_registered = False
+                if self.get_state() == "connected":
+                    self.db.set_system_status("oef-status", "OK: {}".format(self.get_state()))
+                else:
+                    self.db.set_system_status("oef-status", "Error: {}".format(self.get_state()))
 
+            time.sleep(5)
+        print("Leaving poll loop!")
 
 
     def on_message(self, msg_id: int, dialogue_id: int, origin: str, content: bytes):
@@ -276,3 +283,11 @@ class CarParkAgent(OEFAgent):
                 entity.dump(private_key_file)
 
             return entity
+
+    # # Constraint("latitude", Range((0., 90.))), Constraint("longitude", Range((0., 180.)))
+    # def perform_search(self):
+    #     # try:
+    #     query = Query(
+    #         [Constraint("latitude", NotEq(0.0))],
+    #         CarParkDataModel())
+    #     self.search_services(random.randint(1, 1000000), query)
