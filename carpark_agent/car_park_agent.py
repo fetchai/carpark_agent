@@ -116,12 +116,13 @@ class CarParkAgent(OEFAgent):
             return -1
 
     def stop_agent(self):
+        self.kill_event.set()
+
         if self.get_state() == "connected":
             self.disconnect()
 
         self.core.stop()
 
-        self.kill_event.set()
         self.polling_thread.join(120)
 
 
@@ -167,7 +168,7 @@ class CarParkAgent(OEFAgent):
                 self.db.set_system_status("ledger-status", "Error: Failed to connect")
 
             # If we got disconnected from the OEF, then reconnect
-            if self.get_state() != "connected":
+            if self.get_state() != "connected" and not self.kill_event.wait(0):
                 self.db.set_system_status("oef-status", "Trying to connect...")
                 self.connect()
                 self.is_service_registered = False

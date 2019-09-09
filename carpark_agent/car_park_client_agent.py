@@ -115,7 +115,7 @@ class CarParkClientAgent(OEFAgent):
             self.handle_transaction_clearing()
 
             # If we got disconnected from the OEF, then reconnect
-            if self.get_state() != "connected":
+            if self.get_state() != "connected"  and not self.kill_event.wait(0):
                 self.oef_status = "Trying to connect..."
                 self.connect()
                 if self.get_state() == "connected":
@@ -199,7 +199,7 @@ class CarParkClientAgent(OEFAgent):
             data['message_type'] = 'friendly_name_intro'
             data['friendly_name'] = self.friendly_name
             encoded_data = json.dumps(data).encode("utf-8")
-            self.send_message(0, random.randint(1, 1000000), agent  , encoded_data)
+            self.send_message(0, random.randint(1, 1000000), agent, encoded_data)
 
 
     def on_propose(self, msg_id: int, dialogue_id: int, origin: str, target: int, proposals: PROPOSE_TYPES):
