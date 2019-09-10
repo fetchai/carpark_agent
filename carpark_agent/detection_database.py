@@ -302,7 +302,7 @@ class DetectionDatabase:
 
         if len(results) != 0:
             last_epoch = results[0][0]
-            self.execute_single_sql("DELETE FROM {}} WHERE epoch<{}".format(table_name, last_epoch))
+            self.execute_single_sql("DELETE FROM {} WHERE epoch<{}".format(table_name, last_epoch))
 
     def ensure_dirs_exist(self):
         if not os.path.isdir(self.temp_dir):
