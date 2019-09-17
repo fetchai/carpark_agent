@@ -147,41 +147,7 @@ Now when the Pi restarts, the VNC Viewer should show a nice large resolution. If
 ## 3a. Installing the carpark_agent on Rasperry Pi Version 4
 I would now work directly on the Raspbery Pi as the VNC connection can be quite laggy sometimes.
 
-We will be getting the code from github.com. At the moment, the code is  in a private repository, so you will need a Fetch github account to get access to it. When the code is public, you will not need to log into github to get the code, but it is still useful to log in and have the page open in a browser on the Raspberry Pi so you can copy and past text into the terminal fromn these instructions.
-
-### Adding a key to your github account
-While the code is in a private repository, you will not be able to get the code without creating a public/private key pair on the Raspberry Pi and adding it to your github account. Only Fetch employees will be able to do this. 
-
-The first step is to make a public/private key pair. On your Raspberry PI, open a terminal and type (replacing the last bit with your own email address):
-
-    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-    
-When you are presented with options just press Enter to accept the defaults until you are informed a key has been generated.
-
-Now we need to get the public key into the clipboard
-
-    cd ~/.ssh
-    cat id_rsa.pub 
-    
-Now use your mouse to select the text. It should start from the "ssh-rsa......" and finish witth your email address. Try not to select any addiitonal lines or spaces at the beginning and end.
-Now right click in the selected text and select Copy
-
-Open up a browser and type this into the address bar (don't copy and past this in as you will lose the key stored in your clipboard):
- 
-    www.github.com
-    
-You will be asked to sign in - since you are en employee, you should have an account associated with Fetch.AI already. To add the new private key, do the following:
-* In the top right corner, click on the icon representing you. 
-* Select settings
-* On the left hand side select SSH and GPG keys
-* in the top right press, new SSH key
-* In the title, write something like "Raspberry Pi"
-* Right click in the Key text box and select Paste - you should see a long string of numbers and letters pasted in starting with ssh-rsa and finishing with your email address 
-* Click Add SSH Key
-    
-Now you will be able to download the code from github as if it were a public repository
-
-
+We will be getting the code from github.com. 
 
 ### Getting the code
 In your browser on your Raspberry Pi, type this into the address bar:
@@ -193,7 +159,7 @@ This takes you to the webpage with these instructions. Having it available on th
 Open a terminal and type:
 
     cd ~/Desktop
-    git clone git@github.com:fetchai/carpark_agent.git
+    git clone https://github.com/fetchai/carpark_agent.git
     cd carpark_agent
     
 In order to run the machine learning algorithms we need to download a large datafile. In the terminal, type:
@@ -435,14 +401,11 @@ Now we need to install some software to support the agent. Paste these lines int
     pip3 install virtualenv
      
 ### Getting and installing the code
-Since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your github account".
- 
-This should now let you get the code from github as if it were a public repository
   
-Open a Terminal
+In the terminal type:
 
     cd ~/Desktop
-    git clone git@github.com:fetchai/carpark_agent.git
+    git clone https://github.com/fetchai/carpark_agent.git
     cd carpark_agent
     
 If you want to try running that actual carpark agent on a mac, you can do this. You will need to get the object detection datafile:
@@ -557,16 +520,10 @@ Locate the file called "opencv_python-4.1.1-cp37-cp37m-win32.whl" and download i
 
     
 ### Getting the car-park agent code
-Using the Git-Bash terminal you can now get the code from git-hub.  
-
-As before, since this code it not currently public, you will need to set up a private key and add it to your github profile. Follow the same instructions you did for the Raspberry Pi above in the section titled "Adding a key to your github account".
- 
-This should now let you get the code from github as if it were a public repository
-  
-In the Git-Bash terminal type:
+Using the Git-Bash terminal you can now get the code from git-hub. In the Git-Bash terminal type:
 
     cd ~/Desktop
-    git clone git@github.com:fetchai/carpark_agent.git
+    git clone https://github.com/fetchai/carpark_agent.git
     cd carpark_agent
     
 Create and activate the virtual environment and install the python packages (note that the script name to create the virtual environment is a bespoke windows version)

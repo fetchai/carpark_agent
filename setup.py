@@ -46,11 +46,9 @@ subprocess.call([sys.executable, '-m', 'pip', 'install', 'crontab'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'clint'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'docopt'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'Cython'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'colorlog'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'coco == 0.4.0'])
-# Remove this when done
-# subprocess.call([sys.executable, '-m', 'pip', 'install', 'protobuf'])
-# subprocess.call([sys.executable, '-m', 'pip', 'install', 'graphviz'])
-# subprocess.call([sys.executable, '-m', 'pip', 'install', 'colorlog'])
+
 if platform.startswith("win32"):
     pass
     #subprocess.call(['rm', '-rf', './_win/'])
@@ -69,7 +67,7 @@ else:
     subprocess.call([sys.executable, '-m', 'pip', 'install', 'tensorflow == 1.13.1'])
 
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'keras == 2.2.4'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'oef == 0.4.0'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'oef == 0.7.0'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'fetchai-ledger-api == 0.5.1'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'base58'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'pywt'])
