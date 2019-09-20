@@ -34,6 +34,8 @@ I use a wireless network because, once your Raspberry Pi is set up, you want as 
 The Raspberry Pi case I got has excellent instructions on how to put it together and mount the Raspberry PI and Camera inside it. However, this case is desgined for the Raspberry Pi 3 rather than 4 and so the side with the holes for the HDMI output will not fit on when the board is inside. I just left this side off, but you could probably enlarge the holes with a file.
 https://docs-emea.rs-online.com/webdocs/166a/0900766b8166a59a.pdf
 
+Note that that if using a Raspberry Pi 4, the case in the link doesn't fit around the dual mini HDM sockets. I just left this side off and screwed it all together anyway.
+
 I will attach the clamp and arm to the box later, 
 
 Plug in the monitor, keyboard and mouse.
