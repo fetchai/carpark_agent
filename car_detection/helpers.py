@@ -143,6 +143,12 @@ class ParkedCarDetector:
         plt.autoscale(tight=True)
         fig.canvas.draw()
         buf = numpy.fromstring(fig.canvas.tostring_rgb(), dtype='uint8')
+        if buf.size != height * width * 3:
+            print("Warning: Visualisation buffer is not same size as input image - attempting to adjust")
+            width = round(buf.size / (3 * height))
+            if buf.size != height * width * 3:
+                print("Failed to resize visualisation")
+                return None
         buf.shape = (height, width, 3)
         plt.close(fig)
 

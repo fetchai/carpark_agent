@@ -14,5 +14,5 @@ nice python run_detection_only.py &
 python run_carparkagent.py -ps 300 -fn set_friendly_name -dd -fet 2000 -lat 40.780343 -lon -73.967491
 
 pkill -KILL 'python3'
-
+pkill -KILL 'python'
 deactivate
