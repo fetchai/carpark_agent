@@ -61,7 +61,9 @@ You will need to have your OS completely up to date to avoid problens with these
     sudo apt-get update
     sudo apt-get dist-upgrade
     
-once everything is installed you need to reboot. You can do this from the terminal.
+Occasionally I have found that this last line doesn't work properly and halfway through the installation, I get an error message saying something like "unable to install....". If this happens, I found that just re-entering the last line again and letting it run fixed the problem. Warning: If you continue with these instructions after errors have caused this previous step to fail, you will encounter many more problems down the line.
+
+Once everything is installed you need to reboot. You can do this from the terminal.
 
     sudo reboot
 
