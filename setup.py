@@ -67,7 +67,7 @@ else:
     subprocess.call([sys.executable, '-m', 'pip', 'install', 'tensorflow == 1.13.1'])
 
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'keras == 2.2.4'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'oef == 0.7.0'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'oef == 0.8.1'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'fetchai-ledger-api == 0.5.1'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'base58'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'pywt'])
