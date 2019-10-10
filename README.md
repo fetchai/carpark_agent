@@ -55,18 +55,24 @@ Once you have set up your SD card, plug it into your Raspberry Pi, connect the p
 ### Booting up and updating the OS
 When you first boot your Raspberry Pi, you will be prompted to enter a password for the Raspberry PI and your wifi password so the Raspberry Pi has access to the internet. When it has finished you will be prompted to restart.
 
+I recommend having these instructions easily accessible on your Raspberry Pi so you can copy and paste lines into the terminal. You will also be restaring your Raspberry Pi a few times during this process. Open up the Raspberry Pi Browser and enter this into the address bar:
+
+    https://github.com/fetchai/carpark_agent
+
+This takes you to the web-page with these instructions. Now click the star on the right of the address bar to add it as a bookmark. Then click on the three vertical dots at the top right of the browser (settings) and click on Bookmarks and then on "Show Bookmark Bar". This will put a link to this page at the top of your browser window every time you open it. 
+
 You will need to have your OS completely up to date to avoid problens with these instructions. Open a Terminal window and type:
 
     sudo apt update -y
     sudo apt-get update
     sudo apt-get dist-upgrade
     
-Occasionally I have found that this last giving errors halfway through the installation, I get an error message saying something like "unable to install....". 
-If you get error messages, then I found it got fixed by simply retyping:
+Occasionally I have found that this last step giving errors halfway through the installation, I get an error message saying something like "unable to install....". 
+If you get error messages, then I you can usually fix it byt simply retyping that last line again:
  
     sudo apt-get dist-upgrade
     
-If you continue with these instructions after errors have caused this previous step to fail, you will encounter many more problems down the line. Once everything is installed you need to reboot. You can do this from the terminal.
+If the upgrade step fails, then the rest of these instrutions will not work. Once everything is installed you need to reboot. You can do this from the terminal.
 
     sudo reboot
 
@@ -156,12 +162,6 @@ I would now work directly on the Raspbery Pi as the VNC connection can be quite 
 We will be getting the code from github.com. 
 
 ### Getting the code
-In your browser on your Raspberry Pi, type this into the address bar:
-
-    https://github.com/fetchai/carpark_agent
-
-This takes you to the webpage with these instructions. Having it available on the Raspberry Pi is useful for copying and pasting text into the terminal
- 
 Open a terminal and type:
 
     cd ~/Desktop
