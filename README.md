@@ -53,9 +53,10 @@ Once you have set up your SD card, plug it into your Raspberry Pi, connect the p
 
 
 ### Booting up and updating the OS
-When you first boot your Raspberry Pi, you will be prompted to enter a password for the Raspberry PI and your wifi password so the Raspberry Pi has access to the internet. When it has finished you will be prompted to restart.
+When you first boot your Raspberry Pi, you will be prompted to enter a password for the Raspberry PI and your wifi password so the Raspberry Pi has access to the internet. When it has finished you will be prompted to restart. Do this.
 
-I recommend having these instructions easily accessible on your Raspberry Pi so you can copy and paste lines into the terminal. You will also be restaring your Raspberry Pi a few times during this process. Open up the Raspberry Pi Browser and enter this into the address bar:
+
+I recommend having these instructions easily accessible on your Raspberry Pi so you can copy and paste lines into the terminal. You will also be restaring your Raspberry Pi a few times during this process. When your Raspberry Pi has restarted, open up the Browser and enter this into the address bar:
 
     https://github.com/fetchai/carpark_agent
 
