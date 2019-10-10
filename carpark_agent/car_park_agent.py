@@ -7,10 +7,15 @@ import os
 import base58
 import random
 from datetime import datetime
+from enum import Enum
+from typing import List
 
 # oef stuff
 from oef.agents import OEFAgent
 from oef.core import AsyncioCore
+
+
+
 #
 # from typing import List
 # from oef.agents import PROPOSE_TYPES
@@ -19,6 +24,7 @@ from oef.core import AsyncioCore
 
 #from oef.query import Query, Constraint, NotEq
 
+from oef.query import Query, Constraint, Range, NotEq
 
 from oef.schema import Description
 from oef.messages import CFP_TYPES
@@ -28,6 +34,21 @@ from carpark_agent.car_detect_dataModel import CarParkDataModel
 from fetchai.ledger.api import LedgerApi
 from fetchai.ledger.crypto import Entity
 from fetchai.ledger.api import TransactionApi
+
+class HealthCheckState(Enum):
+    INITIALISE = 0
+    WAITING_TO_START = 1
+    TEST_FOR_CONNECTION = 2
+    DO_SEARCH = 3
+    WAITING_FOR_SEARCH_RESULTS = 4
+    RESULTS_ARRIVED = 5
+    FOUND_SELF = 6
+    FAIL = 7
+
+healthcheck_search_id = 97
+health_check_timeout = 60
+health_check_poll_interval = 60
+
 
 def logger(*args):
     print(">>", *args)
@@ -96,14 +117,19 @@ class CarParkAgent(OEFAgent):
 
         # Thread control
         self.polling_thread = threading.Thread(target=self.poll_function)
-
+        self.health_check_thread = threading.Thread(target=self.health_check_function)
         self.kill_event = threading.Event()
+
+        self.health_check_state = HealthCheckState.INITIALISE
+        self.health_timer_start_time = time.time()
+        self.health_check_results = None
 
     def start_agent(self):
         self.db.set_system_status("oef-status", "Trying to connect...")
 
         # Let the polling loop handle connections
         self.polling_thread.start()
+        self.health_check_thread.start()
 
     def read_balance(self):
         try:
@@ -124,7 +150,80 @@ class CarParkAgent(OEFAgent):
         self.core.stop()
 
         self.polling_thread.join(120)
+        self.health_check_thread.join(120)
 
+
+
+    def on_search_result(self, search_id: int, agents: List[str]):
+        if search_id == healthcheck_search_id:
+            if self.health_check_state == HealthCheckState.WAITING_FOR_SEARCH_RESULTS:
+                self.health_check_state = HealthCheckState.RESULTS_ARRIVED
+                self.health_check_results = agents
+
+
+
+
+    def health_check_function(self):
+        # wait a bit before starting this
+        while not self.kill_event.wait(0):
+            time.sleep(1)
+
+            # print("self.health_check_state: {} - {}".format( self.health_check_state, int(time.time() - self.health_timer_start_time)))
+
+            if self.health_check_state == HealthCheckState.INITIALISE:
+                self.health_timer_start_time = time.time()
+                self.health_check_state = HealthCheckState.WAITING_TO_START
+
+            elif self.health_check_state == HealthCheckState.WAITING_TO_START:
+                if time.time() - self.health_timer_start_time > health_check_poll_interval:
+                    self.health_check_state = HealthCheckState.TEST_FOR_CONNECTION
+
+            elif self.health_check_state == HealthCheckState.TEST_FOR_CONNECTION:
+                # only continue if actually connected
+                if self.get_state() == "connected":
+                    self.health_check_state = HealthCheckState.DO_SEARCH
+
+            elif self.health_check_state == HealthCheckState.DO_SEARCH:
+                # print("Searching for self")
+                query = Query(
+                    [Constraint("latitude", NotEq(0.0))],
+                    CarParkDataModel())
+                self.search_services(healthcheck_search_id, query)
+                self.health_timer_start_time = time.time()
+                self.health_check_results = None
+                self.health_check_state = HealthCheckState.WAITING_FOR_SEARCH_RESULTS
+
+            elif self.health_check_state == HealthCheckState.WAITING_FOR_SEARCH_RESULTS:
+                elapsed_time = time.time() - self.health_timer_start_time
+                if elapsed_time > health_check_timeout:
+                    print("Health check: Timeout waiting for search results")
+                    self.health_check_state = HealthCheckState.FAIL
+
+            elif self.health_check_state == HealthCheckState.RESULTS_ARRIVED:
+                # Check if we are part of the results
+                found_self = False
+                if self.health_check_results is not None:
+                    for agent in self.health_check_results:
+                        if self.public_key ==  agent:
+                            found_self = True
+                            break
+                if found_self:
+                    self.health_check_state = HealthCheckState.FOUND_SELF
+                else:
+                    print("Health check: Failed to find self")
+                    self.health_check_state = HealthCheckState.FAIL
+
+            elif self.health_check_state == HealthCheckState.FOUND_SELF:
+                print("Health check successful")
+                self.health_check_state = HealthCheckState.INITIALISE
+
+            elif self.health_check_state == HealthCheckState.FAIL:
+                print("Health check Failed - Attempting to restart connection")
+                if self.get_state() == "connected":
+                    self.disconnect()
+                self.db.set_system_status("oef-status", "Error: {}".format(self.get_state()))
+                time.sleep(10)
+                self.health_check_state = HealthCheckState.INITIALISE
 
     def poll_function(self):
 
