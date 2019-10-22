@@ -90,7 +90,7 @@ class CarParkAgent(OEFAgent):
         if friendly_name != "":
             self.friendly_name = friendly_name
         else:
-            self.friendly_name = "car_park_agent_client_{}".format(random.randint(1, 1000000))
+            self.friendly_name = "car_park_agent_{}".format(random.randint(1, 1000000))
         self.db.add_friendly_name(self.public_key, self.friendly_name, True)
 
         # Set up data model object

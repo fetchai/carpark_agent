@@ -100,13 +100,13 @@ class CarParkClientAgent(OEFAgent):
         self.polling_thread.start()
 
     def stop_agent(self):
+        self.kill_event.set()
 
         if self.get_state() == "connected":
             self.disconnect()
 
         self.core.stop()
 
-        self.kill_event.set()
         self.polling_thread.join(10)
 
 
@@ -115,7 +115,7 @@ class CarParkClientAgent(OEFAgent):
             self.handle_transaction_clearing()
 
             # If we got disconnected from the OEF, then reconnect
-            if self.get_state() != "connected"  and not self.kill_event.wait(0):
+            if self.get_state() != "connected" and not self.kill_event.wait(0):
                 self.oef_status = "Trying to connect..."
                 self.connect()
                 if self.get_state() == "connected":
