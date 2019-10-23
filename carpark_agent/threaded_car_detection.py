@@ -103,6 +103,11 @@ class ThreadedCarDetection:
         time.sleep(2)
         last_time = time.time()
         while not self.kill_event.wait(0):
+            if self.db.get_system_status("detection") == "paused":
+                print("Detection is paused")
+                time.sleep(1)
+                continue
+
             # get GPS data if we have it
             lat, lon = self.gps.GetValues()
             if lat is not None and lon is not None:

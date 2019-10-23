@@ -126,6 +126,10 @@ image_recorder = ThreadedImageRecorder(
 image_recorder.start_processing()
 print("Recorder started")
 
+# Ensure detection is activated by default when we start up
+# we have the time it takes for the libaries to initialise in order to disable it
+db.set_system_status("detection", "unpaused")
+
 # Create the thread to perform the vehicle detection image processing
 if not args.disable_detection:
     from carpark_agent.threaded_car_detection import ThreadedCarDetection

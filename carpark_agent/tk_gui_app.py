@@ -672,6 +672,7 @@ class TkGuiApp:
             frame.config(bg=self.bg_use_col)
 
     def on_live_detect(self):
+        self.db.set_system_status("detection", "unpaused")
         self.uistate = uistate_live_detect
         self.setup_ui_state()
 
@@ -684,6 +685,7 @@ class TkGuiApp:
         self.setup_ui_state()
 
     def on_edit_detection_area(self):
+        self.db.set_system_status("detection", "paused")
         self.uistate = uistate_edit_detection_area
         self.load_masks()
         self.setup_ui_state()
