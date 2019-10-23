@@ -319,24 +319,10 @@ The agent will not be running. So, open a terminal and type:
     cd Desktop/carpark_agent
     ./run_scripts/run_carpark_agent_split.sh
 
-When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in. Also try moving you mouse around the screen - is it responsive enough to use?
+When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in. 
 
-### If GUI is too unresponsive to use the GUI (RPi3 only)
-Note that this UI can be a very unresponsive when running over VNC, especially on a Raspberry Pi Version 3 while detections are going on, so just do it slowly and be patient. Do the following:
-Quit the agent (press Quit - if it is in the middle of a detection, you may have to wait a while for it to fully shut down).
+During the next steps, you will need to interact with the application running on the Raspberry Pi. If the app is in the middle of running the car detection algorithm, it can become a bit unresponsive. However, while in "Edit detection area" mode, the detection algorithm will be disabled - but if it is in the middle of a detection when you enter this mode, it will need to finish the detection it is doing before disabling. This can take a couple of minutes. So if you are on this mode, and the app is unresponsibe, leave it for a couple of minutes and then return to it. 
 
-Open up the script file called "run_carpark_agent_split.sh" and find the following line:
-
-    nice python run_detection_only.py &
-
-Comment it out so it looks like this:
-
-    # nice python run_detection_only.py &
-
-Now if you re-run the script the application should be much more responsive (but it won't be doing any car detection). When you have set up your areas, of interest, quit the application and make sure you un-comment the line in the run_carpark_agent_split.sh script before trying to run it properly.
-  
-
-### Configuring the car-park agent (RPi3 only) continued... 
 There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
 * Press Edit Detection Area button
 * Press Capture Ref Image button - this will capture in image from the camera and it should be tinted blue - indicating that it will detect everywhere
