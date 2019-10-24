@@ -545,8 +545,9 @@ The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. Th
 
 To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform.
 
-When you have docker installed, you will need to open a command prompt (for some reason, this doesn't always work from the Git-Bash terminal). To do this:
-Click on the Search field in your task bar and type "CMD". Click on the Command Prompt result
+When you have docker installed, you will need to open a command prompt (for some reason, this doesn't always work from the Git-Bash terminal). 
+
+To do this: Click on the Search field in your task bar and type "CMD". Click on the Command Prompt result and then you have a terminal window you can type in.
 
 Go to the carpark agent directory:
 
