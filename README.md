@@ -487,7 +487,7 @@ To configure and run the agent on the mac, simply follow the instructions for th
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
 
 ### Access Github
-You will need to clone the repository from github as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this steps starts with the words "After entering the above command..."'  
+You will need to clone the repository from github as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this step starts with the words "After entering the above command..."'  
 https://www.computerhope.com/issues/ch001927.htm
 
 You can now used Git-Bash to execute any of the Linux style bash scripts. 
@@ -532,12 +532,15 @@ Now install virtualenv. Type:
     
     pip install virtualenv
 
-To install OpenCV, Go to this website:
-https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv
+To install OpenCV, you will need a specific version of the python installation file. You can download it with this command:
 
-Locate the file called "opencv_python-4.1.1-cp37-cp37m-win32.whl" and download it. Find where it has been downloaded to and install it. This was what I typed - though you will need to replace the path with where your browser downloaded the file.
+    svn export https://github.com/fetchai/carpark_agent_big_data.git/trunk/opencv_python-4.1.1-cp37-cp37m-win32.whl
 
-    pip install "c:\Users\dishm\Downloads\opencv_python-4.1.1-cp37-cp37m-win32.whl"
+note that I originally got this from here: [https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv) But it seems to no longer exist. 
+
+NOw you need to install this file:
+
+    pip install opencv_python-4.1.1-cp37-cp37m-win32.whl
 
     
 ### Getting the code

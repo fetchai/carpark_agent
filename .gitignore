@@ -94,6 +94,7 @@ ENV/
 /data
 /car_detection/weights/mask_rcnn_coco.h5
 /_win
+*.whl
 
 # OSX stuff
 .DS_Store
