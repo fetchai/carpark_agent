@@ -576,9 +576,54 @@ Now you can install the main application and its dependencies:
     
     python setup.py develop
 
-You can now run the client agent by following the same instructions as for the Mac above entitled "Configuring and running the client".
 
-Now follow the instructions in the section called "Configuring and running the client", above in the instructions for getting this running on a Mac.  
+### Opening up the ports on Windows Firewall
+If you have yours Windows firewall enabled (which it is, by default), it will block the Raspberry Pi's trying to contact it. To avoid this problem, you need to open this port so they can connect.
+
+1. Go to the search bar and type "firewall"
+2. Click on "Windows Defender Firewall"
+
+<img src="resources/readme_images/firewall_01.png" height="200">
+ 
+3. Click on Advanced settings
+
+<img src="resources/readme_images/firewall_02.png" height="200">
+
+4. Click on "Inbound Rules"
+5. Click on "New Rule"
+
+<img src="resources/readme_images/firewall_03.png" height="200">
+
+6. Select "Port"
+7. Click on "Next"
+
+<img src="resources/readme_images/firewall_05.png" height="200">
+
+8. Select TCP
+9. Select "Specific remote ports" and type 10000 (that's ten thousand) into the text box
+10. Click on "Next"
+ 
+<img src="resources/readme_images/firewall_07.png" height="200">
+
+11. Select "Allow the connection"
+12. Click on "Next"
+
+<img src="resources/readme_images/firewall_08.png" height="200">
+
+13. Ensure the rule applies in all cases and click on "Next"
+
+<img src="resources/readme_images/firewall_09.png" height="200">
+
+14. Give the firewall rule a name, say "OEF Node Port"
+15. Click on "Next"
+
+<img src="resources/readme_images/firewall_10.png" height="200">
+
+
+Once this rule is applied, your Rasperry Pi should be connected to the OEF Node running on your windows machine and the OEF Status in the panel at the bottom of the UI on the Raspberry Pi agent should read "OK: connected"
+
+### Getting the client running
+You can now run the client agent by following the same instructions as for the Mac above entitled "Configuring and running the client".
 
 
 ### Cleared and uncleared FET
