@@ -39,13 +39,13 @@ parser.add_argument(
 parser.add_argument(
     '-oi',
     '--oef_ip',
-    help='IP or name of oef node to connect to. use 127.0.0.1 for local (default k-1-alpha.fetch-ai.com)',
+    help='IP or name of oef node to connect to. use 127.0.0.1 for local and k-1-alpha.fetch-ai.com for Fetch.AI servers (default 127.0.0.1)',
     type=str,
-    default='k-1-alpha.fetch-ai.com')
+    default='127.0.0.1')
 parser.add_argument(
     '-op',
     '--oef_port',
-    help='Port of oef node to connect to. use 10000 for local (default 50001)',
+    help='Port of oef node to connect to. use 10000 for local and 50001 for Fetch.AI servers (default 10000)',
     type=str,
     default='50001')
 parser.add_argument(

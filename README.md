@@ -17,7 +17,6 @@ The results will look like this:
 |  <img src="resources/readme_images/device_small.jpg" height="150">       |  <img src="resources/readme_images/pi_live.jpg" height="150"> | <img src="resources/readme_images/client_04.jpg" height="150"> |
 
 
-
 ## 1. Physically building the car park agent
 ### Prerequisits
 Things you will need - I've added links to the specific things I bought:
@@ -155,7 +154,12 @@ Use the up/down arrow keys, select Advanced options and press Enter
 * Use the right arrow to select <Finish>, press Enter
 * You will be prompted to restart - do so
 
-Now when the Pi restarts, the VNC Viewer should show a nice large resolution. If this is what happens, you can shut it down, reconnect your monitor and restart it 
+Now when the RPi restarts, the VNC Viewer should show a nice large resolution. If this is what happens, you can shut it down, reconnect your monitor and restart it
+
+### Get your desktop IP Address
+Later on we will need to use the IP address of your desktop PC so you need to write this down. There are instructions [here](https://www.tp-link.com/us/support/faq/838/) on how to find your IP address on different platforms.
+        
+When you have your Desktop machine's IP address, write it down.        
 
 ## 3a. Installing the carpark_agent on Rasperry Pi Version 4
 I would now work directly on the Raspbery Pi as the VNC connection can be quite laggy sometimes.
@@ -241,15 +245,17 @@ We now need to edit the script file which launches the agent. In the terminal wi
 
 Look for the line that says
 
-    python run_carparkagent.py -ps 120 -fn set_friendly_name -fet 2000 -lat 40.780343 -lon -73.967491
+    python run_carparkagent.py -ps 120 -fn set_friendly_name -fet 2000 -lat 40.780343 -lon -73.967491 -oi 127.0.0.1
     
 Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
 
 You also need to set the latitude and longitude of your locations. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. Paste these values into the script command line - be careful not to leave any commas in.
- 
+
+Finally we need to tell it where to find the OEF Node. For the moment you need to point this to your local desktop machine (we wrote this down earlier in the section "Get your desktop IP Address"). In my case, my desktop IP address is "192.168.95.127". 
+
 My new line would read
 
-    python run_carparkagent.py -ps 120 -fn diarmid_carpark_agent -fet 2000 -lat 52.235063 -lon 0.154021
+    python run_carparkagent.py -ps 120 -fn diarmid_carpark_agent -fet 2000 -lat 52.235063 -lon 0.154021 -oi 192.168.95.127
 
 The -fet argument is how much nano-FET we wish to charge other agents for information about parking. Note that a nano-FET is 0.0000000001 FET, so the default value here is 0.0000002 FET.
 
@@ -270,6 +276,8 @@ This editor will then open a text file - scroll down to the bottom and add the f
 Save the file exit the editor. Reboot your Raspberry Pi.
 
 The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
+
+In the bottom left there is a status panel. The status of the OEF will show an error as we have not yet set up an OEF Node on your desktop machine for the agent to connect to.
 
 ## 3b. Installing the carpark_agent on Rasperry Pi Version 3
 In this section I'll describe how to get the car-park agent running on a Raspberry Pi version 3. Version 3 is very similar to 4 in the way it works but it can only have a maximum of 1GB of RAM (as opposed to Version 4 whihc can have 4 GB of RAM). 1GB is not enough to run the car detection algorithms and so the way we get around this is to allocate a large "swap file" for the Raspberry Pi OS. This is an area of the SD car allocated to the OS which it can treat just like RAM. The SD card is many times slower than NAtive RAM and as a result the algorthm runs MUCH slower on the Version 3 and than on the 4 (taking roughly 5 minutes per detection run). The other issue is that sometimes the scripts simply run out of usable memory and crash. I haven't been ale to completely understand why, but I think it relates to the available address space and memory fragmentation. Anyway, the fix for this is to not run the car-park agent all in one process. Instead I split into two proccess:
@@ -344,15 +352,17 @@ We now need to edit the script file which launches the agent. In the terminal wi
 
 Look for the line that says
 
-    python run_carparkagent.py -ps 300 -fn set_friendly_name -dd -fet 2000 -lat 40.780343 -lon -73.967491
+    python run_carparkagent.py -ps 300 -fn set_friendly_name -dd -fet 2000 -lat 40.780343 -lon -73.967491 -oi 127.0.0.1
     
 Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
 
 You also need to set the latitude and longitude of your locations. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. Paste these values into the script command line - be careful not to leave any commas in.
+
+Finally we need to tell it where to find the OEF Node. For the moment you need to point this to your local desktop machine (we wrote this down earlier in the section "Get your desktop IP Address"). In my case, my desktop IP address is "192.168.95.127".
  
 My new line would read
 
-    python run_carparkagent.py -ps 300 -fn diarmid_carpark_agent -dd -fet 2000 -lat 52.235063 -lon 0.15402
+    python run_carparkagent.py -ps 300 -fn diarmid_carpark_agent -dd -fet 2000 -lat 52.235063 -lon 0.15402 -oi 192.168.95.127
 
 The -fet argument is how much nano-FET we wish to charge other agents for information about parking. Note that a nano-FET is 0.0000000001 FET, so the default value here is 0.0000002 FET.
 
@@ -374,9 +384,11 @@ Save the file exit the editor. Reboot your Raspberry Pi.
 
 The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
 
+In the bottom left there is a status panel. The status of the OEF will show an error as we have not yet set up an OEF Node on your desktop machine for the agent to connect to.
+
 ## 4a. Installing the client software on a Mac
 ### Setting up the Mac
-Now that the car park agent is running, we will set up a client agent on your Mac. This will query the Fetch.AI network for parking space data.
+Now that the car park agent is running, we will set up a client agent on your Mac. This will query the Fetch.AI network for parking space data. 
  
 If you do not have Homebrew already installed, open a terminal:
 
@@ -393,24 +405,34 @@ Now we need to install some software to support the agent. Paste these lines int
     brew install wget python3 opencv3
     pip3 install virtualenv
      
-### Getting and installing the code
-  
+### Getting the code
 In the terminal type:
 
     cd ~/Desktop
     git clone https://github.com/fetchai/carpark_agent.git
     cd carpark_agent
     
-If you want to try running that actual carpark agent on a mac, you can do this. You will need to get the object detection datafile:
-    
-    ./car_detection/weights/download_weights.sh
-    
+### Running an OEF Node
+The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. This will enable it to registers its services for other agents to find. At present this node will need to be run locally on your desktop machine. This "local" setup will only let your agents interact with other agents connected locally to this node. In future, these nodes will form a decentralised network that agents can use to find each other anywhere in the world.
+
+To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform.
+
+Wen you have docker installed, you can run this script to run the oef node:
+
+    python oef_scripts/oef/launch.py --name oef_node -c ./oef_scripts/oef/launch_config.json    
+            
+### Installing the code
+Now this is running we will need to open another terminal window. Go to your carpark agent directory
+
+    cd ~/Desktop/carpark_agent
+        
 Create and activate the virtual environment and install the python packages
     
     ./run_scripts/create_venv.sh
     source venv/bin/activate
     python setup.py develop
-        
+    
+
 ### Configuring and running the client
 Configure the client agent. Open the file run_scripts/run_client_agent.sh in a text editor. You can do this using a terminal by typing
 
@@ -452,8 +474,11 @@ Note there is a transaction fee of 1 nano-FET when you send FET from one agent t
 ### Running the car-park agent on a Mac
 Since you have all the code installed on the Mac, you can also run the car-park agent itself. It will use the Mac's built in camera and so will most likely be looking at you rather than at a car-parking space. However, I have found that the Mac is a much easier environment to develop the code in before then transferring it to the Raspberry Pi. If you hold up a photo of a car-park you can test that the detection algorithms are working correctly.
 
-To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
+To do this, you will need to download the object detection datafile:
+    
+    ./car_detection/weights/download_weights.sh
 
+To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
 
 ## 4b. Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
@@ -512,12 +537,26 @@ Locate the file called "opencv_python-4.1.1-cp37-cp37m-win32.whl" and download i
     pip install "c:\Users\dishm\Downloads\opencv_python-4.1.1-cp37-cp37m-win32.whl"
 
     
-### Getting the car-park agent code
+### Getting the code
 Using the Git-Bash terminal you can now get the code from git-hub. In the Git-Bash terminal type:
 
     cd ~/Desktop
     git clone https://github.com/fetchai/carpark_agent.git
     cd carpark_agent
+
+### Running an OEF Node
+The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. This will enable it to registers its services for other agents to find. At present this node will need to be run locally on your desktop machine. This "local" setup will only let your agents interact with other agents connected locally to this node. In future, these nodes will form a decentralised network that agents can use to find each other anywhere in the world.
+
+To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform.
+
+Wen you have docker installed, you can run this script to run the oef node:
+
+    python oef_scripts/oef/launch.py --name oef_node -c ./oef_scripts/oef/launch_config.json    
+    
+### Installing the code
+Now this is running we will need to open another Git-Bash terminal. Go to your carpark agent directory
+    
+    cd ~/Desktop/carpark_agent
     
 Create and activate the virtual environment and install the python packages (note that the script name to create the virtual environment is a bespoke windows version)
     
