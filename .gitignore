@@ -91,6 +91,7 @@ ENV/
 
 # Project specific stuff
 /temp_files
+/data
 /car_detection/weights/mask_rcnn_coco.h5
 /_win
 

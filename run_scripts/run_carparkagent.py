@@ -73,7 +73,7 @@ parser.add_argument(
     '--oef_port',
     help='Port of oef node to connect to. use 10000 for local and 50001 for Fetch.AI servers (default 10000)',
     type=str,
-    default='50001')
+    default='10000')
 parser.add_argument(
     '-mf',
     '--max_file_count',
