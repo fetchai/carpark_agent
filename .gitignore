@@ -91,7 +91,7 @@ ENV/
 
 # Project specific stuff
 /temp_files
-/data
+data/oef-logs
 /car_detection/weights/mask_rcnn_coco.h5
 /_win
 carpark_agent_big_data
