@@ -532,16 +532,6 @@ Now install virtualenv. Type:
     
     pip install virtualenv
 
-To install OpenCV, you will need a specific version of the python installation file. You can download it with this command:
-
-    svn export https://github.com/fetchai/carpark_agent_big_data.git/trunk/opencv_python-4.1.1-cp37-cp37m-win32.whl
-
-note that I originally got this from here: [https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv) But it seems to no longer exist. 
-
-NOw you need to install this file:
-
-    pip install opencv_python-4.1.1-cp37-cp37m-win32.whl
-
     
 ### Getting the code
 Using the Git-Bash terminal you can now get the code from git-hub. In the Git-Bash terminal type:
@@ -555,19 +545,35 @@ The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. Th
 
 To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform.
 
-Wen you have docker installed, you can run this script to run the oef node:
+When you have docker installed, you will need to open a command prompt (for some reason, this doesn't always work from the Git-Bash terminal). To do this:
+Click on the Search field in your task bar and type "CMD". Click on the Command Prompt result
+
+Go to the carpark agent directory:
+
+    cd Desktop/carpark_agent
+
+Now you can run this script to run the oef node:
 
     python oef_scripts/oef/launch.py --name oef_node -c ./oef_scripts/oef/launch_config.json    
     
 ### Installing the code
-Now this is running we will need to open another Git-Bash terminal. Go to your carpark agent directory
-    
-    cd ~/Desktop/carpark_agent
-    
-Create and activate the virtual environment and install the python packages (note that the script name to create the virtual environment is a bespoke windows version)
+Now this is running we will go bak to our Git-Bash terminal. Create and activate the virtual environment (note that the script name to create the virtual environment is a bespoke windows version)
     
     ./run_scripts/create_venv_win.sh
     source venv/bin/activate
+    
+Now you need to install OpenCV, you will need a specific version of the python installation file. You can get from github:
+
+    git clone git@github.com:fetchai/carpark_agent_big_data.git
+
+Note that I originally got this from here: [https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv) But it seems to no longer exist. 
+
+Now you need to install this file:
+
+    pip install carpark_agent_big_data/opencv_python-4.1.1-cp37-cp37m-win32.whl
+    
+Now you can install the main application and its dependencies:
+    
     python setup.py develop
 
 You can now run the client agent by following the same instructions as for the Mac above entitled "Configuring and running the client".
