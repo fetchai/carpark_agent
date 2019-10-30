@@ -861,7 +861,7 @@ class TkGuiApp:
                 image=self.live_feed_canvas.photo,
                 anchor=CENTER)
 
-        self.live_feed_label.config(text="Current FET: " + self.sdk_fet_to_human_fet(self.db.calc_uncleared_fet()))
+        self.live_feed_label.config(text="Current micro-FET: " + self.sdk_fet_to_human_fet(self.db.calc_uncleared_fet()))
         self.max_capacity_label["text"] = "Max capacity: {}".format(self.db.get_max_capacity())
 
         self.tk_root.after(self.live_update_wait_ms, self.update_live_feed)
@@ -869,7 +869,7 @@ class TkGuiApp:
     # convert fet as used by the SDK into actual fet (not nano-pico fet - or whatever) and display as
     # a human readable string.
     def sdk_fet_to_human_fet(self, fet):
-        return " {0:.10f}".format(fet * 0.0000000001)
+        return " {}".format(round(fet * 0.0000001))
 
 
     def update_history(self):
@@ -912,16 +912,16 @@ class TkGuiApp:
         status_str = "System status:\n"
         status_str += "OEF public key: {}\n".format(public_key)
         status_str += "Friendly name: {}\n".format(friendly_name)
-        status_str += "Uncleared FET: {}\n".format(uncleared_fet)
+        # status_str += "Uncleared FET: {}\n".format(uncleared_fet)
         status_str += "Cleared FET: {}\n".format(cleared_fet)
-        status_str += "Ledger status: {}:{}: {}\n".format(
-            self.db.get_system_status("ledger-ip"),
-            self.db.get_system_status("ledger-port"),
-            self.db.get_system_status("ledger-status"))
-        status_str += "OEF status: {}:{}: {}\n".format(
-            self.db.get_system_status("oef-ip"),
-            self.db.get_system_status("oef-port"),
-            self.db.get_system_status("oef-status"))
+        # status_str += "Ledger status: {}:{}: {}\n".format(
+        #     self.db.get_system_status("ledger-ip"),
+        #     self.db.get_system_status("ledger-port"),
+        #     self.db.get_system_status("ledger-status"))
+        # status_str += "OEF status: {}:{}: {}\n".format(
+        #     self.db.get_system_status("oef-ip"),
+        #     self.db.get_system_status("oef-port"),
+        #     self.db.get_system_status("oef-status"))
         status_str += "GPS source: {}\n".format(self.db.get_system_status("gps_source"))
         status_str += "GPS Location: {}\n".format(self.db.get_lat_lon())
 

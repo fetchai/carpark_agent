@@ -1,0 +1,19 @@
+name: weather_station
+authors: Fetch.AI Limited
+version: 0.1.0
+license: Apache 2.0
+url: ""
+description: "The weather station skill offers weather data for sale."
+behaviours:
+  - behaviour:
+      class_name: MyWeatherBehaviour
+      args:
+        foo: bar
+handlers:
+  - handler:
+      class_name: MyWeatherHandler
+      args:
+        foo: bar
+tasks: []
+shared_classes: []
+protocols: ['fipa']

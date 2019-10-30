@@ -555,7 +555,7 @@ Go to the carpark agent directory:
 
 Now you can run this script to run the oef node:
 
-    python oef_scripts/oef/launch.py --name oef_node -c ./oef_scripts/oef/launch_config.json    
+    python aea_scripts/oef/launch.py --name oef_node -c ./aea_scripts/oef/launch_config.json    
     
 ### Installing the code
 Now this is running we will go bak to our Git-Bash terminal. Create and activate the virtual environment (note that the script name to create the virtual environment is a bespoke windows version)
