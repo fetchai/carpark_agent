@@ -873,7 +873,7 @@ class TkGuiApp:
 
 
     def update_history(self):
-        # Udate dialog lists
+        # Update dialog lists
         results = self.db.get_dialogue_statuses()
         time_text = "Time:\n"
         agent_text = "Other agent:\n"
