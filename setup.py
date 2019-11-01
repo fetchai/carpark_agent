@@ -47,6 +47,7 @@ subprocess.call([sys.executable, '-m', 'pip', 'install', 'clint'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'docopt'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'Cython'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'coco == 0.4.0'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'aea'])
 
 if platform.startswith("win32"):
     pass
