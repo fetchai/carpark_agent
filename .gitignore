@@ -99,7 +99,7 @@ carpark_agent_big_data
 pacakages
 aea_scripts
 data
-
+*_aea/
 
 # OSX stuff
 .DS_Store

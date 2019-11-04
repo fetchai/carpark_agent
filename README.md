@@ -109,6 +109,18 @@ There should be a some lines saying something like:
 
 The numbers after inet is my Raspberry Pi's ip address. In this case 192.168.11.9. Write these down.
 
+It is important to set the screen resolution o fthe Raspberry Pi, otherwise it can have problems when no display is connected. Open a terminal and type:
+ 
+    sudo raspi-config
+    
+Use the up/down arrow keys, select Advanced options and press Enter
+* Go down the Resolution and press Enter
+* Go to the 1920X1080 option and press Enter
+* Confirm the change
+* Use the right arrow to select <Finish>, press Enter
+* You may be prompted to restart - do so
+ 
+
 Let's test that VNC is working by going to our Mac or PC and downloading and installing VNC viewer:
 https://www.realvnc.com/en/connect/download/viewer/
 
@@ -146,16 +158,16 @@ Save this file and exit the editor. Now reboot. You can do this by typing into t
     sudo reboot
     
 As you reboot, your VNC Viewer on your Mac or PC will no longer be able to see your screen. However it will come back to life once your Raspberry Pi has booted up.
-You may find that once you have rebooted, your screen resolution is still small (perhaps even smaller than it was). This is expected. so fix this problem. Open a terminal and type:
+You may find that once you have rebooted, your screen resolution is still small (perhaps even smaller than it was). If this happens, you may nee to set the screen resolution again in the same was as before:
  
     sudo raspi-config
     
 Use the up/down arrow keys, select Advanced options and press Enter
 * Go down the Resolution and press Enter
-* Go all the way to the bottom to the 1920X1080 option and press Enter
+* Go to the 1920X1080 option and press Enter
 * Confirm the change
 * Use the right arrow to select <Finish>, press Enter
-* You will be prompted to restart - do so
+* You may be prompted to restart - do so
 
 Now when the RPi restarts, the VNC Viewer should show a nice large resolution. If this is what happens, you can shut it down, reconnect your monitor and restart it
 
@@ -182,7 +194,7 @@ In order to run the machine learning algorithms we need to download a large data
     
 There are a number of things that need to be installed on the Raspberry Pi before we can install the agent code itself. Paste this line into the terminal (careful its a long one tha goes off the page, so make sure you select it all before doing copy/paste)
 
-    sudo apt-get install gcc htop vim mc python3-dev ffmpeg virtualenv libatlas-base-dev libsm6 libxext6 clang libblas3 liblapack3 liblapack-dev libblas-dev cython gfortran build-essential libgdal-dev libopenblas-dev liblapack3 liblapacke liblapacke-dev liblcms2-utils liblcms2-2 libwebpdemux2 python3-scipy python3-numpy python3-matplotlib libjasper-dev libqtgui4 libqt4-test protobuf-compiler python3-opencv gpsd gpsd-clients
+    sudo apt-get install gcc htop vim mc python3-dev ffmpeg virtualenv libatlas-base-dev libsm6 libxext6 clang libblas3 liblapack3 liblapack-dev libblas-dev cython gfortran build-essential libgdal-dev libopenblas-dev liblapack3 liblapacke liblapacke-dev liblcms2-utils liblcms2-2 libwebpdemux2 python3-scipy python3-numpy python3-matplotlib libjasper-dev libqtgui4 libqt4-test protobuf-compiler python3-opencv gpsd gpsd-clients subversion
 
 Now type this:
 
@@ -193,16 +205,47 @@ Create the virtual environment and activate it
     ./run_scripts/create_venv.sh
     source venv/bin/activate
     
-Install the software in develop mode
+Install the software:
     
-    python setup.py develop
+    python setup.py 
+      
+
+### Building the Autonomous Economic Agent (AEA)
+
+First we need to download the packages and scripts:
+
+    svn export https://github.com/fetchai/agents-aea.git/trunk/scripts
+    svn export https://github.com/fetchai/agents-aea.git/trunk/packages
+
+To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
+
+    aea create carpark_aea
+    cd carpark_aea
+    aea add skill carpark_detection
     
-When install python software you can either pass `install` or `develop` into the setup.py script.  "install" copies all the code into the python environment so it can be run - this means that there are then two copies of the code and if you change one of the python files, it will not necessarily have any effect unless you reinstall it. This can be quite confusing if you are intending to muck around with the code. Therefore, I recommend that you use "develop" as this will create a link to the code and so any changes you make will take immediate effect when you run the code.  
+    
+Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
+
+    nano aea-config.yaml
+    
+Fine the line that says
+
+    ledger_apis: []
+
+and repalce it with:
+
+    ledger_apis:
+    - ledger_api:
+        addr: alpha.fetch-ai.com
+        ledger: fetchai
+        port: 80
+
+Save and exit nano.
 
 ### Ensure it runs correctly (RPi4 only)
 Try running it
     
-    ./run_scripts/run_carpark_agent.sh
+    aea run
     
 You should now see the agent running.
 
@@ -218,8 +261,8 @@ Now go back to your Mac or PC and start up VNC viewer and connect to the Raspber
 
 The agent will not be running. So, open a terminal and type:
 
-    cd Desktop/carpark_agent
-    ./run_scripts/run_carpark_agent.sh
+    cd Desktop/carpark_agent/carpark_aea
+    aea run
 
 When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in.
 
@@ -242,25 +285,37 @@ When you are done press the Live Detect button.
 
 Close down the agent by pressing the Quit button. If you watch the terminal window that you launched it from, you may find that it takes a while to fully shut down - this is because if it is in the middle of a detection it needs to finish what it is doing before quitting. This can take a minute or so.  
 
-We now need to edit the script file which launches the agent. In the terminal window make sure your current directory is ~/Desktop/carpark_agent and type:
-
-    nano run_scripts/run_carpark_agent.sh
-
-Look for the line that says
-
-    python run_carparkagent.py -ps 120 -fn set_friendly_name -fet 2000 -lat 40.780343 -lon -73.967491 -oi 127.0.0.1
+We now need to edit config files of the agent.  In the terminal window make sure your current directory is ~/Desktop/carpark_agent/carpark_aea and type:
     
-Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
+    cd skills/carpark_detection 
+    nano skill.yaml
 
-You also need to set the latitude and longitude of your locations. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. Paste these values into the script command line - be careful not to leave any commas in.
 
-Finally we need to tell it where to find the OEF Node. For the moment you need to point this to your local desktop machine (we wrote this down earlier in the section "Get your desktop IP Address"). In my case, my desktop IP address is "192.168.95.127". 
+You need to set the latitude and longitude of your location. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. 
 
-My new line would read
+Paste these values into the config file. E.g.:
 
-    python run_carparkagent.py -ps 120 -fn diarmid_carpark_agent -fet 2000 -lat 52.235063 -lon 0.154021 -oi 192.168.95.127
+        default_longitude: 0.154021
+        default_latitude: 52.235063
 
-The -fet argument is how much nano-FET we wish to charge other agents for information about parking. Note that a nano-FET is 0.0000000001 FET, so the default value here is 0.0000002 FET.
+
+Note that the data_price_fet argument is how much tenths of a nano-FET we wish to charge other agents for information about parking. Note that a tenth of a nano-FET is 0.0000000001 FET, so the default value here is 0.02 FET. In the UI this will be displayed in milli-FET. i.e. 20 milli-FET
+
+Save and close the skill.yaml file.
+
+We also need to tell our agent where the search and descovery server is. For the moment you need to point this to your local desktop machine (we wrote this down earlier in the section "Get your desktop IP Address"). In my case, my desktop IP address is "192.168.95.127". 
+
+Navigate to the oef connection directory:
+
+    cd ../../connections/oef
+    nano connection.yaml
+    
+
+Replace the specifying the OEF Node IP address with your desktop IP address. This is what mine would say:
+
+    addr: ${OEF_ADDR:192.168.95.127}
+    
+Save and close this file.
 
 Save the edited file and close the editor.
 
@@ -274,7 +329,7 @@ You may be asked to specify which editor you wish to use.
 
 This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
 
-    @reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
+    @reboot cd /home/pi/Desktop/carpark_agent &&  /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
   
 Save the file exit the editor. Reboot your Raspberry Pi.
 
