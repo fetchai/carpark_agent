@@ -214,7 +214,6 @@ Install the software:
 
 First we need to download the packages and scripts:
 
-    svn export https://github.com/fetchai/agents-aea.git/trunk/scripts
     svn export https://github.com/fetchai/agents-aea.git/trunk/packages
 
 To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
@@ -222,7 +221,7 @@ To build the agent which connects to the Fetch.AI network we will use the AEA fr
     aea create carpark_aea
     cd carpark_aea
     aea add skill carpark_detection
-    
+    aea install   
     
 Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
 
@@ -232,7 +231,7 @@ Fine the line that says
 
     ledger_apis: []
 
-and repalce it with:
+and replace it with:
 
     ledger_apis:
     - ledger_api:
@@ -329,7 +328,7 @@ You may be asked to specify which editor you wish to use.
 
 This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
 
-    @reboot cd /home/pi/Desktop/carpark_agent &&  /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
+    @reboot cd /home/pi/Desktop/carpark_agent/carpark_aea && source ../venv/bin/activate && aea run
   
 Save the file exit the editor. Reboot your Raspberry Pi.
 
@@ -342,11 +341,9 @@ In this section I'll describe how to get the car-park agent running on a Raspber
 *  Process 1 runs the GUI, the camera, the image capture and the Fetch.AI agent selling the data
 *  Process 2 runs the car detection algorithm only
 
-However, to make this easier, I've simply made a different script called "run_carpark_agent_split.sh" which launches both of these processes.
+At the moment (due to a recent change in the setup - this splitting of processes is not working. At present it ill just run it all on one process)
  
-To build the car-park agent on a Raspberry Pi version 3 (instead of version 4), follow all the steps described above for version 4 but stop just after the section entitled "Getting the code" and before "Ensure it runs correctly (RPi4 only)". 
-
-Now follow these instructions instead:
+To build the car-park agent on a Raspberry Pi version 3 (instead of version 4), follow all the steps described above for version 4. However, before running the agent, you will need to do the following: 
 
 ### Create a larger SWAP file
 In the terminal, type:
@@ -362,87 +359,6 @@ Change it to:
     CONF_SWAPSIZE=2048
   
 Save the file and exit nano. Reboot the Raspberry Pi.
-
-### Ensure it runs correctly (RPi3 only)
-When the system has restarted, try running it. Open up a terminal and type:
-
-    cd Desktop/carpark_agent
-    ./run_scripts/run_carpark_agent_split.sh
-    
-You should now see the agent running.  
-
-If you go back to your Mac or PC and go to the github repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture. Note that it may take several minutes to start up and then will only capture in image and attempt to detect cars about once every 5 minutes - so you might want to go and make a cup of tea while you wait.
-
-If this all seems to work, power down your Raspberry pi, disconnect the power, keyboard, mouse and keyboard.
-
-Attach the Clamp and Arm and set the camera up pointing to your parking spaces, reconnect the power and let it boot up.
-
-### Configuring the car-park agent (RPi3 only)
-Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi. 
-
-The agent will not be running. So, open a terminal and type:
-
-    cd Desktop/carpark_agent
-    ./run_scripts/run_carpark_agent_split.sh
-
-When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in. 
-
-During the next steps, you will need to interact with the application running on the Raspberry Pi. If the app is in the middle of running the car detection algorithm, it can become a bit unresponsive. However, while in "Edit detection area" mode, the detection algorithm will be disabled - but if it is in the middle of a detection when you enter this mode, it will need to finish the detection it is doing before disabling. This can take a couple of minutes. So if you are on this mode, and the app is unresponsibe, leave it for a couple of minutes and then return to it. 
-
-There are likely to be cars in many parts of your image and by default your agent is set up to detect cars everywhere. To restrict detections to the area you are interested in:
-* Press Edit Detection Area button
-* Press Capture Ref Image button - this will capture in image from the camera and it should be tinted blue - indicating that it will detect everywhere
-* Press the red Fill All button - This will turn it all red - showing it will now detect nowhere
-* Press Draw detectable button and then draw an outline around the area you are interested in. Ensure you make a completely closed shape
-* Press the blue Flood Fill button and then click inside the shape you have drawn. This should fill it blue
-
-Count the number of parking spaces in the area of interest you marked out. If it is hard to see, press Live Detect to see things more clearly. When you have counted them press Edit Detection area again to go into edit mode.
-Use the arrows either side of "Max Capacity" to set the correct number of parking spaces that the agent can report on.
-
-When you are done press the Live Detect button. 
-
-Close down the agent by pressing the Quit button. If you watch the terminal window that you launched it from, you may find that it takes a while to fully shut down - this is because if it is in the middle of a detection it needs to finish what it is doing before quitting. This can take a minute or so.
-
-
-We now need to edit the script file which launches the agent. In the terminal window make sure your current directory is ~/Desktop/carpark_agent and type:
-
-    nano run_scripts/run_carpark_agent_split.sh
-
-Look for the line that says
-
-    python run_carparkagent.py -ps 300 -fn set_friendly_name -dd -fet 2000 -lat 40.780343 -lon -73.967491 -oi 127.0.0.1
-    
-Replace the set_friendly_name with something that is unique to you. E.g. I might set it as diarmid_carpark_agent. 
-
-You also need to set the latitude and longitude of your locations. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. Paste these values into the script command line - be careful not to leave any commas in.
-
-Finally we need to tell it where to find the OEF Node. For the moment you need to point this to your local desktop machine (we wrote this down earlier in the section "Get your desktop IP Address"). In my case, my desktop IP address is "192.168.95.127".
- 
-My new line would read
-
-    python run_carparkagent.py -ps 300 -fn diarmid_carpark_agent -dd -fet 2000 -lat 52.235063 -lon 0.15402 -oi 192.168.95.127
-
-The -fet argument is how much nano-FET we wish to charge other agents for information about parking. Note that a nano-FET is 0.0000000001 FET, so the default value here is 0.0000002 FET.
-
-Save the edited file and close the editor.
-
-### Make the agent start on boot up (RPi3 only)
-
-The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. In a terminal type:
-    
-    crontab -e
-    
-You may be asked to specify which editor you wish to use.
-
-This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
-
-    @reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent_split.sh
-  
-Save the file exit the editor. Reboot your Raspberry Pi.
-
-The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
-
-In the bottom left there is a status panel. The status of the OEF will show an error as we have not yet set up an OEF Node on your desktop machine for the agent to connect to.
 
 ## 4a. Installing the client software on a Mac
 ### Setting up the Mac
@@ -488,55 +404,47 @@ Create and activate the virtual environment and install the python packages
     
     ./run_scripts/create_venv.sh
     source venv/bin/activate
-    python setup.py develop
+    python setup.py
     
+### Building the Autonomous Economic Agent (AEA)
 
-### Configuring and running the client
-Configure the client agent. Open the file run_scripts/run_client_agent.sh in a text editor. You can do this using a terminal by typing
+First we need to download the packages and scripts:
 
-    nano run_scripts/run_client_agent.sh
+    svn export https://github.com/fetchai/agents-aea.git/trunk/packages
+
+To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
+
+    aea create carpark_client_aea
+    cd carpark_client_aea
+    aea add skill carpark_client
+    aea install    
     
-then find the line that says:
+Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
 
-    python run_client_ui.py -fn set_friendly_name -ma 3600 -mf 4000
+    nano aea-config.yaml
+    
+Fine the line that says
 
-Change the set_friendly_name to something personal. E.g. I would called it dc_client_agent. So my line would look like:
+    ledger_apis: []
 
-    python run_client_ui.py -fn dc_client_agent -ma 3600 -mf 4000
+and replace it with:
 
-
-The other options on this command line are:
-* -ma: The maximum age of any detection data we consider worth having. Default is 3600 seconds (1 hour) 
-* -mf: The maximum price this client would be prepared to pay for car parking data. This is specified in nano-FET. I.e. 0.0000000001 FET. SO, default is 0.0000004 FET 
-
-Save the file and exit the editor.
-
+    ledger_apis:
+    - ledger_api:
+        addr: alpha.fetch-ai.com
+        ledger: fetchai
+        port: 80    
+    
 Now you can run the agent
     
-    ./run_scripts/run_client_agent.sh
+    aea run
     
-    
-<img src="resources/readme_images/client_01_small.jpg" height="200"> 
-    
-    
-You are presented with a screen with a number of buttons. 
-* Press Search. This will look for agents on the Fetch.AI network which can supply car parking information. Their public keys will be listed here.
-* Press CFP. This sends a "Call for Proposal" to all the gents listed. They will send back a friendly name that you can identify them with, the age of thier last detection, how many spaces they can report about and the total FET they charge. The UI will display whether their data fits your acceptance criteria (new enough and cheap enough)
-* When you first start this, you will not be able to request any data because you do not have any FET to spend. Press Generate FET to create some (this will freeze the UI for about 30 seconds while it does this)
-* Press Request data. All of the agents that satisfy the acceptance criteria will be asked to send their data. The final column of the table will be filled in showing how many car parking spaces that agent is aware of.  In return this client agent will send the appropriate amount of FET to the car park agent
+This will loop through the following actions:
+1. Search for agents offering carpark detection services
+2. If an agent is found, send it a CFP (Call For Proposal)
+3. If the proposal it receives is cheap enough and the data new enough it purchases it
 
-<img src="resources/readme_images/client_04_small.jpg" height="200">
-
-Note there is a transaction fee of 1 nano-FET when you send FET from one agent to another. So the client agent's FET will go down by a bit more than the cost of the data on its own.
-
-### Running the car-park agent on a Mac
-Since you have all the code installed on the Mac, you can also run the car-park agent itself. It will use the Mac's built in camera and so will most likely be looking at you rather than at a car-parking space. However, I have found that the Mac is a much easier environment to develop the code in before then transferring it to the Raspberry Pi. If you hold up a photo of a car-park you can test that the detection algorithms are working correctly.
-
-To do this, you will need to download the object detection datafile:
-    
-    ./car_detection/weights/download_weights.sh
-
-To configure and run the agent on the mac, simply follow the instructions for the Raspberry Pi above entitled "Configuring the car-park agent" (ignoring the first line about opening up VNC Viewer and connecting to the Raspberry Pi)
+The output messages from this process are displayed in the terminal output. 
 
 ## 4b. Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
@@ -630,8 +538,36 @@ Now you need to install this file:
     
 Now you can install the main application and its dependencies:
     
-    python setup.py develop
+    python setup.py
 
+### Building the Autonomous Economic Agent (AEA)
+
+First we need to download the packages and scripts:
+
+    svn export https://github.com/fetchai/agents-aea.git/trunk/packages
+
+To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
+
+    aea create carpark_client_aea
+    cd carpark_client_aea
+    aea add skill carpark_client
+    aea install    
+    
+Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
+
+    nano aea-config.yaml
+    
+Fine the line that says
+
+    ledger_apis: []
+
+and replace it with:
+
+    ledger_apis:
+    - ledger_api:
+        addr: alpha.fetch-ai.com
+        ledger: fetchai
+        port: 80    
 
 ### Opening up the ports on Windows Firewall
 If you have yours Windows firewall enabled (which it is, by default), it will block the Raspberry Pi's trying to contact it. To avoid this problem, you need to open this port so they can connect.
@@ -679,25 +615,20 @@ If you have yours Windows firewall enabled (which it is, by default), it will bl
 Once this rule is applied, your Rasperry Pi should be connected to the OEF Node running on your windows machine and the OEF Status in the panel at the bottom of the UI on the Raspberry Pi agent should read "OK: connected"
 
 ### Getting the client running
-You can now run the client agent by following the same instructions as for the Mac above entitled "Configuring and running the client".
+Now you can run the agent. Make sure you are in the carpark_client_aea directory and type:
+    
+    aea run
+    
+This will loop through the following actions:
+1. Search for agents offering carpark detection services
+2. If an agent is found, send it a CFP (Call For Proposal)
+3. If the proposal it receives is cheap enough and the data new enough it purchases it
 
+The output messages from this process are displayed in the terminal output. 
 
-### Cleared and uncleared FET
-Both the client and car-park agent UI show the current FET levels at the top left corner of the UI. As soon as the data is sent and the client has initiated the FET transfer, the FET values update. However, this is "uncleared" FET. It takes a while for the transaction to work its way through the network and you can see the cleared and uncleared FET in the detailed status panel at the bottom left of the UI.
-
-Something else to watch out for in this status panel is any errors shown on the Ledger or OEF. If there is an error, the agent may need restarting, or it could be a problem at the server side.
-
-### Code Architecture
-This is an explanation of the code architecture in a blog post I wrote - you can find it here [LINK NEEDED.DC]
-
-Something that isn't mentioned there is that a number of files are created in your car park agent directory when you run any of the appications. This includes all your images you've captured, the keys for your wallets etc. If you want to reset your agent simple remove this folder. It is a sub-directory of the carpark_agent directory called "temp_files"  
 
 ## Trouble shooting
 ### Car detection not accurately detecting
 We use an off-the-shelf car detection algorithm which is not trained specifically on car-parks. As with all computer vision it will not be 100% reliable however often detection rates can be made much better by choosing a more suitable vantage point for your camera.
-
-## Known issues
-### Searchable but non CFP-able agents
-Sometimes the car park agents get in a state where they are still searchable for, but do not receive any notification when CFP is sent. This is an issue at the Fetch.AI end of things and we are working a solution. The only work-around for agent developers at present is to restart their agents when this happens.
 
 

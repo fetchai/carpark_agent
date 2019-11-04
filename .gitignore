@@ -96,7 +96,7 @@ data/oef-logs/*.log
 /car_detection/weights/mask_rcnn_coco.h5
 /_win
 carpark_agent_big_data
-pacakages
+packages
 aea_scripts
 data
 *_aea/
