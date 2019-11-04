@@ -5,7 +5,7 @@ import os
 
 
 from carpark_agent.detection_database import DetectionDatabase
-from carpark_agent.car_park_agent import CarParkAgent
+from _stashed.car_park_agent import CarParkAgent
 
 # parse the command line arguments
 parser = argparse.ArgumentParser(description='Launch the Fetch Car Parking Agent for Raspberry Pi')

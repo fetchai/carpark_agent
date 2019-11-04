@@ -51,6 +51,15 @@ class DetectionDatabase:
             os.remove(self.mask_ref_image_path)
         self.ensure_dirs_exist()
 
+
+    def is_db_exits(self):
+
+        if not os.path.isfile(self.database_path):
+            return False
+
+        ret = self.get_system_status("db") == "Exists"
+        return ret
+
     def initialise_backend(self):
         self.ensure_dirs_exist()
         self.execute_single_sql(
@@ -58,13 +67,12 @@ class DetectionDatabase:
             "processed_image_path TEXT, total_count INTEGER, "
             "moving_count INTEGER, free_spaces INTEGER, lat TEXT, lon TEXT)")
 
-       # self.execute_single_sql("DROP TABLE fet_table")
+        # self.execute_single_sql("DROP TABLE fet_table")
         self.execute_single_sql(
             "CREATE TABLE IF NOT EXISTS fet_table (id INTEGER PRIMARY KEY, amount BIGINT, last_updated TEXT)")
 
         self.execute_single_sql(
             "CREATE TABLE IF NOT EXISTS status_table (system_name TEXT PRIMARY KEY, status TEXT)")
-
 
         self.execute_single_sql(
             "CREATE TABLE IF NOT EXISTS name_lookup2 (oef_key TEXT PRIMARY KEY, friendly_name TEXT, epoch INT, is_self BIT)")
@@ -73,10 +81,16 @@ class DetectionDatabase:
         self.execute_single_sql(
             "CREATE TABLE IF NOT EXISTS transaction_history (tx TEXT PRIMARY KEY, epoch INT, oef_key_payer TEXT, oef_key_payee TEXT, amount BIGINT, status TEXT)")
 
-        #self.execute_single_sql("DROP TABLE dialogue_statuses")
+        # self.execute_single_sql("DROP TABLE dialogue_statuses")
         self.execute_single_sql(
             "CREATE TABLE IF NOT EXISTS dialogue_statuses (dialogue_id TEXT, epoch DECIMAL, other_agent_key TEXT, received_msg TEXT, sent_msg TEXT)")
 
+        if not self.is_db_exits():
+            self.set_system_status("lat", "UNKNOWN")
+            self.set_system_status("lon", "UNKNOWN")
+        self.set_system_status("db", "Exists")
+
+        print("**** backend initialised")
 
 
     def set_fet(self, amount, t):

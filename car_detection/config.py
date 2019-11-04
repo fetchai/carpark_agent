@@ -21,7 +21,7 @@ class InferenceConfig(car_detection.coco.coco.CocoConfig):
     """
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
-    DETECTION_MIN_CONFIDENCE = 0.6
+    DETECTION_MIN_CONFIDENCE = 0.65
     #DETECTION_NMS_THRESHOLD = 0.4
     #IMAGE_MAX_DIM = 320
     IMAGE_MAX_DIM = 960

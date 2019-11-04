@@ -1,7 +1,7 @@
 import argparse
 import os
-from carpark_agent.tk_client_gui_app import TkClientGuiApp
-from carpark_agent.car_park_client_agent import CarParkClientAgent
+from _stashed.tk_client_gui_app import TkClientGuiApp
+from _stashed.car_park_client_agent import CarParkClientAgent
 
 parser = argparse.ArgumentParser(description='Launch the Fetch Car Parking Agent for Raspberry Pi')
 parser.add_argument(

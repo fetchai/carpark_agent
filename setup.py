@@ -46,8 +46,8 @@ subprocess.call([sys.executable, '-m', 'pip', 'install', 'crontab'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'clint'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'docopt'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'Cython'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'colorlog'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'coco == 0.4.0'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'aea'])
 
 if platform.startswith("win32"):
     pass
@@ -67,9 +67,6 @@ else:
     subprocess.call([sys.executable, '-m', 'pip', 'install', 'tensorflow == 1.13.1'])
 
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'keras == 2.2.4'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'oef == 0.8.1'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'fetchai-ledger-api == 0.5.1'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'base58'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'pywt'])
 if not platform.startswith("win32"):
     subprocess.call([sys.executable, '-m', 'pip', 'install', 'shapely == 1.6.4.post2', '--no-dependencies'])
@@ -89,7 +86,6 @@ setup(
     license=license,
     packages=find_packages(),
     package_data={'': ['mask_rcnn_coco.h5', 'default_mask_ref.png']},
-    include_package_data=True,
-
+    include_package_data=True
 )
 
