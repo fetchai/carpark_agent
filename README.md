@@ -192,7 +192,7 @@ We will get the agent code into a folder on the Desktop. In the terminal type:
 ### Running the OEF Node    
 The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. This will enable it to registers its services for other agents to find. At present this node will need to be run locally on your desktop machine. This "local" setup will only let your agents interact with other agents connected locally to this node. In future, Fetch.ai will deploy a decentralised network that agents can use to find each other anywhere in the world.
 
-To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform.
+To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform. Note that you will need to set up a Docker account, install the software, then run it and finally log in to it again using your account details. Once this is done, the docker deamon will be ready to run the OEF Node.  
 
 Wen you have docker installed, you can run this script to run the oef node:
 
@@ -253,7 +253,7 @@ Now install virtualenv. Type:
     
     pip install virtualenv
     
-### Getting the crpark agent code
+### Getting the carpark agent code
 Using the Git-Bash terminal you can now get the car_park agent code from git-hub. In the Git-Bash terminal type:
 
     cd ~/Desktop
@@ -263,7 +263,7 @@ Using the Git-Bash terminal you can now get the car_park agent code from git-hub
 ### Running an OEF Node
 The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. This will enable it to registers its services for other agents to find. At present this node will need to be run locally on your desktop machine. This "local" setup will only let your agents interact with other agents connected locally to this node. In future, Fetch.ai will deploy a decentralised network that agents can use to find each other anywhere in the world.
 
-To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform.
+To run an OEF node you will need to have docker installed. If you don't have it, please check the official documentation [here](https://docs.docker.com/install/), scroll down to the section entitled "Supported platforms" and follow the instructions for your platform. Note that you will need to set up a Docker account, install the software, then run it and finally log in to it again using your account details. Once this is done, the docker deamon will be ready to run the OEF Node. 
 
 When you have docker installed, you will need to open a command prompt (for some reason, this doesn't always work from the Git-Bash terminal). 
 
@@ -306,14 +306,14 @@ Now type this:
 
     pip3 install virtualenv     
 
-Create the virtual environment and activate it
+Create the virtual environment and activate it (replace the 3.7 with your version of python)
 
-    ./run_scripts/create_venv.sh
+    virtualenv --system-site-packages -p python3.7 ../venv
     source venv/bin/activate
     
 Install the software:
     
-    python setup.py 
+    python setup.py install
       
 
 ### Building the Autonomous Economic Agent (AEA)
@@ -346,6 +346,8 @@ and replace it with:
         port: 80
 
 Save and exit nano.
+
+We also need to tell the agent our location. 
 
 ### Ensure it runs correctly (RPi4 only)
 Try running it
@@ -478,7 +480,7 @@ Create and activate the virtual environment and install the python packages
     
     ./run_scripts/create_venv.sh
     source venv/bin/activate
-    python setup.py
+    python setup.py install
     
 ### Building the Autonomous Economic Agent (AEA)
 
@@ -543,7 +545,7 @@ Now you need to install this file:
     
 Now you can install the main application and its dependencies:
     
-    python setup.py
+    python setup.py install
 
 ### Building the Autonomous Economic Agent (AEA)
 
