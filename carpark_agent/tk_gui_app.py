@@ -914,6 +914,8 @@ class TkGuiApp:
         status_str += "Friendly name: {}\n".format(friendly_name)
         # status_str += "Uncleared FET: {}\n".format(uncleared_fet)
         status_str += "Cleared FET: {}\n".format(cleared_fet)
+        status_str += "Ledger status: {}\n".format(self.db.get_system_status("ledger-status"))
+        status_str += "OEF status: {}\n".format(self.db.get_system_status("oef-status"))
         # status_str += "Ledger status: {}:{}: {}\n".format(
         #     self.db.get_system_status("ledger-ip"),
         #     self.db.get_system_status("ledger-port"),
