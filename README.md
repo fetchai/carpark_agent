@@ -361,14 +361,12 @@ Replace the text specifying the OEF Node IP address with your Mac/PC IP address.
 
 Save and exit nano.
 
-Now navigate back to the project directory and activate the virtual environment
-
-    cd ../../../
-    source venv/bin/activate
     
 ### Ensure it runs correctly (RPi4 only)
 
-    cd carpark_aea
+Now navigate back to the carpark_aea directory and intall the agent's dependencies
+
+    cd ../../
     aea install
     
 Note that aea may give some errors at this point - if so, just ignore them. Then type:
@@ -408,9 +406,14 @@ Note that the data_price_fet argument further down is how much tenths of a nano-
 
 Save and close the skill.yaml file.
 
-Navigate back up to the carpark_aea directory and run it
+Navigate back up to the carpark_agent directory and activate the virtual environment
 
-    cd ../../
+    cd ../../../
+    source venv/bin/activate
+    
+Now run the agent
+
+    cd carpark_aea    
     aea run
 
 When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in.
