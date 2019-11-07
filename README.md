@@ -534,7 +534,7 @@ This will loop through the following actions:
 2. If an agent is found, send it a CFP (Call For Proposal)
 3. If the proposal it receives is cheap enough and the data new enough it purchases it
 
-The output messages from this process are displayed in the terminal output. 
+The output messages from this process are displayed in the terminal output. If you leave your agents running, the data will be reported to the client at regular intervals and the amount of milli-fet belonging to the client weill grow.
 
 ## 5b. Installing the client software on Windows
 The client agent (which can request data) can also be run on Windows. These instructions have been tested on Windows 10. We already got some of the way with this when we go the OEF Node up and running. When we did that we left a Git-Bash terminal open. If you didn't do this, just open another and navigate to the carpark_agent directory.
@@ -653,6 +653,4 @@ This will loop through the following actions:
 2. If an agent is found, send it a CFP (Call For Proposal)
 3. If the proposal it receives is cheap enough and the data new enough it purchases it
 
-The output messages from this process are displayed in the terminal output. 
-
-
+The output messages from this process are displayed in the terminal output. If you leave your agents running, the data will be reported to the client at regular intervals and the amount of milli-fet belonging to the client weill grow.
