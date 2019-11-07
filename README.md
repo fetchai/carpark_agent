@@ -408,11 +408,9 @@ Note that the data_price_fet argument further down is how much tenths of a nano-
 
 Save and close the skill.yaml file.
 
-Navigate back up to the agent directory and run it
+Navigate back up to the carpark_aea directory and run it
 
-    cd ../../../
-    source venv/bin/activate
-    cd carpark_aea
+    cd ../../
     aea run
 
 When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in.
@@ -446,7 +444,7 @@ You may be asked to specify which editor you wish to use.
 
 This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
 
-    @reboot cd /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
+    @reboot /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
   
 Save the file exit the editor. Reboot your Raspberry Pi.
 
@@ -522,6 +520,7 @@ Save and exit nano.
 
 We don't need to set up the connection to the local EOF Node, as by default an agent looks for a local host on the local machine. Run the agent: 
     
+    aea install
     aea run
 
 This will try and run, but it won't get very far because we have not given it any money to spend. Stop the program by pressing Ctr+C. Then type:
@@ -541,7 +540,7 @@ This will loop through the following actions:
 
 The output messages from this process are displayed in the terminal output. If you leave your agents running, the data will be reported to the client at regular intervals and the amount of milli-fet belonging to the client weill grow.
 
-## 5b. Installing the client software on Windows
+## 5b. Installing the client softlware on Windows
 The client agent (which can request data) can also be run on Windows. These instructions have been tested on Windows 10. We already got some of the way with this when we go the OEF Node up and running. When we did that we left a Git-Bash terminal open. If you didn't do this, just open another and navigate to the carpark_agent directory.
  
 ### Installing the code
