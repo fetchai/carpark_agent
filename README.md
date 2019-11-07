@@ -369,8 +369,13 @@ Now navigate back to the project directory and activate the virtual environment
 ### Ensure it runs correctly (RPi4 only)
 
     cd carpark_aea
+    aea install
+    
+Note that aea may give some errors at this point - if so, just ignore them. Then type:
+    
     aea run
     
+
 You should now see the agent running. Keep an eye on the terminal output, if your agent cannot contact the OEF Node on your PC/Mac, it will give up and not start.. 
 
 If you go back to your Mac or PC and go to the github repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture (you might have to wait a few minutes to know that it has worked)
