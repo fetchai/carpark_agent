@@ -861,7 +861,7 @@ class TkGuiApp:
                 image=self.live_feed_canvas.photo,
                 anchor=CENTER)
 
-        self.live_feed_label.config(text="Current micro-FET: " + self.sdk_fet_to_human_fet(self.db.calc_uncleared_fet()))
+        self.live_feed_label.config(text="Current milli-FET: " + self.sdk_fet_to_human_fet(self.db.calc_uncleared_fet()))
         self.max_capacity_label["text"] = "Max capacity: {}".format(self.db.get_max_capacity())
 
         self.tk_root.after(self.live_update_wait_ms, self.update_live_feed)

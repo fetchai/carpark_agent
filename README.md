@@ -200,11 +200,11 @@ Wen you have docker installed, you can run this script to run the oef node:
     
 In the terminal you should see a load of output finishing with the phrase "A thing of beauty is a joy forever...". If you see this, the Node is running correctly.
 
-### Getting IP address        
+### Getting Mac IP address        
 Later on we will need to use the IP address of your Mac/PC so you need to write this down. There are instructions [here](https://www.tp-link.com/us/support/faq/838/) on how to find your IP address on different platforms. When you have your Mac/PC machine's IP address, write it down. 
 
 ## 3b. Running an OEF Node on Windows
-Its a bit more awkward getting this stuff running in Windows as many of the tools and scripts we use are Linux based. However, it can be done. 
+It's a bit more awkward getting this stuff running in Windows as many of the tools and scripts we use are Linux based. However, it can be done. 
 
 ### Instaling Git-Bash
 You will need to clone the repository from github as well as execute various linux type Bash scripts. In order to do this, I recommend following these instructions to get Git-Bash installed. Follow these instructions up to and including Step 3 of "Configuring and connecting to a remote repository" - this step starts with the words "After entering the above command..."'  
@@ -215,7 +215,9 @@ You can now used Git-Bash to execute any of the Linux style bash scripts.
 ### Installing Python
 Download and run this installer:
 
-https://www.python.org/ftp/python/3.7.4/python-3.7.4.exe
+https://www.pyt
+
+hon.org/ftp/python/3.7.4/python-3.7.4.exe
 
 
 On the first page of the installation program there is check box "Add Python 3.7 to PATH" tick this. 
@@ -260,6 +262,8 @@ Using the Git-Bash terminal you can now get the car_park agent code from git-hub
     git clone https://github.com/fetchai/carpark_agent.git
     cd carpark_agent
 
+Keep this window open as we will need it later.
+
 ### Running an OEF Node
 The Car Park agent needs to connect to an Open Economic Framework (OEF) Node. This will enable it to registers its services for other agents to find. At present this node will need to be run locally on your desktop machine. This "local" setup will only let your agents interact with other agents connected locally to this node. In future, Fetch.ai will deploy a decentralised network that agents can use to find each other anywhere in the world.
 
@@ -279,7 +283,7 @@ Now you can run this script to run the oef node:
 
 In the terminal you should see a load of output finishing with the phrase "A thing of beauty is a joy forever...". If you see this, the Node is running correctly. 
 
-### Getting IP address        
+### Getting PC IP address        
 Later on we will need to use the IP address of your Mac/PC so you need to write this down. There are instructions [here](https://www.tp-link.com/us/support/faq/838/) on how to find your IP address on different platforms. When you have your Mac/PC machine's IP address, write it down.
 
 ## 4a. Installing the carpark_agent on Raspberry Pi Version 4
@@ -326,8 +330,7 @@ To build the agent which connects to the Fetch.AI network we will use the AEA fr
 
     aea create carpark_aea
     cd carpark_aea
-    aea add skill carpark_detection
-    aea install   
+    aea add skill carpark_detection  
     
 Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
 
@@ -347,14 +350,28 @@ and replace it with:
 
 Save and exit nano.
 
-We also need to tell the agent our location. 
+We also need to tell our agent where the search and discovery server is - that's the OEF Node we ran earlier. For the moment you need to point this to your local PC/Mac machine (we wrote this down earlier in the section "Get your Mac/PC IP Address"). In my case, my desktop IP address is "192.168.95.127". Navigate to the OEF Connection directory:
 
-### Ensure it runs correctly (RPi4 only)
-Try running it
+    cd connections/oef 
+    nano connection.yaml
+
+Replace the text specifying the OEF Node IP address with your Mac/PC IP address. This is what mine would say:
+
+    addr: ${OEF_ADDR:192.168.95.127}
+
+Save and exit nano.
+
+Now navigate back to the project directory and activate the virtual environment
+
+    cd ../../../
+    source venv/bin/activate
     
+### Ensure it runs correctly (RPi4 only)
+
+    cd carpark_aea
     aea run
     
-You should now see the agent running.
+You should now see the agent running. Keep an eye on the terminal output, if your agent cannot contact the OEF Node on your PC/Mac, it will give up and not start.. 
 
 If you go back to your Mac or PC and go to the github repository for this project and look under resources/images there is an image of a car-park. Print this out and tape it to a wall and point the raspberry pi camera at it. Every few minutes, it will capture in email and perform vehicle detection on the image (detections showing up in blue or green) It should detect the cars in your picture (you might have to wait a few minutes to know that it has worked)
 
@@ -364,11 +381,33 @@ Attach the Clamp and Arm and set the camera up pointing to your parking spaces, 
 
  
 ### Configuring the car-park agent (RPi4 only)
-Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi. 
+Now go back to your Mac or PC and start up VNC viewer and connect to the Raspberry Pi.
 
-The agent will not be running. So, open a terminal and type:
+Open a terminal and navigate to the agent directory:
 
-    cd Desktop/carpark_agent/carpark_aea
+    cd Desktop/carpark_agent/carpark_aea 
+
+We need to tell the agent our location. In the same terminal window type:
+    
+    cd skills/carpark_detection 
+    nano skill.yaml
+
+You need to set the latitude and longitude of your location. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. 
+
+Paste these values into the config file. E.g.:
+
+        default_latitude: 52.235063
+        default_longitude: 0.154021
+
+Note that the data_price_fet argument further down is how much tenths of a nano-FET we wish to charge other agents for information about parking. Note that a tenth of a nano-FET is 0.0000000001 FET, so the default value here is 0.02 FET. In the UI this will be displayed in milli-FET. i.e. 20 milli-FET
+
+Save and close the skill.yaml file.
+
+Navigate back up to the agent directory and run it
+
+    cd ../../../
+    source venv/bin/activate
+    cd carpark_aea
     aea run
 
 When it starts up and you see the output from the camera, you can move your camera around so it is looking at the area you are interested in.
@@ -392,43 +431,9 @@ When you are done press the Live Detect button.
 
 Close down the agent by pressing the Quit button. If you watch the terminal window that you launched it from, you may find that it takes a while to fully shut down - this is because if it is in the middle of a detection it needs to finish what it is doing before quitting. This can take a minute or so.  
 
-We now need to edit config files of the agent.  In the terminal window make sure your current directory is ~/Desktop/carpark_agent/carpark_aea and type:
-    
-    cd skills/carpark_detection 
-    nano skill.yaml
-
-
-You need to set the latitude and longitude of your location. An easy way to find out what this is, is to go open a browser and go to Google Maps and find your current location. Then right click at your location and select "What's here?". A small window will pop up which will let you copy the latitude and longitude of that location. 
-
-Paste these values into the config file. E.g.:
-
-        default_longitude: 0.154021
-        default_latitude: 52.235063
-
-
-Note that the data_price_fet argument is how much tenths of a nano-FET we wish to charge other agents for information about parking. Note that a tenth of a nano-FET is 0.0000000001 FET, so the default value here is 0.02 FET. In the UI this will be displayed in milli-FET. i.e. 20 milli-FET
-
-Save and close the skill.yaml file.
-
-We also need to tell our agent where the search and descovery server is. For the moment you need to point this to your local desktop machine (we wrote this down earlier in the section "Get your desktop IP Address"). In my case, my desktop IP address is "192.168.95.127". 
-
-Navigate to the oef connection directory:
-
-    cd ../../connections/oef
-    nano connection.yaml
-    
-
-Replace the specifying the OEF Node IP address with your desktop IP address. This is what mine would say:
-
-    addr: ${OEF_ADDR:192.168.95.127}
-    
-Save and close this file.
-
-Save the edited file and close the editor.
 
 ### Make the agent start on boot up (RPi4 only)
-
-The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. In a terminal type:
+The final thing we need to do is to make the script run whenever we start the Raspberry Pi up. To make this easier I've included a script, which you can run from a cron job. In a terminal type:
     
     crontab -e
     
@@ -436,13 +441,11 @@ You may be asked to specify which editor you wish to use.
 
 This editor will then open a text file - scroll down to the bottom and add the following line right the bottom:
 
-    @reboot cd /home/pi/Desktop/carpark_agent/carpark_aea && source ../venv/bin/activate && aea run
+    @reboot cd /home/pi/Desktop/carpark_agent/run_scripts/run_carpark_agent.sh
   
 Save the file exit the editor. Reboot your Raspberry Pi.
 
 The carpark agent should now start up after it has booted. Wait for a detection to happen. Look at the stats in the panel on the right hand side of the images. You should see the total number of parking spaces, the number of vehicles detected, the number of free spaces and the latitude and longitude. Check this is all correct. If you click your mouse on any of the smaller images on the right, they will be enlarged in the main panel.
-
-In the bottom left there is a status panel. The status of the OEF will show an error as we have not yet set up an OEF Node on your desktop machine for the agent to connect to.
 
 ## 4b. Installing the carpark_agent on Rasperry Pi Version 3
 In this section I'll describe how to get the car-park agent running on a Raspberry Pi version 3. Version 3 is very similar to 4 in the way it works but it can only have a maximum of 1GB of RAM (as opposed to Version 4 whihc can have 4 GB of RAM). 1GB is not enough to run the car detection algorithms and so the way we get around this is to allocate a large "swap file" for the Raspberry Pi OS. This is an area of the SD car allocated to the OS which it can treat just like RAM. The SD card is many times slower than NAtive RAM and as a result the algorthm runs MUCH slower on the Version 3 and than on the 4 (taking roughly 5 minutes per detection run). The other issue is that sometimes the scripts simply run out of usable memory and crash. I haven't been ale to completely understand why, but I think it relates to the available address space and memory fragmentation. Anyway, the fix for this is to not run the car-park agent all in one process. Instead I split into two proccess:
@@ -469,16 +472,16 @@ Change it to:
 Save the file and exit nano. Reboot the Raspberry Pi.
 
 ## 5a. Installing the client software on a Mac
-    
-            
+When we started up the OEF Node we did some of this already. We can leave the Node running and open up a new terminal. 
+     
 ### Installing the code
-Now this is running we will need to open another terminal window. Go to your carpark agent directory
+Go to your carpark agent directory
 
     cd ~/Desktop/carpark_agent
         
 Create and activate the virtual environment and install the python packages
     
-    ./run_scripts/create_venv.sh
+    virtualenv --system-site-packages -p python3.7 ../venv
     source venv/bin/activate
     python setup.py install
     
@@ -492,8 +495,7 @@ To build the agent which connects to the Fetch.AI network we will use the AEA fr
 
     aea create carpark_client_aea
     cd carpark_client_aea
-    aea add skill carpark_client
-    aea install    
+    aea add skill carpark_client 
     
 Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
 
@@ -511,10 +513,22 @@ and replace it with:
         ledger: fetchai
         port: 80    
     
-Now you can run the agent
+Save and exit nano.
+
+We don't need to set up the connection to the local EOF Node, as by default an agent looks for a local host on the local machine. Run the agent: 
     
     aea run
+
+This will try and run, but it won't get very far because we have not given it any money to spend. Stop the program by pressing Ctr+C. Then type:
+
+    cd ..
+    python aea_scripts/fetchai_wealth_generation.py --private-key carpark_client_aea/fet_private_key.txt --amount 100000000000 --addr alpha.fetch-ai.com --port 80
     
+Now you should be able to run it properly:
+
+    cd carpark_client_aea
+    aea run
+
 This will loop through the following actions:
 1. Search for agents offering carpark detection services
 2. If an agent is found, send it a CFP (Call For Proposal)
@@ -523,15 +537,13 @@ This will loop through the following actions:
 The output messages from this process are displayed in the terminal output. 
 
 ## 5b. Installing the client software on Windows
-The client agent (which can request data) can also be run on Windows. However, you cannot at present run the car park agent (which detects cars in a camera image) on Windows. This is due to some difficulties I have had getting the TensorFlow libraries running. These instructions have been tested on Windows 10.
-
+The client agent (which can request data) can also be run on Windows. These instructions have been tested on Windows 10. We already got some of the way with this when we go the OEF Node up and running. When we did that we left a Git-Bash terminal open. If you didn't do this, just open another and navigate to the carpark_agent directory.
  
-    
 ### Installing the code
-Now this is running we will go bak to our Git-Bash terminal. Create and activate the virtual environment (note that the script name to create the virtual environment is a bespoke windows version)
+In the Git-Bach termninal, we create and activate the virtual environment.
     
-    ./run_scripts/create_venv_win.sh
-    source venv/bin/activate
+    virtualenv --system-site-packages -p python3.7 ../venv
+    venv/bin/activate
     
 Now you need to install OpenCV, you will need a specific version of the python installation file. You can get from github:
 
@@ -549,7 +561,7 @@ Now you can install the main application and its dependencies:
 
 ### Building the Autonomous Economic Agent (AEA)
 
-First we need to download the packages and scripts:
+We need to download the packages and scripts:
 
     svn export https://github.com/fetchai/agents-aea.git/trunk/packages
 
@@ -557,8 +569,7 @@ To build the agent which connects to the Fetch.AI network we will use the AEA fr
 
     aea create carpark_client_aea
     cd carpark_client_aea
-    aea add skill carpark_client
-    aea install    
+    aea add skill carpark_client  
     
 Now we need to give the agent information about the Fetch.ai ledger that it uses to process transactions. To this you need to edit the aea-config.yaml file:
 
@@ -576,8 +587,19 @@ and replace it with:
         ledger: fetchai
         port: 80    
 
+Save and exit nano.
+
+We don't need to set up the connection to the EOF Node, as by default an agent looks for a local host on the local machine. Run teh agent: 
+    
+    aea run
+
+This will try and run, but it won't get very far because we have not given it any money to spend. Stop the program by pressing Ctr+C. Then type:
+
+    cd ..
+    python aea_scripts/fetchai_wealth_generation.py --private-key carpark_client_aea/fet_private_key.txt --amount 100000000000 --addr alpha.fetch-ai.com --port 80
+    
 ### Opening up the ports on Windows Firewall
-If you have yours Windows firewall enabled (which it is, by default), it will block the Raspberry Pi's trying to contact it. To avoid this problem, you need to open this port so they can connect.
+If you have your Windows firewall enabled (which it is, by default), it will block the Raspberry Pi's trying to contact it. To avoid this problem, you need to open this port so they can connect.
 
 1. Go to the search bar and type "firewall"
 2. Click on "Windows Defender Firewall"
@@ -622,20 +644,15 @@ If you have yours Windows firewall enabled (which it is, by default), it will bl
 Once this rule is applied, your Rasperry Pi should be connected to the OEF Node running on your windows machine and the OEF Status in the panel at the bottom of the UI on the Raspberry Pi agent should read "OK: connected"
 
 ### Getting the client running
-Now you can run the agent. Make sure you are in the carpark_client_aea directory and type:
-    
+Now you should be able to run it properly. Make sure you are in the carpark_client_aea directory and type:
+
     aea run
-    
+
 This will loop through the following actions:
 1. Search for agents offering carpark detection services
 2. If an agent is found, send it a CFP (Call For Proposal)
 3. If the proposal it receives is cheap enough and the data new enough it purchases it
 
 The output messages from this process are displayed in the terminal output. 
-
-
-## Trouble shooting
-### Car detection not accurately detecting
-We use an off-the-shelf car detection algorithm which is not trained specifically on car-parks. As with all computer vision it will not be 100% reliable however often detection rates can be made much better by choosing a more suitable vantage point for your camera.
 
 
