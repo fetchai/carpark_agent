@@ -67,7 +67,7 @@ else:
     subprocess.call([sys.executable, '-m', 'pip', 'install', 'tensorflow == 1.13.1'])
 
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'keras == 2.2.4'])
-subprocess.call([sys.executable, '-m', 'pip', 'install', 'pywt'])
+subprocess.call([sys.executable, '-m', 'pip', 'install', 'PyWavelets'])
 if not platform.startswith("win32"):
     subprocess.call([sys.executable, '-m', 'pip', 'install', 'shapely == 1.6.4.post2', '--no-dependencies'])
 subprocess.call([sys.executable, '-m', 'pip', 'install', 'scikit-image == 0.15.0', '--no-dependencies'])
