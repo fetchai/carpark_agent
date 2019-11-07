@@ -312,7 +312,7 @@ Now type this:
 
 Create the virtual environment and activate it (replace the 3.7 with your version of python)
 
-    virtualenv --system-site-packages -p python3.7 ../venv
+    virtualenv --system-site-packages -p python3.7 venv
     source venv/bin/activate
     
 Install the software:
@@ -481,7 +481,7 @@ Go to your carpark agent directory
         
 Create and activate the virtual environment and install the python packages
     
-    virtualenv --system-site-packages -p python3.7 ../venv
+    virtualenv --system-site-packages -p python3.7 venv
     source venv/bin/activate
     python setup.py install
     
@@ -542,7 +542,7 @@ The client agent (which can request data) can also be run on Windows. These inst
 ### Installing the code
 In the Git-Bach termninal, we create and activate the virtual environment.
     
-    virtualenv --system-site-packages -p python3.7 ../venv
+    virtualenv --system-site-packages -p python3.7 venv
     venv/bin/activate
     
 Now you need to install OpenCV, you will need a specific version of the python installation file. You can get from github:
