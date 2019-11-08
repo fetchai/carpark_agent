@@ -215,9 +215,7 @@ You can now used Git-Bash to execute any of the Linux style bash scripts.
 ### Installing Python
 Download and run this installer:
 
-https://www.pyt
-
-hon.org/ftp/python/3.7.4/python-3.7.4.exe
+https://www.python.org/ftp/python/3.7.4/python-3.7.4.exe
 
 
 On the first page of the installation program there is check box "Add Python 3.7 to PATH" tick this. 
@@ -250,6 +248,10 @@ Now you can open Git-Bash and type:
     $ python --version
 
 Check that is displays the correct version.
+
+Now you need to install pip. Type:
+
+    python run_scripts/get-pip.py
 
 Now install virtualenv. Type:
     
@@ -549,12 +551,12 @@ The client agent (which can request data) can also be run on Windows. These inst
 ### Installing the code
 In the Git-Bach termninal, we create and activate the virtual environment.
     
-    virtualenv --system-site-packages -p python3.7 venv
-    venv/bin/activate
+    virtualenv --system-site-packages -p python venv
+    source venv/Scripts/activate
     
 Now you need to install OpenCV, you will need a specific version of the python installation file. You can get from github:
 
-    git clone git@github.com:fetchai/carpark_agent_big_data.git
+    git clone https://github.com/fetchai/carpark_agent_big_data.git
 
 Note that I originally got this from here: [https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv](https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv) But it seems to no longer exist. 
 
@@ -566,9 +568,31 @@ Now you can install the main application and its dependencies:
     
     python setup.py install
 
-### Building the Autonomous Economic Agent (AEA)
+### Fixing error when installing carpark agent code
+It is possible that while installing the software you got an error telling you you need to install Build Tools for Visual Studio. This is when it was trying to install the AEA framework. 
 
-We need to download the packages and scripts:
+The tools are available here: 
+https://visualstudio.microsoft.com/downloads/
+
+Scroll down to find the link to the build tools. When you run the installer you will be given some options about which packages to install. Just select. C++ build tools.
+
+You may need to restart after doing this.
+
+You can then use GitBash to navigate back to the carpark-agent dirtectory, reactivate the virtual env and then reinstall aea:
+ 
+    cd ~/Desktop/carpark_agent
+    source venv/Scripts/activate
+    pip install aea
+ 
+You will also need to restart your OEF Node - so you will need to also reopen a comamnd prompt (CMD) and type:
+    
+    cd ~/Desktop/carpark_agent
+    python aea_scripts/oef/launch.py --name oef_node -c ./aea_scripts/oef/launch_config.json
+  
+Now go back to your GitBash terminal window.
+
+### Building the Autonomous Economic Agent (AEA)
+You need to download the packages and scripts:
 
     svn export https://github.com/fetchai/agents-aea.git/trunk/packages
 
@@ -604,6 +628,7 @@ This will try and run, but it won't get very far because we have not given it an
 
     cd ..
     python aea_scripts/fetchai_wealth_generation.py --private-key carpark_client_aea/fet_private_key.txt --amount 100000000000 --addr alpha.fetch-ai.com --port 80
+    cd carpark_client_aea
     
 ### Opening up the ports on Windows Firewall
 If you have your Windows firewall enabled (which it is, by default), it will block the Raspberry Pi's trying to contact it. To avoid this problem, you need to open this port so they can connect.
