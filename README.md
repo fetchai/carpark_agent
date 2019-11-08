@@ -1,8 +1,8 @@
-# Fetch.AI Car Park Agent
+# Fetch.ai Car Park Agent
 
 IMPORTANT: THIS PROJECT IS NOT YET "PUBLIC". IT IS OCCASIONALLY BEING MADE PUBLIC FOR TESTING PURPOSES.
 
-This is a project to get a Fetch.AI agent running on a Rasperry Pi which utilises the camera to report on free parking spaces. This data is made available on the Fetch network and can be purchased by other agents. 
+This is a project to get a Fetch.ai agent running on a Rasperry Pi which utilises the camera to report on free parking spaces. This data is made available on the Fetch network and can be purchased by other agents. 
 
 This project primarily targets the Raspberry Pi 4. It can be made to run on the Raspberry Pi 3, but it struggles a little.
 
@@ -326,7 +326,7 @@ First we need to download the packages and scripts:
 
     svn export https://github.com/fetchai/agents-aea.git/trunk/packages
 
-To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
+To build the agent which connects to the Fetch.ai network we will use the AEA framework. This will have been installed during the setup process above. Type:
 
     aea create carpark_aea
     cd carpark_aea
@@ -455,7 +455,7 @@ The carpark agent should now start up after it has booted. Wait for a detection 
 
 ## 4b. Installing the carpark_agent on Rasperry Pi Version 3
 In this section I'll describe how to get the car-park agent running on a Raspberry Pi version 3. Version 3 is very similar to 4 in the way it works but it can only have a maximum of 1GB of RAM (as opposed to Version 4 whihc can have 4 GB of RAM). 1GB is not enough to run the car detection algorithms and so the way we get around this is to allocate a large "swap file" for the Raspberry Pi OS. This is an area of the SD car allocated to the OS which it can treat just like RAM. The SD card is many times slower than NAtive RAM and as a result the algorthm runs MUCH slower on the Version 3 and than on the 4 (taking roughly 5 minutes per detection run). The other issue is that sometimes the scripts simply run out of usable memory and crash. I haven't been ale to completely understand why, but I think it relates to the available address space and memory fragmentation. Anyway, the fix for this is to not run the car-park agent all in one process. Instead I split into two proccess:
-*  Process 1 runs the GUI, the camera, the image capture and the Fetch.AI agent selling the data
+*  Process 1 runs the GUI, the camera, the image capture and the Fetch.ai agent selling the data
 *  Process 2 runs the car detection algorithm only
 
 At the moment (due to a recent change in the setup - this splitting of processes is not working. At present it ill just run it all on one process)
@@ -497,7 +497,7 @@ First we need to download the packages and scripts:
 
     svn export https://github.com/fetchai/agents-aea.git/trunk/packages
 
-To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
+To build the agent which connects to the Fetch.ai network we will use the AEA framework. This will have been installed during the setup process above. Type:
 
     aea create carpark_client_aea
     cd carpark_client_aea
@@ -572,7 +572,7 @@ We need to download the packages and scripts:
 
     svn export https://github.com/fetchai/agents-aea.git/trunk/packages
 
-To build the agent which connects to the Fetch.AI network we will use the AEA framework. This will have been installed during the setup process above. Type:
+To build the agent which connects to the Fetch.ai network we will use the AEA framework. This will have been installed during the setup process above. Type:
 
     aea create carpark_client_aea
     cd carpark_client_aea
